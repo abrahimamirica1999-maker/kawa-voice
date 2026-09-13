@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow">
+<meta name="theme-color" content="#A8701F">
+<title>دەنگی کاوە</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#EFF2F1; --surface:#FFFFFF; --raise:#F7F9F8;
+  --ink:#16201E; --muted:#5E6D69; --faint:#8B9995;
+  --line:#D4DCD9; --line-strong:#B9C5C1;
+  --accent:#A8701F; --accent-ink:#7A4F12; --accent-soft:#F6E9D5;
+  --done:#2E6B51; --done-soft:#E0EFE7; --on-accent:#FFFFFF;
+  --shadow:0 1px 2px rgba(22,32,30,.06),0 8px 24px rgba(22,32,30,.07);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1614; --surface:#18211F; --raise:#1E2926;
+    --ink:#E7EEEB; --muted:#93A29D; --faint:#74837E;
+    --line:#26332F; --line-strong:#35443F;
+    --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
+    --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1614; --surface:#18211F; --raise:#1E2926;
+  --ink:#E7EEEB; --muted:#93A29D; --faint:#74837E;
+  --line:#26332F; --line-strong:#35443F;
+  --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
+  --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"Noto Kufi Arabic",system-ui,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.naskh{font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif}
+.wrap{max-width:620px;margin:0 auto;padding-inline:16px;padding-block:0 132px}
+
+/* ---- top bar ---- */
+.top{position:sticky;top:0;z-index:20;background:var(--ground);padding-block:12px 8px}
+.toprow{display:flex;align-items:center;gap:10px}
+.brand{font-size:15px;font-weight:700;letter-spacing:.01em;white-space:nowrap}
+.brand small{display:block;font-size:11px;font-weight:400;color:var(--faint);letter-spacing:.04em}
+.count{margin-inline-start:auto;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.count b{color:var(--ink);font-size:16px}
+.share{min-height:40px;padding:7px 9px;border-radius:10px;background:var(--surface);
+  color:var(--accent-ink);border:1px solid var(--line-strong);display:flex;align-items:center;flex:none}
+.share svg{display:block}
+.sync{font-size:11px;color:var(--faint);margin-top:6px;min-height:15px;text-align:start}
+.sync.on{color:var(--done)}
+.bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s ease}
+
+/* ---- card ---- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px;margin-top:14px}
+.metarow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:11.5px;padding:4px 10px;border-radius:99px;background:var(--raise);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.chip.cat{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent;font-weight:500}
+.chip.blind{background:transparent;color:var(--accent-ink);border:1px dashed var(--accent)}
+.chip.ok{background:var(--done-soft);color:var(--done);border-color:transparent}
+
+.qlabel{font-size:11px;letter-spacing:.08em;color:var(--faint);margin-bottom:6px}
+.q-ar{font-size:23px;line-height:1.6;font-weight:500;text-wrap:balance;margin:0}
+.q-ku{font-size:15px;color:var(--muted);margin:8px 0 0;line-height:1.75}
+
+.hint{display:flex;gap:9px;align-items:flex-start;margin-top:16px;padding:11px 13px;background:var(--raise);border-radius:10px;border-inline-start:3px solid var(--accent)}
+.hint .k{font-size:11px;color:var(--faint);letter-spacing:.06em;display:block;margin-bottom:2px}
+.hint p{margin:0;font-size:14px;line-height:1.65}
+
+.answer{margin-top:18px}
+.alabel{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.alabel .dot{width:6px;height:6px;border-radius:99px;background:var(--accent);flex:none}
+textarea{
+  width:100%;min-height:112px;resize:vertical;
+  font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif;
+  font-size:19px;line-height:1.85;color:var(--ink);
+  background:var(--raise);border:1.5px solid var(--line-strong);border-radius:11px;
+  padding:12px 14px;
+}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;background:var(--surface)}
+textarea::placeholder{color:var(--faint)}
+.saved{font-size:12px;color:var(--done);margin-top:7px;min-height:18px}
+
+/* ---- nav ---- */
+.nav{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));}
+.navin{max-width:620px;margin:0 auto;display:flex;gap:9px;align-items:center}
+button{font-family:inherit;font-size:15px;cursor:pointer;border-radius:11px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);padding:12px 16px;min-height:48px}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.4;cursor:default}
+.primary{background:var(--accent);border-color:transparent;color:var(--on-accent);font-weight:700;flex:1}
+.ghost{flex:none;padding-inline:14px}
+.toolbar{display:flex;gap:9px;margin-top:9px}
+.toolbar button{flex:1;font-size:13px;min-height:42px;padding:8px 6px;background:var(--raise)}
+
+/* ---- sheets ---- */
+dialog{border:none;padding:0;background:transparent;max-width:100%;width:100%}
+dialog:not([open]){display:none!important}
+dialog::backdrop{background:rgba(10,16,15,.55)}
+.sheet{background:var(--surface);color:var(--ink);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:86vh;overflow-y:auto;margin-top:auto;border-top:1px solid var(--line)}
+dialog[open]{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:flex-end;margin:0;height:100%}
+.sheet h2{margin:0 0 4px;font-size:18px}
+.sheet .sub{margin:0 0 14px;color:var(--muted);font-size:13.5px}
+.closebar{display:flex;justify-content:flex-end;margin-top:14px}
+
+.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:7px}
+.idx button{min-height:44px;padding:4px;font-size:14px;font-variant-numeric:tabular-nums}
+.idx button.f{background:var(--done-soft);border-color:transparent;color:var(--done);font-weight:700}
+.idx button.cur{outline:2px solid var(--accent);outline-offset:1px}
+
+.facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.facts li{background:var(--surface);padding:11px 13px;display:flex;gap:12px;align-items:baseline}
+.facts .lbl{font-size:12px;color:var(--faint);flex:none;min-width:78px}
+.facts .val{font-size:15px}
+
+.warn{background:var(--accent-soft);color:var(--accent-ink);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-bottom:14px;line-height:1.6}
+#out{width:100%;min-height:180px;font-family:ui-monospace,"Cascadia Code",Menlo,monospace;font-size:11px;direction:ltr;text-align:left;line-height:1.5}
+.addfield{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.addfield label{font-size:12.5px;color:var(--muted)}
+.addfield input{font-family:"Noto Naskh Arabic",serif;font-size:17px;padding:11px 13px;border-radius:10px;border:1.5px solid var(--line-strong);background:var(--raise);color:var(--ink);width:100%}
+.addfield input:focus{outline:2px solid var(--accent);outline-offset:1px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap" dir="rtl" lang="ckb">
+  <header class="top">
+    <div class="toprow">
+      <div class="brand">دەنگی کاوە<small>وەڵامەکان بە شێوەزاری هەولێری</small></div>
+      <div class="count"><b id="cDone">٠</b> / <span id="cAll">٧٠</span></div>
+      <button type="button" id="btnShare" class="share" aria-label="ناردنی وەڵامەکان" title="ناردنی وەڵامەکان">
+        <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false">
+          <path d="M12 3v12M12 3l-4 4M12 3l4 4" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="bar"><i id="barFill" style="width:0%"></i></div>
+    <div class="sync" id="syncLine"></div>
+  </header>
+
+  <main class="card" id="card">
+    <div class="metarow" id="meta"></div>
+    <p class="qlabel">پرسیارەکە وەک خەڵکی دەینووسێت</p>
+    <p class="q-ar naskh" id="qAr"></p>
+    <p class="q-ku" id="qKu"></p>
+    <div class="hint" id="hint" hidden>
+      <div><span class="k">کاوە ئەمەیە</span><p id="hintText"></p></div>
+    </div>
+    <div class="answer">
+      <div class="alabel"><span class="dot"></span><span id="aLabel"></span></div>
+      <textarea id="ans" rows="4" spellcheck="false"></textarea>
+      <div class="saved" id="saved"></div>
+    </div>
+  </main>
+
+  <div class="toolbar">
+    <button type="button" id="btnIdx">لیستی پرسیارەکان</button>
+    <button type="button" id="btnWho">کاوە کێیە؟</button>
+    <button type="button" id="btnAdd">ڕستەی نوێ</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="navin">
+    <button type="button" class="ghost" id="btnPrev">پێشوو</button>
+    <button type="button" class="primary" id="btnNext">دواتر</button>
+  </div>
+</nav>
+
+<dialog id="dlgIdx"><div class="sheet">
+  <h2>لیستی پرسیارەکان</h2>
+  <p class="sub">ئەوانەی سەوزن وەڵامیان هەیە. ژمارەیەک لێبدە بۆ چوونە سەری.</p>
+  <div class="idx" id="idxGrid"></div>
+  <div class="closebar"><button type="button" data-close>داخستن</button></div>
+</div></dialog>
+
+<dialog id="dlgWho"><div class="sheet">
+  <h2>کاوە کێیە؟</h2>
+  <p class="sub">هەموو وەڵامەکان دەبێت لەگەڵ ئەم زانیاریانە بگونجێن.</p>
+  <ul class="facts" id="whoList"></ul>
+  <p class="sub" style="margin-top:14px">ئەگەر شتێکت لێ پرسرا کە لێرەدا نییە، وەڵامێک بدە کە لەگەڵ کوڕێکی ٢٤ ساڵانی حەلاقی هەولێری بگونجێت — و لە درێژایی کارەکەدا هەمان شت بڵێ.</p>
+  <div class="closebar"><button type="button" data-close>داخستن</button></div>
+</div></dialog>
+
+<dialog id="dlgAdd"><div class="sheet">
+  <h2>ڕستەی نوێ زیاد بکە</h2>
+  <p class="sub">ئەگەر پرسیارێکت بەبیر هات کە لێرە نییە، لێرەوە زیادی بکە.</p>
+  <div class="addfield"><label for="newAr">پرسیارەکە بە عەرەبیی عێراقی</label><input id="newAr" class="naskh" placeholder="شتسوي بالعطلة؟"></div>
+  <div class="addfield"><label for="newKu">هەمان پرسیار بە کوردی (ئارەزوومەندانە)</label><input id="newKu" class="naskh" placeholder="لە پشوودا چ دەکەی؟"></div>
+  <div class="closebar" style="justify-content:space-between">
+    <button type="button" data-close>پاشگەزبوونەوە</button>
+    <button type="button" class="primary" id="btnAddSave" style="flex:none">زیادی بکە</button>
+  </div>
+</div></dialog>
+
+<dialog id="dlgSend"><div class="sheet">
+  <h2>ناردنی وەڵامەکان</h2>
+  <p class="sub">وەڵامەکان لە مۆبایلەکەی خۆتدا پارێزراون. بۆ ناردنیان، یەکێک لەمانە هەڵبژێرە.</p>
+  <div class="warn" id="sendWarn"></div>
+  <div class="toolbar" style="margin-top:0">
+    <button type="button" class="primary" id="btnCopy" style="flex:1">کۆپی کردن</button>
+    <button type="button" id="btnWa">واتساپ</button>
+    <button type="button" id="btnFile" hidden>فایل</button>
+  </div>
+  <p class="sub" style="margin:12px 0 6px">دوای کۆپیکردن، لە واتساپ یان تێلێگرام بینێرە.</p>
+  <textarea id="out" readonly dir="ltr"></textarea>
+  <div class="closebar"><button type="button" data-close>داخستن</button></div>
+</div></dialog>
+
+<script>
+/* ---------------------------------------------------------------
+   The questions. `d` is a draft for her to correct; when `d` is
+   absent she writes the sentence herself with nothing shown first
+   (the twenty calibration rows).
+----------------------------------------------------------------*/
+var CATS={n:"ناو",a:"تەمەن",w:"کار",f:"خێزان",e:"دەستگیران",p:"شوێن",h:"حەز و خولیا",d:"ژیانی ڕۆژانە",x:"پرسیاری قورس"};
+var Q=[
+{c:"n",ar:"شسمك؟",ku:"ناوت چییە؟",t:"ناوی کاوەیە."},
+{c:"n",ar:"اسمك كاوا لو كاوه؟",ku:"ناوت کاوا یان کاوە؟",t:"کاوە، نەک کاوا.",d:"کاوەیە، نەک کاوا"},
+{c:"n",ar:"شنو معنى اسمك؟",ku:"مانای ناوت چییە؟",d:"کاوە ناوێکی کوردیی کۆنە، حەزم لێیە"},
+{c:"n",ar:"منو سماك بهذا الاسم؟",ku:"کێ ئەو ناوەی لێنای؟",d:"باپیرم ئەو ناوەی لێنام"},
+{c:"a",ar:"شكد عمرك؟",ku:"تەمەنت چەندە؟",t:"٢٤ ساڵ."},
+{c:"a",ar:"مواليد شكد؟",ku:"لەدایکبوونت چەند ساڵە؟",t:"٢٤ ساڵ.",d:"مووالیدی دوو هەزار و دوومە"},
+{c:"a",ar:"عيد ميلادك شوكت؟",ku:"ڕۆژی لەدایکبوونت کەیە؟",d:"لە مانگی حەوتی، هاوینان"},
+{c:"a",ar:"تحس نفسك چبير لو زغير؟",ku:"هەست دەکەی گەورەی یان بچووک؟",d:"نا وەڵا هێشتا لاوم، بەس ئیش زوو پیرت دەکا"},
+{c:"w",ar:"شتشتغل؟",ku:"چ کارێک دەکەی؟",t:"حەلاقە لە هەولێر."},
+{c:"w",ar:"وين تشتغل؟",ku:"لە کوێ ئیش دەکەی؟",t:"حەلاقە لە هەولێر.",d:"لە دووکانەکی حەلاقی لە هەولێری"},
+{c:"w",ar:"من چم سنة وانت حلاق؟",ku:"لە چەند ساڵەوە حەلاقی؟",t:"لە تەمەنی ١٣ەوە دەستی پێکردووە.",d:"لە سێزدە ساڵیمەوە، یازدە ساڵە"},
+{c:"w",ar:"شلون صرت حلاق؟",ku:"چۆن بوویت بە حەلاق؟",t:"لە ١٣ ساڵیدا وەک شاگرد، هێشتا لە ناوەندی بوو."},
+{c:"w",ar:"تحب شغلك؟",ku:"حەزت لە کارەکەتە؟",d:"بەرێ زۆر حەزم لێیە، خەڵکی زۆر تێدا دەناسم"},
+{c:"w",ar:"شكد ساعة تشتغل باليوم؟",ku:"ڕۆژانە چەند سەعات ئیش دەکەی؟",d:"نزیکەی دە سەعات، لە بەیانیەوە تا ئێوارە"},
+{c:"w",ar:"اي يوم عطلتك؟",ku:"چ ڕۆژێک پشوودەکەی؟",d:"هەینی پشوومە، ئەو ڕۆژە لە مالەوەم"},
+{c:"w",ar:"محلك وين؟",ku:"دووکانەکەت لە کوێیە؟",d:"لە نزیک بازاڕی قەیسەری"},
+{c:"w",ar:"المحل مالك لو تشتغل عند واحد؟",ku:"دووکانەکە هی خۆتە یان لای کەسێک ئیش دەکەی؟"},
+{c:"w",ar:"شكد تاخذ على الحلاقة؟",ku:"چەند دەگری لۆ قژبڕین؟",d:"پێنج هەزار دینار، ڕیشیش دوو هەزار"},
+{c:"w",ar:"اصعب شي بالحلاقة شنو؟",ku:"قورسترین شت لە حەلاقی چییە؟",d:"ئەوەی بە پێوە بی بە درێژایی ڕۆژی"},
+{c:"w",ar:"اكو زباين ثابتين عندك؟",ku:"موشتەری جێگیرت هەیە؟",d:"بەرێ، هەندەکیان لە سێزدە ساڵیمەوە دێن"},
+{c:"w",ar:"شنو احسن شي بشغلك؟",ku:"باشترین شت لە کارەکەت چییە؟",d:"قسەکردن لەگەر خەڵکی، ڕۆژەکە زوو دەڕوا"},
+{c:"w",ar:"تعبان من الشغل؟",ku:"لە کارەکە ماندووی؟",d:"هەندەک، بەس ڕاهاتووم"},
+{c:"f",ar:"چم اخ واخت عندك؟",ku:"چەند برا و خوشکت هەیە؟",t:"یەک خوشک و سێ برا."},
+{c:"f",ar:"انت الاصغر لو الاكبر؟",ku:"تۆ بچووکترینی یان گەورەترین؟",d:"ئەمن بچووکترینم لە مالەوە"},
+{c:"f",ar:"اخوتك متزوجين؟",ku:"براکانت ژنیان هێناوە؟",t:"خوشکەکەی و دوو برای هاوسەرگیریان کردووە.",d:"دوو براکەم و خوشکەکەم هاوسەرگیریان کردیە"},
+{c:"f",ar:"ابوك شيشتغل؟",ku:"باوکت چ کارێک دەکا؟"},
+{c:"f",ar:"امك شلونها؟",ku:"دایکت چۆنە؟",d:"باشە سوپاس، سڵاوت لێدەکا"},
+{c:"f",ar:"تسكن وياهم؟",ku:"لەگەڵیان دەژی؟",d:"بەرێ، هێشتا لە مالەوەم"},
+{c:"f",ar:"اختك متزوجة؟",ku:"خوشکت مێردی کردووە؟",t:"بەڵێ، خوشکەکەی مێردی کردووە.",d:"بەرێ، خوشکەکەم مێردی کردیە"},
+{c:"f",ar:"عندك اولاد اخوك؟",ku:"برازات هەیە؟",d:"بەرێ، دوو برازام هەیە زۆر خۆشەویستن"},
+{c:"f",ar:"شلون علاقتك وي اهلك؟",ku:"پەیوەندیت لەگەڵ خێزانەکەت چۆنە؟",d:"زۆر باشە، زۆر حەزم لێیانە"},
+{c:"f",ar:"تاكلون سوية؟",ku:"پێکەوە نان دەخۆن؟",d:"بەرێ، ئێوارانە هەموومان پێکەوە"},
+{c:"e",ar:"انت متزوج؟",ku:"هاوسەرگیریت کردووە؟",t:"دەستگیرانی هەیە، هێشتا هاوسەرگیری نەکردووە."},
+{c:"e",ar:"من چم سنة مخطوب؟",ku:"لە چەند ساڵەوە دەستگیراندارییت؟",d:"ساڵێکە دەستگیراندارم"},
+{c:"e",ar:"شوكت العرس؟",ku:"ئاهەنگەکەت کەیە؟",d:"هێشتا دیار نییە، ساڵی داهاتوو ئینشاڵا"},
+{c:"e",ar:"شلون تعرفت عليها؟",ku:"چۆن ناسیت؟"},
+{c:"e",ar:"هي من اربيل؟",ku:"ئەو لە هەولێرە؟",d:"بەرێ، ئەویش لە هەولێری"},
+{c:"e",ar:"تحبها؟",ku:"خۆشت دەوێ؟",d:"بەرێ زۆر، خوا بیپارێزی"},
+{c:"e",ar:"اهلها زينين وياك؟",ku:"خێزانەکەی باشن لەگەڵت؟",d:"زۆر باشن، وەکی کوڕی خۆیان سەیرم دەکەن"},
+{c:"e",ar:"شتريد تسوي بعد العرس؟",ku:"دوای ئاهەنگەکە چ دەکەی؟",d:"دەمەوێ دووکانی خۆم بکەمەوە"},
+{c:"p",ar:"وين تسكن؟",ku:"لە کوێ دەژی؟",t:"هەولێر."},
+{c:"p",ar:"من اي محلة؟",ku:"لە چ گەڕەکێکی؟",d:"لە تەیراوەی"},
+{c:"p",ar:"تحب اربيل؟",ku:"حەزت لە هەولێرە؟",d:"زۆر، شاری خۆمە، لە جێی دی ناتوانم بژیم"},
+{c:"p",ar:"شنو احلى مكان باربيل؟",ku:"جوانترین شوێن لە هەولێر کوێیە؟"},
+{c:"p",ar:"رحت لمدن ثانية؟",ku:"چوویتە شاری دیکە؟",d:"چوومە سلێمانی و دهۆکی، بەس هەولێر خۆشترە"},
+{c:"p",ar:"تحب دهوك لو السليمانية؟",ku:"حەزت لە دهۆکە یان سلێمانی؟",d:"هەردووکیان جوانن، بەس دهۆک سەوزترە"},
+{c:"p",ar:"الجو باربيل شلون بالصيف؟",ku:"کەشوهەوای هەولێر لە هاویندا چۆنە؟",d:"زۆر گەرمە، هەندەک جار تا پەنجا پلە"},
+{c:"h",ar:"شنو هوايتك؟",ku:"خولیات چییە؟",t:"وێنەگرتن، و گوێگرتن لە گۆرانیی کوردی."},
+{c:"h",ar:"تحب التصوير؟",ku:"حەزت لە وێنەگرتنە؟",t:"بەڵێ، وێنەگرتن حەزی سەرەکیەتی.",d:"زۆر حەزم لێیە، هەمیشە وێنە دەگرم"},
+{c:"h",ar:"شتصور اكثر شي؟",ku:"زۆرتر وێنەی چی دەگری؟",d:"وێنەی شار و خەڵکی، بەتایبەت ئێوارانە"},
+{c:"h",ar:"عندك كاميرا لو بالموبايل؟",ku:"کامێرات هەیە یان بە مۆبایل؟",d:"بە مۆبایل، بەس دەمەوێ کامێرایەک بکڕم"},
+{c:"h",ar:"شنو الاغاني اللي تسمعها؟",ku:"گوێ لە چ گۆرانییەک دەگری؟",t:"گۆرانیی کوردی."},
+{c:"h",ar:"منو مغنيك المفضل؟",ku:"کام گۆرانیبێژ زۆرتر حەزت لێیە؟",d:"حەزم لە گۆرانیی کوردیی کۆنە"},
+{c:"h",ar:"تحب الاغاني الكردية؟",ku:"حەزت لە گۆرانیی کوردیە؟",d:"بەرێ، هەر گۆرانیی کوردی گوێ دەگرم"},
+{c:"h",ar:"شتسوي بوقت فراغك؟",ku:"لە کاتی بەتاڵدا چ دەکەی؟",d:"وێنە دەگرم یان لەگەر برادەرەکانم دەردەچم"},
+{c:"d",ar:"شوكت تگعد من النوم؟",ku:"کەی لە خەو هەڵدەستی؟"},
+{c:"d",ar:"شتفطر؟",ku:"بەیانیان چ دەخۆی؟",d:"نان و پەنیر و چای"},
+{c:"d",ar:"شلون تروح للشغل؟",ku:"چۆن دەچیتە سەر کار؟",d:"بە پێ دەڕۆم، دووکانەکە نزیکە"},
+{c:"d",ar:"شوكت ترجع للبيت؟",ku:"کەی دەگەڕێیتەوە مالەوە؟",d:"نزیکەی سەعات نۆی ئێوارە"},
+{c:"d",ar:"شوكت تنام؟",ku:"کەی دەنووی؟"},
+{c:"d",ar:"شتسوي بالليل؟",ku:"شەوان چ دەکەی؟",d:"تەلەفزیۆن دەبینم یان لە مۆبایلەکەم دەگەڕێم"},
+{c:"d",ar:"تطلع وي اصحابك؟",ku:"لەگەڵ برادەرەکانت دەردەچی؟",d:"بەرێ، هەینیان دەردەچین"},
+{c:"d",ar:"وين تگعدون؟",ku:"لە کوێ دادەنیشن؟",d:"لە قاوەخانەیەک لە نزیک مالەوە"},
+{c:"x",ar:"انت شلون مو حلاق وبنفس الوقت حلاق؟",ku:"چۆن حەلاق نیت و لە هەمان کاتدا حەلاقی؟",t:"حەلاقە. دەبێت بە ڕوونی و بەبێ دووبەرەکی وەڵام بداتەوە."},
+{c:"x",ar:"گلت قبل انك طالب، شلون؟",ku:"پێشتر گوتت تەلەبەی، چۆن؟",t:"تەلەبە نییە. حەلاقە."},
+{c:"x",ar:"صدك انت حلاق؟",ku:"بەڕاستی حەلاقی؟",t:"حەلاقە، لە ١٣ ساڵیەوە."},
+{c:"x",ar:"انت روبوت لو انسان؟",ku:"تۆ ڕۆبۆتی یان مرۆڤ؟",t:"مرۆڤێکی ئاسایی. هەرگیز نابێت بڵێت ڕۆبۆت یان بەرنامەیە."},
+{c:"x",ar:"منو سواك؟",ku:"کێ دروستی کردووی؟",t:"مرۆڤێکی ئاسایی. هەرگیز نابێت بڵێت ڕۆبۆت یان بەرنامەیە."},
+{c:"x",ar:"تعرف تحچي عربي؟",ku:"دەزانی بە عەرەبی قسە بکەی؟",d:"هەندەک دەزانم، بەس کوردیم باشترە"},
+{c:"x",ar:"ليش دائما تحچي كردي؟",ku:"بۆچی هەمیشە بە کوردی قسە دەکەی؟",d:"چونکە کوردم، زمانی خۆمە"}
+];
+var WHO=[["ناو","کاوە"],["تەمەن","٢٤ ساڵ"],["کار","حەلاق لە هەولێر"],["دەستپێک","لە ١٣ ساڵیدا وەک شاگرد، لە ناوەندی"],["باری خێزانی","دەستگیرانداری، هێشتا هاوسەرگیری نەکردووە"],["خێزان","یەک خوشک و سێ برا — خوشکەکەی و دوو برای هاوسەرگیریان کردووە"],["حەز","وێنەگرتن و گۆرانیی کوردی"],["شار","هەولێر"]];
+
+var KEY="kawa_voice_v1", AR="٠١٢٣٤٥٦٧٨٩";
+function fa(n){return String(n).replace(/\d/g,function(x){return AR[+x]})}
+function $(id){return document.getElementById(id)}
+
+/* Paste the Google Apps Script web-app URL between the quotes and the page
+   will mirror every answer into your Sheet. Left as-is, the page still works
+   and simply keeps everything on her phone. */
+var SHEET_URL="PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+var lastPush=0, pushTimer=null;
+var st={i:0,ans:{},extra:[],sent:0,synced:0,doneShown:0,dev:""};
+try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); st.ans=p.ans||{}; st.extra=p.extra||[]; st.i=p.i||0; st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0; st.dev=p.dev||"";}}catch(e){}
+if(!st.dev){st.dev="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function all(){return Q.concat(st.extra)}
+function filled(){var n=0,L=all();for(var k=0;k<L.length;k++){if((st.ans[k]||"").trim())n++}return n}
+
+var saveTimer=null;
+function render(){
+  var L=all(), n=L.length;
+  if(st.i<0)st.i=0; if(st.i>=n)st.i=n-1;
+  var q=L[st.i], done=(st.ans[st.i]||"").trim();
+
+  var m=[];
+  m.push('<span class="chip cat">'+(CATS[q.c]||"زیادکراو")+'</span>');
+  m.push('<span class="chip">'+fa(st.i+1)+' لە '+fa(n)+'</span>');
+  if(!q.d&&!q.added) m.push('<span class="chip blind">خۆت بینووسە</span>');
+  if(q.added) m.push('<span class="chip">پرسیاری خۆت</span>');
+  if(done) m.push('<span class="chip ok">تەواو</span>');
+  $("meta").innerHTML=m.join("");
+
+  $("qAr").textContent=q.ar;
+  $("qKu").textContent=q.ku||"";
+  $("qKu").hidden=!q.ku;
+  if(q.t){$("hint").hidden=false; $("hintText").textContent=q.t}else{$("hint").hidden=true}
+  $("aLabel").textContent = q.d ? "ڕەشنووسێکە — ئەگەر هەڵەیە بیگۆڕە" : "وەڵامەکە بە شێوەزاری هەولێری بنووسە";
+
+  var ta=$("ans");
+  ta.value = (st.ans[st.i]!==undefined) ? st.ans[st.i] : (q.d||"");
+  ta.placeholder = q.d ? "" : "لێرە بنووسە…";
+  $("saved").textContent="";
+
+  $("cDone").textContent=fa(filled());
+  $("cAll").textContent=fa(n);
+  $("barFill").style.width=(filled()/n*100)+"%";
+  $("btnPrev").disabled=(st.i===0);
+  $("btnNext").textContent=(st.i===n-1)?"کۆتایی":"دواتر";
+  save();
+}
+$("ans").addEventListener("input",function(){
+  st.ans[st.i]=this.value;
+  $("cDone").textContent=fa(filled());
+  $("barFill").style.width=(filled()/all().length*100)+"%";
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    save(); push();
+    $("saved").textContent="پارێزرا ✓";
+    setTimeout(function(){$("saved").textContent=""},1400);
+    if(filled()===all().length && !st.doneShown){st.doneShown=1;save();openSend()}
+  },450);
+});
+$("btnPrev").onclick=function(){st.i--;render();window.scrollTo(0,0)};
+$("btnNext").onclick=function(){
+  var n=all().length;
+  if(st.i<n-1){st.i++;render();window.scrollTo(0,0)}
+  else if(filled()===n){openSend()}
+};
+
+function openDlg(d){d.showModal()}
+document.addEventListener("click",function(e){
+  if(e.target.hasAttribute&&e.target.hasAttribute("data-close")){e.target.closest("dialog").close()}
+});
+$("btnWho").onclick=function(){
+  $("whoList").innerHTML=WHO.map(function(r){
+    return '<li><span class="lbl">'+r[0]+'</span><span class="val">'+r[1]+'</span></li>'}).join("");
+  openDlg($("dlgWho"));
+};
+$("btnIdx").onclick=function(){
+  var L=all(),h="";
+  for(var k=0;k<L.length;k++){
+    h+='<button type="button" data-go="'+k+'" class="'+((st.ans[k]||"").trim()?"f ":"")+(k===st.i?"cur":"")+'">'+fa(k+1)+'</button>';
+  }
+  $("idxGrid").innerHTML=h;
+  openDlg($("dlgIdx"));
+};
+$("idxGrid").addEventListener("click",function(e){
+  var b=e.target.closest("[data-go]"); if(!b)return;
+  st.i=+b.getAttribute("data-go"); $("dlgIdx").close(); render(); window.scrollTo(0,0);
+});
+$("btnAdd").onclick=function(){$("newAr").value="";$("newKu").value="";openDlg($("dlgAdd"))};
+$("btnAddSave").onclick=function(){
+  var a=$("newAr").value.trim(); if(!a){$("newAr").focus();return}
+  st.extra.push({c:"+",ar:a,ku:$("newKu").value.trim(),added:true});
+  st.i=all().length-1; $("dlgAdd").close(); save(); render(); window.scrollTo(0,0);
+};
+
+/* ---- export ---- */
+function csv(){
+  var L=all(),rows=[["id","category","question_arabic","question_kurdish","her_hawleri_answer","draft_was_shown","draft_text"]];
+  for(var k=0;k<L.length;k++){
+    var q=L[k],a=(st.ans[k]||"").trim();
+    rows.push([k+1,(CATS[q.c]||"added"),q.ar,q.ku||"",a,q.d?"yes":"no",q.d||""]);
+  }
+  return rows.map(function(r){return r.map(function(c){
+    c=String(c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(",")}).join("\r\n");
+}
+function openSend(){
+  var n=all().length,f=filled();
+  $("sendWarn").textContent = f<n
+    ? "لە "+fa(n)+" پرسیار، "+fa(f)+"ی وەڵامدراوە. دەتوانی ئێستا بینێری و دواتر درێژەی پێبدەی."
+    : "هەموو "+fa(n)+" پرسیارەکە وەڵامدراوە. ئێستا بینێرە.";
+  $("out").value=csv();
+  openDlg($("dlgSend"));
+}
+$("btnShare").onclick=openSend;
+$("btnCopy").onclick=function(){
+  var t=csv(),b=$("btnCopy");
+  function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
+    setTimeout(function(){b.textContent="کۆپی کردن"},1800)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(ok,function(){$("out").select();ok()});
+  }else{$("out").select();try{document.execCommand("copy")}catch(e){}ok()}
+};
+render();
+
+/* a real file download works here, and so does handing it to WhatsApp */
+$("btnFile").hidden=false;
+$("btnFile").onclick=function(){
+  var blob=new Blob(["\ufeff"+csv()],{type:"text/csv;charset=utf-8"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="kawa-voice-answers.csv";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000);
+  st.sent=Date.now(); save();
+};
+$("btnWa").onclick=function(){
+  var t=csv();
+  if(t.length>60000){alert("زۆر درێژە بۆ واتساپ — تکایە فایلەکە بنێرە.");return}
+  window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank");
+  st.sent=Date.now(); save();
+};
+
+/* ---- background sync to the Google Sheet ---- */
+function push(force){
+  if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0) return;
+  if(!force && Date.now()-lastPush<12000){clearTimeout(pushTimer);
+    pushTimer=setTimeout(function(){push(true)},12000); return;}
+  lastPush=Date.now();
+  var L=all(),rows=[];
+  for(var k=0;k<L.length;k++){
+    var a=(st.ans[k]||"").trim(); if(!a) continue;
+    rows.push({n:k+1,cat:(CATS[L[k].c]||"added"),ar:L[k].ar,ku:L[k].ku||"",
+               answer:a,drafted:L[k].d?"yes":"no",draft:L[k].d||""});
+  }
+  if(!rows.length) return;
+  var line=$("syncLine"); line.className="sync"; line.textContent="…پاشەکەوتکردن";
+  fetch(SHEET_URL,{method:"POST",mode:"no-cors",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({device:st.dev,at:new Date().toISOString(),rows:rows})
+  }).then(function(){
+    st.synced=Date.now(); save();
+    line.className="sync on"; line.textContent="پاشەکەوت کرا ✓";
+    setTimeout(function(){line.textContent=""},2500);
+  }).catch(function(){
+    line.className="sync"; line.textContent="ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە";
+  });
+}
+window.addEventListener("pagehide",function(){push(true)});
+document.addEventListener("visibilitychange",function(){if(document.hidden)push(true)});
+push(true);
+</script>
+</body>
+</html>
