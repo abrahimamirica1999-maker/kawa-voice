@@ -225,107 +225,61 @@ dialog[open]{position:fixed;inset:0;display:flex;flex-direction:column;justify-c
 </div></dialog>
 
 <script>
-/* ---------------------------------------------------------------
-   The questions. `d` is a draft for her to correct; when `d` is
-   absent she writes the sentence herself with nothing shown first
-   (the twenty calibration rows).
-----------------------------------------------------------------*/
-var CATS={n:"ناو",a:"تەمەن",w:"کار",f:"خێزان",e:"دەستگیران",p:"شوێن",h:"حەز و خولیا",d:"ژیانی ڕۆژانە",x:"پرسیاری قورس"};
-var Q=[
-{c:"n",ar:"شسمك؟",ku:"ناوت چییە؟",t:"ناوی کاوەیە."},
-{c:"n",ar:"اسمك كاوا لو كاوه؟",ku:"ناوت کاوا یان کاوە؟",t:"کاوە، نەک کاوا.",d:"کاوەیە، نەک کاوا"},
-{c:"n",ar:"شنو معنى اسمك؟",ku:"مانای ناوت چییە؟",d:"کاوە ناوێکی کوردیی کۆنە، حەزم لێیە"},
-{c:"n",ar:"منو سماك بهذا الاسم؟",ku:"کێ ئەو ناوەی لێنای؟",d:"باپیرم ئەو ناوەی لێنام"},
-{c:"a",ar:"شكد عمرك؟",ku:"تەمەنت چەندە؟",t:"٢٤ ساڵ."},
-{c:"a",ar:"مواليد شكد؟",ku:"لەدایکبوونت چەند ساڵە؟",t:"٢٤ ساڵ.",d:"مووالیدی دوو هەزار و دوومە"},
-{c:"a",ar:"عيد ميلادك شوكت؟",ku:"ڕۆژی لەدایکبوونت کەیە؟",d:"لە مانگی حەوتی، هاوینان"},
-{c:"a",ar:"تحس نفسك چبير لو زغير؟",ku:"هەست دەکەی گەورەی یان بچووک؟",d:"نا وەڵا هێشتا لاوم، بەس ئیش زوو پیرت دەکا"},
-{c:"w",ar:"شتشتغل؟",ku:"چ کارێک دەکەی؟",t:"حەلاقە لە هەولێر."},
-{c:"w",ar:"وين تشتغل؟",ku:"لە کوێ ئیش دەکەی؟",t:"حەلاقە لە هەولێر.",d:"لە دووکانەکی حەلاقی لە هەولێری"},
-{c:"w",ar:"من چم سنة وانت حلاق؟",ku:"لە چەند ساڵەوە حەلاقی؟",t:"لە تەمەنی ١٣ەوە دەستی پێکردووە.",d:"لە سێزدە ساڵیمەوە، یازدە ساڵە"},
-{c:"w",ar:"شلون صرت حلاق؟",ku:"چۆن بوویت بە حەلاق؟",t:"لە ١٣ ساڵیدا وەک شاگرد، هێشتا لە ناوەندی بوو."},
-{c:"w",ar:"تحب شغلك؟",ku:"حەزت لە کارەکەتە؟",d:"بەرێ زۆر حەزم لێیە، خەڵکی زۆر تێدا دەناسم"},
-{c:"w",ar:"شكد ساعة تشتغل باليوم؟",ku:"ڕۆژانە چەند سەعات ئیش دەکەی؟",d:"نزیکەی دە سەعات، لە بەیانیەوە تا ئێوارە"},
-{c:"w",ar:"اي يوم عطلتك؟",ku:"چ ڕۆژێک پشوودەکەی؟",d:"هەینی پشوومە، ئەو ڕۆژە لە مالەوەم"},
-{c:"w",ar:"محلك وين؟",ku:"دووکانەکەت لە کوێیە؟",d:"لە نزیک بازاڕی قەیسەری"},
-{c:"w",ar:"المحل مالك لو تشتغل عند واحد؟",ku:"دووکانەکە هی خۆتە یان لای کەسێک ئیش دەکەی؟"},
-{c:"w",ar:"شكد تاخذ على الحلاقة؟",ku:"چەند دەگری لۆ قژبڕین؟",d:"پێنج هەزار دینار، ڕیشیش دوو هەزار"},
-{c:"w",ar:"اصعب شي بالحلاقة شنو؟",ku:"قورسترین شت لە حەلاقی چییە؟",d:"ئەوەی بە پێوە بی بە درێژایی ڕۆژی"},
-{c:"w",ar:"اكو زباين ثابتين عندك؟",ku:"موشتەری جێگیرت هەیە؟",d:"بەرێ، هەندەکیان لە سێزدە ساڵیمەوە دێن"},
-{c:"w",ar:"شنو احسن شي بشغلك؟",ku:"باشترین شت لە کارەکەت چییە؟",d:"قسەکردن لەگەر خەڵکی، ڕۆژەکە زوو دەڕوا"},
-{c:"w",ar:"تعبان من الشغل؟",ku:"لە کارەکە ماندووی؟",d:"هەندەک، بەس ڕاهاتووم"},
-{c:"f",ar:"چم اخ واخت عندك؟",ku:"چەند برا و خوشکت هەیە؟",t:"یەک خوشک و سێ برا."},
-{c:"f",ar:"انت الاصغر لو الاكبر؟",ku:"تۆ بچووکترینی یان گەورەترین؟",d:"ئەمن بچووکترینم لە مالەوە"},
-{c:"f",ar:"اخوتك متزوجين؟",ku:"براکانت ژنیان هێناوە؟",t:"خوشکەکەی و دوو برای هاوسەرگیریان کردووە.",d:"دوو براکەم و خوشکەکەم هاوسەرگیریان کردیە"},
-{c:"f",ar:"ابوك شيشتغل؟",ku:"باوکت چ کارێک دەکا؟"},
-{c:"f",ar:"امك شلونها؟",ku:"دایکت چۆنە؟",d:"باشە سوپاس، سڵاوت لێدەکا"},
-{c:"f",ar:"تسكن وياهم؟",ku:"لەگەڵیان دەژی؟",d:"بەرێ، هێشتا لە مالەوەم"},
-{c:"f",ar:"اختك متزوجة؟",ku:"خوشکت مێردی کردووە؟",t:"بەڵێ، خوشکەکەی مێردی کردووە.",d:"بەرێ، خوشکەکەم مێردی کردیە"},
-{c:"f",ar:"عندك اولاد اخوك؟",ku:"برازات هەیە؟",d:"بەرێ، دوو برازام هەیە زۆر خۆشەویستن"},
-{c:"f",ar:"شلون علاقتك وي اهلك؟",ku:"پەیوەندیت لەگەڵ خێزانەکەت چۆنە؟",d:"زۆر باشە، زۆر حەزم لێیانە"},
-{c:"f",ar:"تاكلون سوية؟",ku:"پێکەوە نان دەخۆن؟",d:"بەرێ، ئێوارانە هەموومان پێکەوە"},
-{c:"e",ar:"انت متزوج؟",ku:"هاوسەرگیریت کردووە؟",t:"دەستگیرانی هەیە، هێشتا هاوسەرگیری نەکردووە."},
-{c:"e",ar:"من چم سنة مخطوب؟",ku:"لە چەند ساڵەوە دەستگیراندارییت؟",d:"ساڵێکە دەستگیراندارم"},
-{c:"e",ar:"شوكت العرس؟",ku:"ئاهەنگەکەت کەیە؟",d:"هێشتا دیار نییە، ساڵی داهاتوو ئینشاڵا"},
-{c:"e",ar:"شلون تعرفت عليها؟",ku:"چۆن ناسیت؟"},
-{c:"e",ar:"هي من اربيل؟",ku:"ئەو لە هەولێرە؟",d:"بەرێ، ئەویش لە هەولێری"},
-{c:"e",ar:"تحبها؟",ku:"خۆشت دەوێ؟",d:"بەرێ زۆر، خوا بیپارێزی"},
-{c:"e",ar:"اهلها زينين وياك؟",ku:"خێزانەکەی باشن لەگەڵت؟",d:"زۆر باشن، وەکی کوڕی خۆیان سەیرم دەکەن"},
-{c:"e",ar:"شتريد تسوي بعد العرس؟",ku:"دوای ئاهەنگەکە چ دەکەی؟",d:"دەمەوێ دووکانی خۆم بکەمەوە"},
-{c:"p",ar:"وين تسكن؟",ku:"لە کوێ دەژی؟",t:"هەولێر."},
-{c:"p",ar:"من اي محلة؟",ku:"لە چ گەڕەکێکی؟",d:"لە تەیراوەی"},
-{c:"p",ar:"تحب اربيل؟",ku:"حەزت لە هەولێرە؟",d:"زۆر، شاری خۆمە، لە جێی دی ناتوانم بژیم"},
-{c:"p",ar:"شنو احلى مكان باربيل؟",ku:"جوانترین شوێن لە هەولێر کوێیە؟"},
-{c:"p",ar:"رحت لمدن ثانية؟",ku:"چوویتە شاری دیکە؟",d:"چوومە سلێمانی و دهۆکی، بەس هەولێر خۆشترە"},
-{c:"p",ar:"تحب دهوك لو السليمانية؟",ku:"حەزت لە دهۆکە یان سلێمانی؟",d:"هەردووکیان جوانن، بەس دهۆک سەوزترە"},
-{c:"p",ar:"الجو باربيل شلون بالصيف؟",ku:"کەشوهەوای هەولێر لە هاویندا چۆنە؟",d:"زۆر گەرمە، هەندەک جار تا پەنجا پلە"},
-{c:"h",ar:"شنو هوايتك؟",ku:"خولیات چییە؟",t:"وێنەگرتن، و گوێگرتن لە گۆرانیی کوردی."},
-{c:"h",ar:"تحب التصوير؟",ku:"حەزت لە وێنەگرتنە؟",t:"بەڵێ، وێنەگرتن حەزی سەرەکیەتی.",d:"زۆر حەزم لێیە، هەمیشە وێنە دەگرم"},
-{c:"h",ar:"شتصور اكثر شي؟",ku:"زۆرتر وێنەی چی دەگری؟",d:"وێنەی شار و خەڵکی، بەتایبەت ئێوارانە"},
-{c:"h",ar:"عندك كاميرا لو بالموبايل؟",ku:"کامێرات هەیە یان بە مۆبایل؟",d:"بە مۆبایل، بەس دەمەوێ کامێرایەک بکڕم"},
-{c:"h",ar:"شنو الاغاني اللي تسمعها؟",ku:"گوێ لە چ گۆرانییەک دەگری؟",t:"گۆرانیی کوردی."},
-{c:"h",ar:"منو مغنيك المفضل؟",ku:"کام گۆرانیبێژ زۆرتر حەزت لێیە؟",d:"حەزم لە گۆرانیی کوردیی کۆنە"},
-{c:"h",ar:"تحب الاغاني الكردية؟",ku:"حەزت لە گۆرانیی کوردیە؟",d:"بەرێ، هەر گۆرانیی کوردی گوێ دەگرم"},
-{c:"h",ar:"شتسوي بوقت فراغك؟",ku:"لە کاتی بەتاڵدا چ دەکەی؟",d:"وێنە دەگرم یان لەگەر برادەرەکانم دەردەچم"},
-{c:"d",ar:"شوكت تگعد من النوم؟",ku:"کەی لە خەو هەڵدەستی؟"},
-{c:"d",ar:"شتفطر؟",ku:"بەیانیان چ دەخۆی؟",d:"نان و پەنیر و چای"},
-{c:"d",ar:"شلون تروح للشغل؟",ku:"چۆن دەچیتە سەر کار؟",d:"بە پێ دەڕۆم، دووکانەکە نزیکە"},
-{c:"d",ar:"شوكت ترجع للبيت؟",ku:"کەی دەگەڕێیتەوە مالەوە؟",d:"نزیکەی سەعات نۆی ئێوارە"},
-{c:"d",ar:"شوكت تنام؟",ku:"کەی دەنووی؟"},
-{c:"d",ar:"شتسوي بالليل؟",ku:"شەوان چ دەکەی؟",d:"تەلەفزیۆن دەبینم یان لە مۆبایلەکەم دەگەڕێم"},
-{c:"d",ar:"تطلع وي اصحابك؟",ku:"لەگەڵ برادەرەکانت دەردەچی؟",d:"بەرێ، هەینیان دەردەچین"},
-{c:"d",ar:"وين تگعدون؟",ku:"لە کوێ دادەنیشن؟",d:"لە قاوەخانەیەک لە نزیک مالەوە"},
-{c:"x",ar:"انت شلون مو حلاق وبنفس الوقت حلاق؟",ku:"چۆن حەلاق نیت و لە هەمان کاتدا حەلاقی؟",t:"حەلاقە. دەبێت بە ڕوونی و بەبێ دووبەرەکی وەڵام بداتەوە."},
-{c:"x",ar:"گلت قبل انك طالب، شلون؟",ku:"پێشتر گوتت تەلەبەی، چۆن؟",t:"تەلەبە نییە. حەلاقە."},
-{c:"x",ar:"صدك انت حلاق؟",ku:"بەڕاستی حەلاقی؟",t:"حەلاقە، لە ١٣ ساڵیەوە."},
-{c:"x",ar:"انت روبوت لو انسان؟",ku:"تۆ ڕۆبۆتی یان مرۆڤ؟",t:"مرۆڤێکی ئاسایی. هەرگیز نابێت بڵێت ڕۆبۆت یان بەرنامەیە."},
-{c:"x",ar:"منو سواك؟",ku:"کێ دروستی کردووی؟",t:"مرۆڤێکی ئاسایی. هەرگیز نابێت بڵێت ڕۆبۆت یان بەرنامەیە."},
-{c:"x",ar:"تعرف تحچي عربي؟",ku:"دەزانی بە عەرەبی قسە بکەی؟",d:"هەندەک دەزانم، بەس کوردیم باشترە"},
-{c:"x",ar:"ليش دائما تحچي كردي؟",ku:"بۆچی هەمیشە بە کوردی قسە دەکەی؟",d:"چونکە کوردم، زمانی خۆمە"}
-];
-var WHO=[["ناو","کاوە"],["تەمەن","٢٤ ساڵ"],["کار","حەلاق لە هەولێر"],["دەستپێک","لە ١٣ ساڵیدا وەک شاگرد، لە ناوەندی"],["باری خێزانی","دەستگیرانداری، هێشتا هاوسەرگیری نەکردووە"],["خێزان","یەک خوشک و سێ برا — خوشکەکەی و دوو برای هاوسەرگیریان کردووە"],["حەز","وێنەگرتن و گۆرانیی کوردی"],["شار","هەولێر"]];
+/* Sentences live in questions.json, never in here. Answers are keyed by the
+   question's stable id, so sentences can be added, removed or reordered in a
+   later batch without any answer sliding onto the wrong question. Storage is
+   namespaced per batch, so a new batch starts clean on her phone. */
 
-var KEY="kawa_voice_v1", AR="٠١٢٣٤٥٦٧٨٩";
+var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
+var KEY_V1="kawa_voice_v1", QCACHE="kawa_voice_questions", AR="٠١٢٣٤٥٦٧٨٩";
+var lastPush=0, pushTimer=null, saveTimer=null;
+var CATS={}, WHO=[], Q=[], BATCH="", LABEL="", KEY="";
+var st={i:0,ans:{},extra:[],sent:0,synced:0,doneShown:0,dev:""};
+
 function fa(n){return String(n).replace(/\d/g,function(x){return AR[+x]})}
 function $(id){return document.getElementById(id)}
-
-/* Paste the Google Apps Script web-app URL between the quotes and the page
-   will mirror every answer into your Sheet. Left as-is, the page still works
-   and simply keeps everything on her phone. */
-var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
-var lastPush=0, pushTimer=null;
-var st={i:0,ans:{},extra:[],sent:0,synced:0,doneShown:0,dev:""};
-try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); st.ans=p.ans||{}; st.extra=p.extra||[]; st.i=p.i||0; st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0; st.dev=p.dev||"";}}catch(e){}
-if(!st.dev){st.dev="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
 function all(){return Q.concat(st.extra)}
-function filled(){var n=0,L=all();for(var k=0;k<L.length;k++){if((st.ans[k]||"").trim())n++}return n}
+function cur(){return all()[st.i]}
+function filled(){var L=all(),n=0;for(var k=0;k<L.length;k++){if((st.ans[L[k].id]||"").trim())n++}return n}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
 
-var saveTimer=null;
+function load(){
+  try{
+    var raw=localStorage.getItem(KEY);
+    if(raw){var p=JSON.parse(raw);
+      st.i=p.i||0; st.ans=p.ans||{}; st.extra=p.extra||[];
+      st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0; st.dev=p.dev||"";}
+  }catch(e){}
+  if(!st.dev) st.dev="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+
+/* Anything typed before ids existed was keyed by position. batch-1 keeps the
+   same order, so position maps to id exactly. Runs once. */
+function migrate(){
+  if(BATCH!=="batch-1") return;
+  for(var _ in st.ans) return;
+  try{
+    var raw=localStorage.getItem(KEY_V1); if(!raw) return;
+    var p=JSON.parse(raw), old=p.ans||{}, n=0;
+    for(var k in old){
+      var i=parseInt(k,10);
+      if(!isNaN(i)&&Q[i]&&String(old[k]).trim()){st.ans[Q[i].id]=old[k];n++}
+    }
+    if(p.extra&&p.extra.length){
+      st.extra=p.extra.map(function(x,j){x.id="own-"+(j+1);return x});
+    }
+    if(n||st.extra.length){
+      st.i=Math.min(p.i||0,all().length-1);
+      if(p.dev) st.dev=p.dev;
+      save();
+    }
+  }catch(e){}
+}
+
 function render(){
   var L=all(), n=L.length;
   if(st.i<0)st.i=0; if(st.i>=n)st.i=n-1;
-  var q=L[st.i], done=(st.ans[st.i]||"").trim();
+  var q=L[st.i], done=(st.ans[q.id]||"").trim();
 
   var m=[];
   m.push('<span class="chip cat">'+(CATS[q.c]||"زیادکراو")+'</span>');
@@ -338,12 +292,12 @@ function render(){
   $("qAr").textContent=q.ar;
   $("qKu").textContent=q.ku||"";
   $("qKu").hidden=!q.ku;
-  if(q.t){$("hint").hidden=false; $("hintText").textContent=q.t}else{$("hint").hidden=true}
-  $("aLabel").textContent = q.d ? "ڕەشنووسێکە — ئەگەر هەڵەیە بیگۆڕە" : "وەڵامەکە بە شێوەزاری هەولێری بنووسە";
+  if(q.t){$("hint").hidden=false;$("hintText").textContent=q.t}else{$("hint").hidden=true}
+  $("aLabel").textContent=q.d?"ڕەشنووسێکە — ئەگەر هەڵەیە بیگۆڕە":"وەڵامەکە بە شێوەزاری هەولێری بنووسە";
 
   var ta=$("ans");
-  ta.value = (st.ans[st.i]!==undefined) ? st.ans[st.i] : (q.d||"");
-  ta.placeholder = q.d ? "" : "لێرە بنووسە…";
+  ta.value=(st.ans[q.id]!==undefined)?st.ans[q.id]:(q.d||"");
+  ta.placeholder=q.d?"":"لێرە بنووسە…";
   $("saved").textContent="";
 
   $("cDone").textContent=fa(filled());
@@ -353,114 +307,117 @@ function render(){
   $("btnNext").textContent=(st.i===n-1)?"کۆتایی":"دواتر";
   save();
 }
-$("ans").addEventListener("input",function(){
-  st.ans[st.i]=this.value;
-  $("cDone").textContent=fa(filled());
-  $("barFill").style.width=(filled()/all().length*100)+"%";
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(function(){
-    save(); push();
-    $("saved").textContent="پارێزرا ✓";
-    setTimeout(function(){$("saved").textContent=""},1400);
-    if(filled()===all().length && !st.doneShown){st.doneShown=1;save();openSend()}
-  },450);
-});
-$("btnPrev").onclick=function(){st.i--;render();window.scrollTo(0,0)};
-$("btnNext").onclick=function(){
-  var n=all().length;
-  if(st.i<n-1){st.i++;render();window.scrollTo(0,0)}
-  else if(filled()===n){openSend()}
-};
 
-function openDlg(d){d.showModal()}
-document.addEventListener("click",function(e){
-  if(e.target.hasAttribute&&e.target.hasAttribute("data-close")){e.target.closest("dialog").close()}
-});
-$("btnWho").onclick=function(){
-  $("whoList").innerHTML=WHO.map(function(r){
-    return '<li><span class="lbl">'+r[0]+'</span><span class="val">'+r[1]+'</span></li>'}).join("");
-  openDlg($("dlgWho"));
-};
-$("btnIdx").onclick=function(){
-  var L=all(),h="";
+function bind(){
+  $("ans").addEventListener("input",function(){
+    st.ans[cur().id]=this.value;
+    $("cDone").textContent=fa(filled());
+    $("barFill").style.width=(filled()/all().length*100)+"%";
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(function(){
+      save(); push();
+      $("saved").textContent="پارێزرا ✓";
+      setTimeout(function(){$("saved").textContent=""},1400);
+      if(filled()===all().length&&!st.doneShown){st.doneShown=1;save();openSend()}
+    },450);
+  });
+  $("btnPrev").onclick=function(){st.i--;render();window.scrollTo(0,0)};
+  $("btnNext").onclick=function(){
+    var n=all().length;
+    if(st.i<n-1){st.i++;render();window.scrollTo(0,0)}
+    else if(filled()===n){openSend()}
+  };
+  document.addEventListener("click",function(e){
+    if(e.target.hasAttribute&&e.target.hasAttribute("data-close")){e.target.closest("dialog").close()}
+  });
+  $("btnWho").onclick=function(){
+    $("whoList").innerHTML=WHO.map(function(r){
+      return '<li><span class="lbl">'+r[0]+'</span><span class="val">'+r[1]+'</span></li>'}).join("");
+    $("dlgWho").showModal();
+  };
+  $("btnIdx").onclick=function(){
+    var L=all(),h="";
+    for(var k=0;k<L.length;k++){
+      h+='<button type="button" data-go="'+k+'" class="'+((st.ans[L[k].id]||"").trim()?"f ":"")+(k===st.i?"cur":"")+'">'+fa(k+1)+'</button>';
+    }
+    $("idxGrid").innerHTML=h;
+    $("dlgIdx").showModal();
+  };
+  $("idxGrid").addEventListener("click",function(e){
+    var b=e.target.closest("[data-go]"); if(!b)return;
+    st.i=+b.getAttribute("data-go"); $("dlgIdx").close(); render(); window.scrollTo(0,0);
+  });
+  $("btnAdd").onclick=function(){$("newAr").value="";$("newKu").value="";$("dlgAdd").showModal()};
+  $("btnAddSave").onclick=function(){
+    var a=$("newAr").value.trim(); if(!a){$("newAr").focus();return}
+    st.extra.push({id:"own-"+(st.extra.length+1)+"-"+Date.now().toString(36),
+                   c:"+",ar:a,ku:$("newKu").value.trim(),added:true});
+    st.i=all().length-1; $("dlgAdd").close(); save(); render(); window.scrollTo(0,0);
+  };
+  $("btnShare").onclick=openSend;
+  $("btnCopy").onclick=function(){
+    var t=csv(),b=$("btnCopy");
+    function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
+      setTimeout(function(){b.textContent="کۆپی کردن"},1800)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(ok,function(){$("out").select();ok()});
+    }else{$("out").select();try{document.execCommand("copy")}catch(e){}ok()}
+  };
+  $("btnPush").onclick=function(){
+    var b=$("btnPush"); push(true);
+    b.textContent="نێردرا ✓"; setTimeout(function(){b.textContent="ناردنەوە"},1800);
+  };
+  $("btnWa").onclick=function(){
+    var t=csv();
+    if(t.length>60000){alert("زۆر درێژە بۆ واتساپ — تکایە فایلەکە بنێرە.");return}
+    window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank");
+    st.sent=Date.now(); save();
+  };
+  $("btnFile").hidden=false;
+  $("btnFile").onclick=function(){
+    var blob=new Blob(["﻿"+csv()],{type:"text/csv;charset=utf-8"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="kawa-voice-"+BATCH+".csv";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000);
+    st.sent=Date.now(); save();
+  };
+  window.addEventListener("pagehide",beacon);
+  document.addEventListener("visibilitychange",function(){if(document.hidden)beacon()});
+}
+
+function rows(){
+  var L=all(),out=[];
   for(var k=0;k<L.length;k++){
-    h+='<button type="button" data-go="'+k+'" class="'+((st.ans[k]||"").trim()?"f ":"")+(k===st.i?"cur":"")+'">'+fa(k+1)+'</button>';
+    var a=(st.ans[L[k].id]||"").trim(); if(!a) continue;
+    out.push({id:L[k].id,n:k+1,cat:(CATS[L[k].c]||"added"),ar:L[k].ar,ku:L[k].ku||"",
+              answer:a,drafted:L[k].d?"yes":"no",draft:L[k].d||""});
   }
-  $("idxGrid").innerHTML=h;
-  openDlg($("dlgIdx"));
-};
-$("idxGrid").addEventListener("click",function(e){
-  var b=e.target.closest("[data-go]"); if(!b)return;
-  st.i=+b.getAttribute("data-go"); $("dlgIdx").close(); render(); window.scrollTo(0,0);
-});
-$("btnAdd").onclick=function(){$("newAr").value="";$("newKu").value="";openDlg($("dlgAdd"))};
-$("btnAddSave").onclick=function(){
-  var a=$("newAr").value.trim(); if(!a){$("newAr").focus();return}
-  st.extra.push({c:"+",ar:a,ku:$("newKu").value.trim(),added:true});
-  st.i=all().length-1; $("dlgAdd").close(); save(); render(); window.scrollTo(0,0);
-};
-
-/* ---- export ---- */
+  return out;
+}
 function csv(){
-  var L=all(),rows=[["id","category","question_arabic","question_kurdish","her_hawleri_answer","draft_was_shown","draft_text"]];
+  var L=all(),r=[["batch","q_id","q_no","category","question_arabic","question_kurdish",
+                  "her_hawleri_answer","draft_was_shown","draft_text"]];
   for(var k=0;k<L.length;k++){
-    var q=L[k],a=(st.ans[k]||"").trim();
-    rows.push([k+1,(CATS[q.c]||"added"),q.ar,q.ku||"",a,q.d?"yes":"no",q.d||""]);
+    r.push([BATCH,L[k].id,k+1,(CATS[L[k].c]||"added"),L[k].ar,L[k].ku||"",
+            (st.ans[L[k].id]||"").trim(),L[k].d?"yes":"no",L[k].d||""]);
   }
-  return rows.map(function(r){return r.map(function(c){
+  return r.map(function(x){return x.map(function(c){
     c=String(c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(",")}).join("\r\n");
 }
 function openSend(){
   var n=all().length,f=filled();
-  $("sendWarn").textContent = f<n
+  $("sendWarn").textContent=f<n
     ? "لە "+fa(n)+" پرسیار، "+fa(f)+"ی وەڵامدراوە. دەتوانی ئێستا بینێری و دواتر درێژەی پێبدەی."
     : "هەموو "+fa(n)+" پرسیارەکە وەڵامدراوە. ئێستا بینێرە.";
   $("out").value=csv();
-  openDlg($("dlgSend"));
+  $("dlgSend").showModal();
 }
-$("btnShare").onclick=openSend;
-$("btnCopy").onclick=function(){
-  var t=csv(),b=$("btnCopy");
-  function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
-    setTimeout(function(){b.textContent="کۆپی کردن"},1800)}
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(t).then(ok,function(){$("out").select();ok()});
-  }else{$("out").select();try{document.execCommand("copy")}catch(e){}ok()}
-};
-render();
 
-/* a real file download works here, and so does handing it to WhatsApp */
-$("btnFile").hidden=false;
-$("btnFile").onclick=function(){
-  var blob=new Blob(["\ufeff"+csv()],{type:"text/csv;charset=utf-8"});
-  var a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="kawa-voice-answers.csv";
-  document.body.appendChild(a); a.click();
-  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000);
-  st.sent=Date.now(); save();
-};
-$("btnPush").onclick=function(){
-  var b=$("btnPush"); push(true);
-  b.textContent="نێردرا ✓"; setTimeout(function(){b.textContent="ناردنەوە"},1800);
-};
-$("btnWa").onclick=function(){
-  var t=csv();
-  if(t.length>60000){alert("زۆر درێژە بۆ واتساپ — تکایە فایلەکە بنێرە.");return}
-  window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank");
-  st.sent=Date.now(); save();
-};
-
-/* ---- background sync to the Google Sheet ---- */
 function payload(){
-  var L=all(),rows=[];
-  for(var k=0;k<L.length;k++){
-    var a=(st.ans[k]||"").trim(); if(!a) continue;
-    rows.push({n:k+1,cat:(CATS[L[k].c]||"added"),ar:L[k].ar,ku:L[k].ku||"",
-               answer:a,drafted:L[k].d?"yes":"no",draft:L[k].d||""});
-  }
-  if(!rows.length) return null;
-  return JSON.stringify({device:st.dev,at:new Date().toISOString(),rows:rows});
+  var r=rows(); if(!r.length) return null;
+  return JSON.stringify({device:st.dev,batch:BATCH,at:new Date().toISOString(),rows:r});
 }
 function stamp(){
   if(!st.synced) return "";
@@ -470,10 +427,8 @@ function stamp(){
 }
 function push(force){
   if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0) return;
-  if(!force && Date.now()-lastPush<4000){
-    clearTimeout(pushTimer);
-    pushTimer=setTimeout(function(){push(true)},4000);
-    return;
+  if(!force&&Date.now()-lastPush<4000){
+    clearTimeout(pushTimer); pushTimer=setTimeout(function(){push(true)},4000); return;
   }
   var body=payload(); if(!body) return;
   lastPush=Date.now();
@@ -488,7 +443,6 @@ function push(force){
     line.className="sync"; line.textContent="ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە";
   });
 }
-/* On close, fetch is cancelled by the browser -- sendBeacon is not. */
 function beacon(){
   if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0) return;
   var body=payload(); if(!body) return;
@@ -499,9 +453,33 @@ function beacon(){
     }
   }catch(e){}
 }
-window.addEventListener("pagehide",beacon);
-document.addEventListener("visibilitychange",function(){if(document.hidden)beacon()});
-push(true); $("syncLine").textContent=stamp();
+
+function boot(data){
+  CATS=data.categories||{}; WHO=data.who||[]; Q=data.questions||[];
+  BATCH=data.batch||"batch-1"; LABEL=data.label||"";
+  KEY="kawa_voice_v2:"+BATCH;
+  try{localStorage.setItem(QCACHE,JSON.stringify(data))}catch(e){}
+  load(); migrate(); bind(); render();
+  if(LABEL) document.querySelector(".brand small").textContent=LABEL;
+  $("syncLine").textContent=stamp();
+  push(true);
+}
+function fail(){
+  $("qAr").textContent="نەتوانرا پرسیارەکان باربکرێن.";
+  $("qKu").textContent="تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە.";
+  $("qKu").hidden=false;
+}
+
+fetch("questions.json?v="+Date.now()).then(function(r){
+  if(!r.ok) throw 0; return r.json();
+}).then(boot).catch(function(){
+  try{
+    var c=localStorage.getItem(QCACHE);
+    if(c){boot(JSON.parse(c));return}
+  }catch(e){}
+  fail();
+});
+
 </script>
 </body>
 </html>
