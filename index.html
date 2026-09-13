@@ -311,7 +311,7 @@ function $(id){return document.getElementById(id)}
 /* Paste the Google Apps Script web-app URL between the quotes and the page
    will mirror every answer into your Sheet. Left as-is, the page still works
    and simply keeps everything on her phone. */
-var SHEET_URL="PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
 var lastPush=0, pushTimer=null;
 var st={i:0,ans:{},extra:[],sent:0,synced:0,doneShown:0,dev:""};
 try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); st.ans=p.ans||{}; st.extra=p.extra||[]; st.i=p.i||0; st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0; st.dev=p.dev||"";}}catch(e){}
@@ -465,7 +465,7 @@ function push(force){
     body:JSON.stringify({device:st.dev,at:new Date().toISOString(),rows:rows})
   }).then(function(){
     st.synced=Date.now(); save();
-    line.className="sync on"; line.textContent="پاشەکەوت کرا ✓";
+    line.className="sync on"; line.textContent="نێردرا ✓";
     setTimeout(function(){line.textContent=""},2500);
   }).catch(function(){
     line.className="sync"; line.textContent="ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە";
