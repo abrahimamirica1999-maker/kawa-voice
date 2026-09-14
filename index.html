@@ -76,6 +76,16 @@ body{
 .q-ar{font-size:23px;line-height:1.6;font-weight:500;text-wrap:balance;margin:0}
 .q-ku{font-size:15px;color:var(--muted);margin:8px 0 0;line-height:1.75}
 
+/* A whole conversation, for the items that ask about ORDER rather than about
+   one sentence. Kawa's turns are tinted so the two voices separate at a
+   glance on a phone. */
+.conv{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.conv .row{display:flex;gap:8px;padding:9px 12px;font-size:14.5px;line-height:1.65;border-top:1px solid var(--line)}
+.conv .row:first-child{border-top:0}
+.conv .row.k{background:var(--accent-soft)}
+.conv .who{flex:none;font-size:11px;color:var(--faint);padding-top:4px;min-width:34px}
+.conv .row.k .who{color:var(--accent-ink)}
+.conv .txt{flex:1}
 .hint{display:flex;gap:9px;align-items:flex-start;margin-top:16px;padding:11px 13px;background:var(--raise);border-radius:10px;border-inline-start:3px solid var(--accent)}
 .hint .k{font-size:11px;color:var(--faint);letter-spacing:.06em;display:block;margin-bottom:2px}
 .hint p{margin:0;font-size:14px;line-height:1.65}
@@ -159,6 +169,7 @@ dialog[open]{position:fixed;inset:0;display:flex;flex-direction:column;justify-c
     <p class="qlabel">پرسیارەکە وەک خەڵکی دەینووسێت</p>
     <p class="q-ar naskh" id="qAr"></p>
     <p class="q-ku" id="qKu"></p>
+    <div class="conv" id="conv" hidden></div>
     <div class="hint" id="hint" hidden>
       <div><span class="k">تێبینی</span><p id="hintText"></p></div>
     </div>
@@ -284,7 +295,8 @@ function render(){
   var m=[];
   m.push('<span class="chip cat">'+(CATS[q.c]||"زیادکراو")+'</span>');
   m.push('<span class="chip">'+fa(st.i+1)+' لە '+fa(n)+'</span>');
-  if(!q.d&&!q.added) m.push('<span class="chip blind">خۆت بینووسە</span>');
+  if(!q.d&&!q.added&&!q.conv) m.push('<span class="chip blind">خۆت بینووسە</span>');
+  if(q.conv) m.push('<span class="chip blind">ڕیزبەندی</span>');
   if(q.added) m.push('<span class="chip">پرسیاری خۆت</span>');
   if(done) m.push('<span class="chip ok">تەواو</span>');
   $("meta").innerHTML=m.join("");
@@ -292,8 +304,21 @@ function render(){
   $("qAr").textContent=q.ar;
   $("qKu").textContent=q.ku||"";
   $("qKu").hidden=!q.ku;
+  if(q.conv&&q.conv.length){
+    var h="";
+    for(var ci=0;ci<q.conv.length;ci++){
+      var side=q.conv[ci][0]==="k";
+      h+='<div class="row'+(side?" k":"")+'"><span class="who">'
+        +(side?"کاوە":"ئەو")+'</span><span class="txt"></span></div>';
+    }
+    $("conv").innerHTML=h;
+    var txts=$("conv").querySelectorAll(".txt");
+    for(var cj=0;cj<q.conv.length;cj++) txts[cj].textContent=q.conv[cj][1];
+    $("conv").hidden=false;
+  } else { $("conv").hidden=true; $("conv").innerHTML=""; }
   if(q.t){$("hint").hidden=false;$("hintText").textContent=q.t}else{$("hint").hidden=true}
-  $("aLabel").textContent=q.d?"ڕەشنووسێکە — ئەگەر هەڵەیە بیگۆڕە":"وەڵامەکە بە شێوەزاری هەولێری بنووسە";
+  $("aLabel").textContent=q.conv?"'باشە' بنووسە، یان بڵێ چی هەڵەیە"
+    :(q.d?"ڕەشنووسێکە — ئەگەر هەڵەیە بیگۆڕە":"وەڵامەکە بە شێوەزاری هەولێری بنووسە");
 
   var ta=$("ans");
   ta.value=(st.ans[q.id]!==undefined)?st.ans[q.id]:(q.d||"");
