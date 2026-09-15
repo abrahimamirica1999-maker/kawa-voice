@@ -18,6 +18,7 @@
   --line:#D4DCD9; --line-strong:#B9C5C1;
   --accent:#A8701F; --accent-ink:#7A4F12; --accent-soft:#F6E9D5;
   --done:#2E6B51; --done-soft:#E0EFE7; --on-accent:#FFFFFF;
+  --kawa:#EFE6F5; --kawa-line:#C9B5DA;
   --shadow:0 1px 2px rgba(22,32,30,.06),0 8px 24px rgba(22,32,30,.07);
 }
 @media (prefers-color-scheme:dark){
@@ -27,6 +28,7 @@
     --line:#26332F; --line-strong:#35443F;
     --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
     --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
+    --kawa:#241C2E; --kawa-line:#493A5C;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
   }
 }
@@ -36,6 +38,7 @@
   --line:#26332F; --line-strong:#35443F;
   --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
   --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
+  --kawa:#241C2E; --kawa-line:#493A5C;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
@@ -43,406 +46,395 @@ html,body{margin:0}
 body{
   background:var(--ground); color:var(--ink);
   font-family:"Noto Kufi Arabic",system-ui,"Segoe UI",sans-serif;
-  font-size:15px; line-height:1.7;
-  -webkit-text-size-adjust:100%;
+  font-size:15px; line-height:1.7; -webkit-text-size-adjust:100%;
 }
-.naskh{font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif}
-.wrap{max-width:620px;margin:0 auto;padding-inline:16px;padding-block:0 132px}
+[hidden]{display:none!important}
+.wrap{max-width:660px;margin:0 auto;padding-inline:16px;padding-block:0 148px}
 
-/* ---- top bar ---- */
-.top{position:sticky;top:0;z-index:20;background:var(--ground);padding-block:12px 8px}
+/* ---------- top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:var(--ground);padding-block:12px 8px}
 .toprow{display:flex;align-items:center;gap:10px}
-.brand{font-size:15px;font-weight:700;letter-spacing:.01em;white-space:nowrap}
-.brand small{display:block;font-size:11px;font-weight:400;color:var(--faint);letter-spacing:.04em}
-.count{margin-inline-start:auto;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.brand{font-size:15px;font-weight:700;white-space:nowrap}
+.brand small{display:block;font-size:11px;font-weight:400;color:var(--faint)}
+.count{margin-inline-start:auto;font-size:13px;color:var(--muted);
+  font-variant-numeric:tabular-nums;white-space:nowrap;text-align:end}
 .count b{color:var(--ink);font-size:16px}
-.share{min-height:40px;padding:7px 9px;border-radius:10px;background:var(--surface);
-  color:var(--accent-ink);border:1px solid var(--line-strong);display:flex;align-items:center;flex:none}
-.share svg{display:block}
-.sync{font-size:11px;color:var(--faint);margin-top:6px;min-height:15px;text-align:start}
+.bar{height:4px;border-radius:99px;background:var(--line);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;
+  transition:width .25s ease}
+.sync{font-size:11.5px;color:var(--faint);margin-top:6px;min-height:16px}
 .sync.on{color:var(--done)}
-.bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
-.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s ease}
 
-/* ---- card ---- */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px;margin-top:14px}
-.metarow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.chip{font-size:11.5px;padding:4px 10px;border-radius:99px;background:var(--raise);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
-.chip.cat{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent;font-weight:500}
-.chip.blind{background:transparent;color:var(--accent-ink);border:1px dashed var(--accent)}
+/* ---------- cards ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:16px;box-shadow:var(--shadow);margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{font-size:11.5px;padding:3px 9px;border-radius:99px;background:var(--raise);
+  color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.chip.cat{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
 .chip.ok{background:var(--done-soft);color:var(--done);border-color:transparent}
 
-.qlabel{font-size:11px;letter-spacing:.08em;color:var(--faint);margin-bottom:6px}
-.q-ar{font-size:23px;line-height:1.6;font-weight:500;text-wrap:balance;margin:0}
-.q-ku{font-size:15px;color:var(--muted);margin:8px 0 0;line-height:1.75}
-
-/* A whole conversation, for the items that ask about ORDER rather than about
-   one sentence. Kawa's turns are tinted so the two voices separate at a
-   glance on a phone. */
+/* ---------- overview ---------- */
+.ovtitle{font-size:22px;font-weight:700;line-height:1.45;margin:2px 0 4px}
+.ovtitle-en{font-size:12.5px;color:var(--faint);direction:ltr;text-align:right;
+  font-family:system-ui,sans-serif;margin-bottom:12px}
+.setting{background:var(--raise);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;font-size:14.5px;color:var(--muted);line-height:1.75}
+.setting .en{display:block;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);
+  direction:ltr;text-align:left;font-family:system-ui,sans-serif;font-size:12.5px;
+  color:var(--faint)}
 .conv{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.conv .row{display:flex;gap:8px;padding:9px 12px;font-size:14.5px;line-height:1.65;border-top:1px solid var(--line)}
-.conv .row:first-child{border-top:0}
-.conv .row.k{background:var(--accent-soft)}
-.conv .who{flex:none;font-size:11px;color:var(--faint);padding-top:4px;min-width:34px}
-.conv .row.k .who{color:var(--accent-ink)}
-.conv .txt{flex:1}
-.hint{display:flex;gap:9px;align-items:flex-start;margin-top:16px;padding:11px 13px;background:var(--raise);border-radius:10px;border-inline-start:3px solid var(--accent)}
-.hint .k{font-size:11px;color:var(--faint);letter-spacing:.06em;display:block;margin-bottom:2px}
-.hint p{margin:0;font-size:14px;line-height:1.65}
+.crow{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);
+  background:var(--surface)}
+.crow:last-child{border-bottom:0}
+.crow.k{background:var(--kawa);box-shadow:inset 3px 0 0 var(--kawa-line)}
+.cn{flex:none;width:22px;font-size:11px;color:var(--faint);
+  font-variant-numeric:tabular-nums;padding-top:3px}
+.cbody{flex:1;min-width:0}
+.cwho{font-size:11px;color:var(--faint);letter-spacing:.02em;margin-bottom:2px}
+.crow.k .cwho{color:var(--accent-ink);font-weight:700}
+.cku{font-size:16px;line-height:1.75;word-wrap:break-word}
+.cen{font-size:12px;color:var(--faint);direction:ltr;text-align:left;
+  font-family:system-ui,sans-serif;margin-top:3px;line-height:1.5}
 
-.answer{margin-top:18px}
-.alabel{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:8px}
-.alabel .dot{width:6px;height:6px;border-radius:99px;background:var(--accent);flex:none}
-textarea{
-  width:100%;min-height:112px;resize:vertical;
-  font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif;
-  font-size:19px;line-height:1.85;color:var(--ink);
-  background:var(--raise);border:1.5px solid var(--line-strong);border-radius:11px;
-  padding:12px 14px;
-}
-textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;background:var(--surface)}
-textarea::placeholder{color:var(--faint)}
-.saved{font-size:12px;color:var(--done);margin-top:7px;min-height:18px}
+/* ---------- one line ---------- */
+.linewho{font-size:12.5px;color:var(--faint);margin-bottom:4px}
+.linewho b{color:var(--accent-ink)}
+.ref{background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.ref .lbl{font-size:11px;color:var(--accent-ink);font-weight:700;margin-bottom:5px;
+  letter-spacing:.02em}
+.ref .en{direction:ltr;text-align:left;font-family:system-ui,sans-serif;
+  font-size:16.5px;line-height:1.55;color:var(--ink)}
+.ar{background:var(--raise);border:1px solid var(--line);border-radius:10px;
+  padding:9px 12px;font-size:14.5px;color:var(--muted);margin-bottom:12px;
+  font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif}
+.ar .lbl{font-size:11px;color:var(--faint);font-family:"Noto Kufi Arabic",sans-serif;
+  margin-bottom:3px}
+.lbl2{font-size:12px;color:var(--muted);margin-bottom:6px}
+textarea{width:100%;min-height:104px;resize:vertical;border-radius:12px;
+  border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);
+  padding:12px 14px;font:inherit;font-size:17px;line-height:1.8}
+textarea:focus{outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft)}
+.hint{font-size:12px;color:var(--faint);margin-top:7px}
+.prev{margin-top:12px;font-size:13px;color:var(--muted);
+  border-inline-start:3px solid var(--line-strong);padding-inline-start:10px}
+.prev b{color:var(--ink);font-weight:500}
 
-/* ---- nav ---- */
-.nav{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));}
-.navin{max-width:620px;margin:0 auto;display:flex;gap:9px;align-items:center}
-button{font-family:inherit;font-size:15px;cursor:pointer;border-radius:11px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);padding:12px 16px;min-height:48px}
-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-button:disabled{opacity:.4;cursor:default}
-.primary{background:var(--accent);border-color:transparent;color:var(--on-accent);font-weight:700;flex:1}
-.ghost{flex:none;padding-inline:14px}
-.toolbar{display:flex;gap:9px;margin-top:9px}
-.toolbar button{flex:1;font-size:13px;min-height:42px;padding:8px 6px;background:var(--raise)}
+/* ---------- buttons ---------- */
+.btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:12px;min-height:48px;padding:10px 16px;
+  border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;
+  font-weight:700;flex:1}
+button.ghost{background:transparent}
+button.good{background:var(--done-soft);color:var(--done);border-color:transparent;
+  font-weight:700;flex:1}
+button:disabled{opacity:.45;cursor:default}
 
-/* ---- sheets ---- */
-dialog{border:none;padding:0;background:transparent;max-width:100%;width:100%}
-dialog:not([open]){display:none!important}
+/* ---------- bottom bar ---------- */
+.foot{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--ground);
+  border-top:1px solid var(--line);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.footin{max-width:660px;margin:0 auto;display:flex;gap:8px;align-items:center}
+.footin button{flex:1}
+.footin .nav{flex:0 0 52px;min-width:52px}
+
+/* ---------- dialogs ---------- */
+dialog{border:0;border-radius:18px;padding:0;background:var(--surface);color:var(--ink);
+  max-width:520px;width:calc(100% - 32px);box-shadow:var(--shadow)}
 dialog::backdrop{background:rgba(10,16,15,.55)}
-.sheet{background:var(--surface);color:var(--ink);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:86vh;overflow-y:auto;margin-top:auto;border-top:1px solid var(--line)}
-dialog[open]{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:flex-end;margin:0;height:100%}
-.sheet h2{margin:0 0 4px;font-size:18px}
-.sheet .sub{margin:0 0 14px;color:var(--muted);font-size:13.5px}
-.closebar{display:flex;justify-content:flex-end;margin-top:14px}
-
-.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:7px}
-.idx button{min-height:44px;padding:4px;font-size:14px;font-variant-numeric:tabular-nums}
-.idx button.f{background:var(--done-soft);border-color:transparent;color:var(--done);font-weight:700}
-.idx button.cur{outline:2px solid var(--accent);outline-offset:1px}
-
-.facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:11px;overflow:hidden}
-.facts li{background:var(--surface);padding:11px 13px;display:flex;gap:12px;align-items:baseline}
-.facts .lbl{font-size:12px;color:var(--faint);flex:none;min-width:78px}
-.facts .val{font-size:15px}
-
-.warn{background:var(--accent-soft);color:var(--accent-ink);border-radius:10px;padding:11px 13px;font-size:13.5px;margin-bottom:14px;line-height:1.6}
-#out{width:100%;min-height:180px;font-family:ui-monospace,"Cascadia Code",Menlo,monospace;font-size:11px;direction:ltr;text-align:left;line-height:1.5}
-.addfield{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.addfield label{font-size:12.5px;color:var(--muted)}
-.addfield input{font-family:"Noto Naskh Arabic",serif;font-size:17px;padding:11px 13px;border-radius:10px;border:1.5px solid var(--line-strong);background:var(--raise);color:var(--ink);width:100%}
-.addfield input:focus{outline:2px solid var(--accent);outline-offset:1px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.dlg{padding:18px}
+.dlg h3{margin:0 0 8px;font-size:18px}
+.dlg p{margin:0 0 12px;color:var(--muted);font-size:14px}
+.big{font-size:17px;font-weight:700;margin:14px 0 6px}
 </style>
-<style>img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<div class="wrap" dir="rtl" lang="ckb">
-  <header class="top">
+
+<div class="wrap">
+  <div class="top">
     <div class="toprow">
-      <div class="brand">دەنگی کاوە<small>وەڵامەکان بە شێوەزاری هەولێری</small></div>
-      <div class="count"><b id="cDone">٠</b> / <span id="cAll">٧٠</span></div>
-      <button type="button" id="btnShare" class="share" aria-label="ناردنی وەڵامەکان" title="ناردنی وەڵامەکان">
-        <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false">
-          <path d="M12 3v12M12 3l-4 4M12 3l4 4" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
+      <div class="brand">دەنگی کاوە<small id="label"></small></div>
+      <div class="count" id="count"></div>
     </div>
-    <div class="bar"><i id="barFill" style="width:0%"></i></div>
+    <div class="bar"><i id="barfill" style="width:0"></i></div>
     <div class="sync" id="syncLine"></div>
-  </header>
+  </div>
 
-  <main class="card" id="card">
-    <div class="metarow" id="meta"></div>
-    <p class="qlabel">پرسیارەکە وەک خەڵکی دەینووسێت</p>
-    <p class="q-ar naskh" id="qAr"></p>
-    <p class="q-ku" id="qKu"></p>
-    <div class="conv" id="conv" hidden></div>
-    <div class="hint" id="hint" hidden>
-      <div><span class="k">تێبینی</span><p id="hintText"></p></div>
+  <!-- welcome -->
+  <div id="scIntro" hidden>
+    <div class="card">
+      <div class="ovtitle">بەخێربێی</div>
+      <p id="introText" style="color:var(--muted);line-height:1.85"></p>
+      <div class="setting" style="margin-top:12px">
+        سەرەتا هەموو گفتوگۆکە پێکەوە دەبینی. پاشان ڕستە بە ڕستە دێی.
+        <br>لای هەر ڕستەیەک <b>دەقی ئینگلیزی</b> هەیە — ئەوە مانا ڕاستەقینەکەیە.
+        کوردییەکە بەپێی ئینگلیزییەکە ڕاست بکەوە.
+        <br>ئەگەر کوردییەکە ڕاست بوو، تەنها <b>ڕاستە</b> لێ بدە.
+      </div>
+      <div class="btns"><button class="primary" id="btnStart">دەست پێ بکە</button></div>
     </div>
-    <div class="answer">
-      <div class="alabel"><span class="dot"></span><span id="aLabel"></span></div>
-      <textarea id="ans" rows="4" spellcheck="false"></textarea>
-      <div class="saved" id="saved"></div>
-    </div>
-  </main>
+  </div>
 
-  <div class="toolbar">
-    <button type="button" id="btnIdx">لیستی پرسیارەکان</button>
-    <button type="button" id="btnWho">کاوە کێیە؟</button>
-    <button type="button" id="btnAdd">ڕستەی نوێ</button>
+  <!-- conversation overview -->
+  <div id="scOv" hidden>
+    <div class="card">
+      <div class="chips" id="ovChips"></div>
+      <div class="ovtitle" id="ovTitle"></div>
+      <div class="ovtitle-en" id="ovTitleEn"></div>
+      <div class="setting" id="ovSetting"></div>
+      <div class="conv" id="ovConv"></div>
+      <div class="big">ئەو گفتوگۆیە وەکو قسەکردنی ڕاستەقینە دەچێ؟</div>
+      <p style="margin:0 0 10px;color:var(--muted);font-size:13.5px">
+        مەبەست ڕیزبەندییەکەیە — هەر ڕستەیەک لە شوێنی خۆیەتی، یان شتێک سەیرە؟
+      </p>
+      <div class="btns">
+        <button id="flowYes" style="flex:1">بەرێ، دەچێ</button>
+        <button id="flowNo" style="flex:1">نا، شتێکی سەیرە</button>
+      </div>
+      <div id="flowNoteWrap" hidden>
+        <div class="lbl2" style="margin-top:12px">چی سەیرە؟ (ئارەزوومەندانە)</div>
+        <textarea id="flowNote" style="min-height:76px" placeholder="…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- one line -->
+  <div id="scLine" hidden>
+    <div class="card">
+      <div class="chips" id="lnChips"></div>
+      <div class="linewho" id="lnWho"></div>
+      <div class="ref">
+        <div class="lbl">مانا بە ئینگلیزی</div>
+        <div class="en" id="lnEn"></div>
+      </div>
+      <div class="ar"><div class="lbl">بە عەرەبیی عێراقی</div><span id="lnAr"></span></div>
+      <div class="prev" id="lnPrev" hidden></div>
+      <div class="lbl2" style="margin-top:12px">کوردییەکە — ئەگەر هەڵەیە ڕاستی بکەوە</div>
+      <textarea id="lnKu" spellcheck="false"></textarea>
+      <div class="hint" id="lnHint"></div>
+      <div class="btns">
+        <button class="good" id="btnOk">ڕاستە ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- finished -->
+  <div id="scDone" hidden>
+    <div class="card">
+      <div class="ovtitle">تەواو بوو 🌿</div>
+      <p style="color:var(--muted)">زۆر سوپاس. هەموو شتێک پارێزراوە و نێردراوە.</p>
+      <div class="btns">
+        <button class="primary" id="btnSend2">دووبارە بینێرە</button>
+        <button class="ghost" id="btnBack2">بگەڕێوە</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<nav class="nav">
-  <div class="navin">
-    <button type="button" class="ghost" id="btnPrev">پێشوو</button>
-    <button type="button" class="primary" id="btnNext">دواتر</button>
+<div class="foot">
+  <div class="footin">
+    <button class="nav ghost" id="btnPrev" aria-label="پێشوو">→</button>
+    <button class="primary" id="btnNext">دواتر</button>
+    <button class="nav ghost" id="btnSend" aria-label="ناردن">↑</button>
   </div>
-</nav>
+</div>
 
-<dialog id="dlgIdx"><div class="sheet">
-  <h2>لیستی پرسیارەکان</h2>
-  <p class="sub">ئەوانەی سەوزن وەڵامیان هەیە. ژمارەیەک لێبدە بۆ چوونە سەری.</p>
-  <div class="idx" id="idxGrid"></div>
-  <div class="closebar"><button type="button" data-close>داخستن</button></div>
-</div></dialog>
-
-<dialog id="dlgWho"><div class="sheet">
-  <h2>کاوە کێیە؟</h2>
-  <p class="sub">هەموو وەڵامەکان دەبێت لەگەڵ ئەم زانیاریانە بگونجێن.</p>
-  <ul class="facts" id="whoList"></ul>
-  <p class="sub" style="margin-top:14px">ئەگەر شتێکت لێ پرسرا کە لێرەدا نییە، وەڵامێک بدە کە لەگەڵ کوڕێکی ٢٤ ساڵانی حەلاقی هەولێری بگونجێت — و لە درێژایی کارەکەدا هەمان شت بڵێ.</p>
-  <div class="closebar"><button type="button" data-close>داخستن</button></div>
-</div></dialog>
-
-<dialog id="dlgAdd"><div class="sheet">
-  <h2>ڕستەی نوێ زیاد بکە</h2>
-  <p class="sub">ئەگەر پرسیارێکت بەبیر هات کە لێرە نییە، لێرەوە زیادی بکە.</p>
-  <div class="addfield"><label for="newAr">پرسیارەکە بە عەرەبیی عێراقی</label><input id="newAr" class="naskh" placeholder="شتسوي بالعطلة؟"></div>
-  <div class="addfield"><label for="newKu">هەمان پرسیار بە کوردی (ئارەزوومەندانە)</label><input id="newKu" class="naskh" placeholder="لە پشوودا چ دەکەی؟"></div>
-  <div class="closebar" style="justify-content:space-between">
-    <button type="button" data-close>پاشگەزبوونەوە</button>
-    <button type="button" class="primary" id="btnAddSave" style="flex:none">زیادی بکە</button>
+<dialog id="dlgSend"><div class="dlg">
+  <h3>ناردن</h3>
+  <p id="sendWarn"></p>
+  <div class="btns">
+    <button class="primary" id="doSend">بینێرە</button>
+    <button class="ghost" id="doCopy">کۆپی بکە</button>
+    <button class="ghost" id="doClose">داخستن</button>
   </div>
-</div></dialog>
-
-<dialog id="dlgSend"><div class="sheet">
-  <h2>ناردنی وەڵامەکان</h2>
-  <p class="sub">وەڵامەکان لە مۆبایلەکەی خۆتدا پارێزراون. بۆ ناردنیان، یەکێک لەمانە هەڵبژێرە.</p>
-  <div class="warn" id="sendWarn"></div>
-  <div class="toolbar" style="margin-top:0">
-    <button type="button" class="primary" id="btnCopy" style="flex:1">کۆپی کردن</button>
-    <button type="button" id="btnWa">واتساپ</button>
-    <button type="button" id="btnPush">ناردنەوە</button>
-    <button type="button" id="btnFile" hidden>فایل</button>
-  </div>
-  <p class="sub" style="margin:12px 0 6px">دوای کۆپیکردن، لە واتساپ یان تێلێگرام بینێرە.</p>
-  <textarea id="out" readonly dir="ltr"></textarea>
-  <div class="closebar"><button type="button" data-close>داخستن</button></div>
 </div></dialog>
 
 <script>
-/* Sentences live in questions.json, never in here. Answers are keyed by the
-   question's stable id, so sentences can be added, removed or reordered in a
-   later batch without any answer sliding onto the wrong question. Storage is
-   namespaced per batch, so a new batch starts clean on her phone. */
+/* ────────────────────────────────────────────────────────────────────────────
+   batch-4. The unit is a CONVERSATION: she sees the whole scene first, says
+   whether it flows, then walks it line by line with the ENGLISH shown as the
+   reference. The Kurdish box is pre-filled with my draft — she only types when
+   something is wrong, and "ڕاستە" confirms my draft unchanged.
 
+   The sheet's 11 columns do not change. For batch-4:
+     q_id              c042-t3   (conversation + turn)  |  c042-flow
+     category          the domain                       |  "flow"
+     question_arabic   the Iraqi Arabic line            |  the English setting
+     question_kurdish  my Hawleri draft                 |  the Kurdish title
+     her_hawleri_answer  the final Kurdish (hers, or mine confirmed)
+     draft_text        my Hawleri draft, always
+   The English is NOT round-tripped — it lives in the local CSV and rejoins on
+   q_id, so every column still means what its name says.
+   ──────────────────────────────────────────────────────────────────────────── */
 var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
-var KEY_V1="kawa_voice_v1", QCACHE="kawa_voice_questions", AR="٠١٢٣٤٥٦٧٨٩";
+var QCACHE="kawa_voice_questions_b4", AR="٠١٢٣٤٥٦٧٨٩";
 var lastPush=0, pushTimer=null, saveTimer=null;
-var CATS={}, WHO=[], Q=[], BATCH="", LABEL="", KEY="";
-var st={i:0,ans:{},extra:[],sent:0,synced:0,doneShown:0,dev:""};
+var DATA=null, CONVS=[], SCREENS=[], BATCH="", LABEL="", KEY="";
+var st={i:0,ans:{},flow:{},seen:0,sent:0,synced:0,doneShown:0,dev:""};
 
 function fa(n){return String(n).replace(/\d/g,function(x){return AR[+x]})}
 function $(id){return document.getElementById(id)}
-function all(){return Q.concat(st.extra)}
-function cur(){return all()[st.i]}
-function filled(){var L=all(),n=0;for(var k=0;k<L.length;k++){if((st.ans[L[k].id]||"").trim())n++}return n}
+function esc(s){return String(s==null?"":s)
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function saveSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(save,300)}
 
 function load(){
   try{
     var raw=localStorage.getItem(KEY);
     if(raw){var p=JSON.parse(raw);
-      st.i=p.i||0; st.ans=p.ans||{}; st.extra=p.extra||[];
-      st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0; st.dev=p.dev||"";}
+      st.i=p.i||0; st.ans=p.ans||{}; st.flow=p.flow||{};
+      st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0;
+      st.dev=p.dev||"";}
   }catch(e){}
   if(!st.dev) st.dev="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 }
 
-/* Anything typed before ids existed was keyed by position. batch-1 keeps the
-   same order, so position maps to id exactly. Runs once. */
-function migrate(){
-  if(BATCH!=="batch-1") return;
-  for(var _ in st.ans) return;
-  try{
-    var raw=localStorage.getItem(KEY_V1); if(!raw) return;
-    var p=JSON.parse(raw), old=p.ans||{}, n=0;
-    for(var k in old){
-      var i=parseInt(k,10);
-      if(!isNaN(i)&&Q[i]&&String(old[k]).trim()){st.ans[Q[i].id]=old[k];n++}
-    }
-    if(p.extra&&p.extra.length){
-      st.extra=p.extra.map(function(x,j){x.id="own-"+(j+1);return x});
-    }
-    if(n||st.extra.length){
-      st.i=Math.min(p.i||0,all().length-1);
-      if(p.dev) st.dev=p.dev;
-      save();
-    }
-  }catch(e){}
+/* ---- screens ---- */
+function buildScreens(){
+  SCREENS=[{t:"intro"}];
+  for(var i=0;i<CONVS.length;i++){
+    var c=CONVS[i];
+    SCREENS.push({t:"ov",ci:i});
+    for(var j=0;j<c.turns.length;j++) SCREENS.push({t:"ln",ci:i,ti:j});
+  }
+  SCREENS.push({t:"done"});
 }
+function scr(){return SCREENS[Math.max(0,Math.min(st.i,SCREENS.length-1))]}
+function lineId(c,t){return c.id+"-t"+t.n}
+function lineScreens(){var n=0;for(var k=0;k<SCREENS.length;k++)if(SCREENS[k].t==="ln")n++;return n}
+function filled(){var n=0;for(var k in st.ans){if((st.ans[k]||"").trim())n++}return n}
 
+/* ---- rendering ---- */
+function whoLabel(w){
+  var M={KAWA:"کاوە",CUSTOMER:"موشتەری",FRIEND:"برادەر",NEIGHBOUR:"دراوسێ",
+    LEARNER:"فێرخواز",APPRENTICE:"شاگرد",BROTHER:"برا",SISTER:"خوشک",
+    MOTHER:"داک",FATHER:"باب",BOSS:"خاوەن دووکان",DRIVER:"شۆفێر",
+    SELLER:"فرۆشیار",SHOPKEEPER:"دووکاندار",STRANGER:"کەسێکی نامۆ",
+    SUPPLIER:"دابینکەر",TEA_BOY:"چایچی",WAITER:"گارسۆن",STALLHOLDER:"فرۆشیار",
+    NEPHEW:"برازا",PHARMACIST:"سەیدەلی",GENERATOR_MAN:"پیاوی مۆلیدە"};
+  return M[w]||w;
+}
+function renderOv(s){
+  var c=CONVS[s.ci];
+  $("ovChips").innerHTML=
+    '<span class="chip cat">گفتوگۆی '+fa(s.ci+1)+' لە '+fa(CONVS.length)+'</span>'+
+    '<span class="chip">'+fa(c.turns.length)+' ڕستە</span>'+
+    (st.flow[c.id]?'<span class="chip ok">وەڵامدرا ✓</span>':'');
+  $("ovTitle").textContent=c.title_ku;
+  $("ovTitleEn").textContent=c.title_en;
+  $("ovSetting").innerHTML=esc(c.setting_ku)+
+    '<span class="en">'+esc(c.setting_en)+'</span>';
+  var h=[];
+  for(var j=0;j<c.turns.length;j++){
+    var t=c.turns[j], cur=st.ans[lineId(c,t)];
+    h.push('<div class="crow'+(t.kawa?" k":"")+'">'+
+      '<div class="cn">'+fa(t.n)+'</div><div class="cbody">'+
+      '<div class="cwho">'+esc(whoLabel(t.who))+'</div>'+
+      '<div class="cku">'+esc((cur&&cur.trim())||t.ku)+'</div>'+
+      '<div class="cen">'+esc(t.en)+'</div></div></div>');
+  }
+  $("ovConv").innerHTML=h.join("");
+  var f=st.flow[c.id];
+  $("flowYes").className=(f&&f.v==="yes")?"good":"";
+  $("flowNo").className=(f&&f.v==="no")?"good":"";
+  $("flowNoteWrap").hidden=!(f&&f.v==="no");
+  $("flowNote").value=(f&&f.note)||"";
+  $("btnNext").textContent="دەست بە ڕستەکان بکە";
+}
+function renderLine(s){
+  var c=CONVS[s.ci], t=c.turns[s.ti], id=lineId(c,t);
+  var answered=(st.ans[id]||"").trim();
+  $("lnChips").innerHTML=
+    '<span class="chip cat">'+esc(c.title_ku)+'</span>'+
+    '<span class="chip">ڕستەی '+fa(t.n)+' لە '+fa(c.turns.length)+'</span>'+
+    (answered?'<span class="chip ok">تەواو ✓</span>':'');
+  $("lnWho").innerHTML="قسەکەر: <b>"+esc(whoLabel(t.who))+"</b>"+
+    (t.kawa?" — ئەمە قسەی کاوەیە":"");
+  $("lnEn").textContent=t.en;
+  $("lnAr").textContent=t.ar;
+  if(s.ti>0){
+    var p=c.turns[s.ti-1], pv=st.ans[lineId(c,p)];
+    $("lnPrev").hidden=false;
+    $("lnPrev").innerHTML="ڕستەی پێشوو ("+esc(whoLabel(p.who))+"): <b>"+
+      esc((pv&&pv.trim())||p.ku)+"</b>";
+  }else{ $("lnPrev").hidden=true; }
+  $("lnKu").value=answered||t.ku;
+  $("lnHint").textContent=answered
+    ? "پێشتر وەڵامت داوەتەوە. دەتوانی بیگۆڕی."
+    : "ئەمە ئەوەیە ئەمن نووسیومە. ئەگەر ڕاستە، «ڕاستە» لێ بدە.";
+  $("btnNext").textContent="دواتر";
+}
 function render(){
-  var L=all(), n=L.length;
-  if(st.i<0)st.i=0; if(st.i>=n)st.i=n-1;
-  var q=L[st.i], done=(st.ans[q.id]||"").trim();
-
-  var m=[];
-  m.push('<span class="chip cat">'+(CATS[q.c]||"زیادکراو")+'</span>');
-  m.push('<span class="chip">'+fa(st.i+1)+' لە '+fa(n)+'</span>');
-  if(!q.d&&!q.added&&!q.conv) m.push('<span class="chip blind">خۆت بینووسە</span>');
-  if(q.conv) m.push('<span class="chip blind">ڕیزبەندی</span>');
-  if(q.added) m.push('<span class="chip">پرسیاری خۆت</span>');
-  if(done) m.push('<span class="chip ok">تەواو</span>');
-  $("meta").innerHTML=m.join("");
-
-  $("qAr").textContent=q.ar;
-  $("qKu").textContent=q.ku||"";
-  $("qKu").hidden=!q.ku;
-  if(q.conv&&q.conv.length){
-    var h="";
-    for(var ci=0;ci<q.conv.length;ci++){
-      var side=q.conv[ci][0]==="k";
-      h+='<div class="row'+(side?" k":"")+'"><span class="who">'
-        +(side?"کاوە":"ئەو")+'</span><span class="txt"></span></div>';
-    }
-    $("conv").innerHTML=h;
-    var txts=$("conv").querySelectorAll(".txt");
-    for(var cj=0;cj<q.conv.length;cj++) txts[cj].textContent=q.conv[cj][1];
-    $("conv").hidden=false;
-  } else { $("conv").hidden=true; $("conv").innerHTML=""; }
-  if(q.t){$("hint").hidden=false;$("hintText").textContent=q.t}else{$("hint").hidden=true}
-  $("aLabel").textContent=q.conv?"'باشە' بنووسە، یان بڵێ چی هەڵەیە"
-    :(q.d?"ڕەشنووسێکە — ئەگەر هەڵەیە بیگۆڕە":"وەڵامەکە بە شێوەزاری هەولێری بنووسە");
-
-  var ta=$("ans");
-  ta.value=(st.ans[q.id]!==undefined)?st.ans[q.id]:(q.d||"");
-  ta.placeholder=q.d?"":"لێرە بنووسە…";
-  $("saved").textContent="";
-
-  $("cDone").textContent=fa(filled());
-  $("cAll").textContent=fa(n);
-  $("barFill").style.width=(filled()/n*100)+"%";
-  $("btnPrev").disabled=(st.i===0);
-  $("btnNext").textContent=(st.i===n-1)?"کۆتایی":"دواتر";
+  var s=scr();
+  $("scIntro").hidden=s.t!=="intro";
+  $("scOv").hidden=s.t!=="ov";
+  $("scLine").hidden=s.t!=="ln";
+  $("scDone").hidden=s.t!=="done";
+  $("btnPrev").disabled=st.i<=0;
+  $("btnNext").hidden=(s.t==="intro"||s.t==="done");
+  if(s.t==="ov") renderOv(s);
+  if(s.t==="ln") renderLine(s);
+  if(s.t==="intro") $("introText").textContent=(DATA&&DATA.intro)||"";
+  var total=lineScreens(), f=filled();
+  $("count").innerHTML="<b>"+fa(f)+"</b> / "+fa(total);
+  $("barfill").style.width=(total?Math.round(100*f/total):0)+"%";
   save();
 }
 
-function bind(){
-  $("ans").addEventListener("input",function(){
-    st.ans[cur().id]=this.value;
-    $("cDone").textContent=fa(filled());
-    $("barFill").style.width=(filled()/all().length*100)+"%";
-    clearTimeout(saveTimer);
-    saveTimer=setTimeout(function(){
-      save(); push();
-      $("saved").textContent="پارێزرا ✓";
-      setTimeout(function(){$("saved").textContent=""},1400);
-      if(filled()===all().length&&!st.doneShown){st.doneShown=1;save();openSend()}
-    },450);
-  });
-  $("btnPrev").onclick=function(){st.i--;render();window.scrollTo(0,0)};
-  $("btnNext").onclick=function(){
-    var n=all().length;
-    if(st.i<n-1){st.i++;render();window.scrollTo(0,0)}
-    else if(filled()===n){openSend()}
-  };
-  document.addEventListener("click",function(e){
-    if(e.target.hasAttribute&&e.target.hasAttribute("data-close")){e.target.closest("dialog").close()}
-  });
-  $("btnWho").onclick=function(){
-    $("whoList").innerHTML=WHO.map(function(r){
-      return '<li><span class="lbl">'+r[0]+'</span><span class="val">'+r[1]+'</span></li>'}).join("");
-    $("dlgWho").showModal();
-  };
-  $("btnIdx").onclick=function(){
-    var L=all(),h="";
-    for(var k=0;k<L.length;k++){
-      h+='<button type="button" data-go="'+k+'" class="'+((st.ans[L[k].id]||"").trim()?"f ":"")+(k===st.i?"cur":"")+'">'+fa(k+1)+'</button>';
-    }
-    $("idxGrid").innerHTML=h;
-    $("dlgIdx").showModal();
-  };
-  $("idxGrid").addEventListener("click",function(e){
-    var b=e.target.closest("[data-go]"); if(!b)return;
-    st.i=+b.getAttribute("data-go"); $("dlgIdx").close(); render(); window.scrollTo(0,0);
-  });
-  $("btnAdd").onclick=function(){$("newAr").value="";$("newKu").value="";$("dlgAdd").showModal()};
-  $("btnAddSave").onclick=function(){
-    var a=$("newAr").value.trim(); if(!a){$("newAr").focus();return}
-    st.extra.push({id:"own-"+(st.extra.length+1)+"-"+Date.now().toString(36),
-                   c:"+",ar:a,ku:$("newKu").value.trim(),added:true});
-    st.i=all().length-1; $("dlgAdd").close(); save(); render(); window.scrollTo(0,0);
-  };
-  $("btnShare").onclick=openSend;
-  $("btnCopy").onclick=function(){
-    var t=csv(),b=$("btnCopy");
-    function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
-      setTimeout(function(){b.textContent="کۆپی کردن"},1800)}
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(t).then(ok,function(){$("out").select();ok()});
-    }else{$("out").select();try{document.execCommand("copy")}catch(e){}ok()}
-  };
-  $("btnPush").onclick=function(){
-    var b=$("btnPush"); push(true);
-    b.textContent="نێردرا ✓"; setTimeout(function(){b.textContent="ناردنەوە"},1800);
-  };
-  $("btnWa").onclick=function(){
-    var t=csv();
-    if(t.length>60000){alert("زۆر درێژە بۆ واتساپ — تکایە فایلەکە بنێرە.");return}
-    window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank");
-    st.sent=Date.now(); save();
-  };
-  $("btnFile").hidden=false;
-  $("btnFile").onclick=function(){
-    var blob=new Blob(["﻿"+csv()],{type:"text/csv;charset=utf-8"});
-    var a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="kawa-voice-"+BATCH+".csv";
-    document.body.appendChild(a); a.click();
-    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000);
-    st.sent=Date.now(); save();
-  };
-  window.addEventListener("pagehide",beacon);
-  document.addEventListener("visibilitychange",function(){if(document.hidden)beacon()});
+/* ---- movement ---- */
+function commitLine(){
+  var s=scr(); if(s.t!=="ln") return;
+  var c=CONVS[s.ci], t=c.turns[s.ti];
+  var v=$("lnKu").value.trim();
+  if(v) st.ans[lineId(c,t)]=v;
+}
+function go(d){
+  commitLine();
+  st.i=Math.max(0,Math.min(st.i+d,SCREENS.length-1));
+  save(); push(); render(); window.scrollTo(0,0);
+  if(scr().t==="done"&&!st.doneShown){st.doneShown=1;save();push(true)}
 }
 
+/* ---- payload ---- */
 function rows(){
-  var L=all(),out=[];
-  for(var k=0;k<L.length;k++){
-    var a=(st.ans[L[k].id]||"").trim(); if(!a) continue;
-    out.push({id:L[k].id,n:k+1,cat:(CATS[L[k].c]||"added"),ar:L[k].ar,ku:L[k].ku||"",
-              answer:a,drafted:L[k].d?"yes":"no",draft:L[k].d||""});
+  var out=[];
+  for(var i=0;i<CONVS.length;i++){
+    var c=CONVS[i];
+    var f=st.flow[c.id];
+    if(f&&f.v){
+      out.push({id:c.id+"-flow",n:out.length+1,cat:"flow",
+        ar:c.setting_en,ku:c.title_ku,
+        answer:(f.v==="yes"?"بەرێ":"نا")+(f.note?" — "+f.note:""),
+        drafted:"no",draft:""});
+    }
+    for(var j=0;j<c.turns.length;j++){
+      var t=c.turns[j], a=(st.ans[lineId(c,t)]||"").trim();
+      if(!a) continue;
+      out.push({id:lineId(c,t),n:out.length+1,cat:c.domain,
+        ar:t.ar,ku:t.ku,answer:a,drafted:"yes",draft:t.ku});
+    }
   }
   return out;
 }
-function csv(){
-  var L=all(),r=[["batch","q_id","q_no","category","question_arabic","question_kurdish",
-                  "her_hawleri_answer","draft_was_shown","draft_text"]];
-  for(var k=0;k<L.length;k++){
-    r.push([BATCH,L[k].id,k+1,(CATS[L[k].c]||"added"),L[k].ar,L[k].ku||"",
-            (st.ans[L[k].id]||"").trim(),L[k].d?"yes":"no",L[k].d||""]);
-  }
-  return r.map(function(x){return x.map(function(c){
-    c=String(c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(",")}).join("\r\n");
-}
-function openSend(){
-  var n=all().length,f=filled();
-  $("sendWarn").textContent=f<n
-    ? "لە "+fa(n)+" پرسیار، "+fa(f)+"ی وەڵامدراوە. دەتوانی ئێستا بینێری و دواتر درێژەی پێبدەی."
-    : "هەموو "+fa(n)+" پرسیارەکە وەڵامدراوە. ئێستا بینێرە.";
-  $("out").value=csv();
-  $("dlgSend").showModal();
-}
-
 function payload(){
   var r=rows(); if(!r.length) return null;
   return JSON.stringify({device:st.dev,batch:BATCH,at:new Date().toISOString(),rows:r});
+}
+function csv(){
+  var r=[["batch","q_id","q_no","category","question_arabic","question_kurdish",
+          "her_hawleri_answer","draft_was_shown","draft_text"]];
+  var R=rows();
+  for(var k=0;k<R.length;k++){
+    r.push([BATCH,R[k].id,R[k].n,R[k].cat,R[k].ar,R[k].ku,R[k].answer,
+            R[k].drafted,R[k].draft]);
+  }
+  return r.map(function(x){return x.map(function(c){
+    c=String(c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c
+  }).join(",")}).join("\r\n");
 }
 function stamp(){
   if(!st.synced) return "";
@@ -478,23 +470,81 @@ function beacon(){
     }
   }catch(e){}
 }
+function openSend(){
+  var total=lineScreens(), f=filled();
+  $("sendWarn").textContent = f<total
+    ? "لە "+fa(total)+" ڕستە، "+fa(f)+"ی تەواو بووە. دەتوانی ئێستا بینێری و دواتر درێژەی پێبدەی."
+    : "هەموو "+fa(total)+" ڕستەکە تەواو بوون.";
+  $("dlgSend").showModal();
+}
 
+/* ---- events ---- */
+function bind(){
+  $("btnStart").onclick=function(){go(1)};
+  $("btnNext").onclick=function(){go(1)};
+  $("btnPrev").onclick=function(){go(-1)};
+  $("btnSend").onclick=openSend;
+  $("btnSend2").onclick=openSend;
+  $("btnBack2").onclick=function(){go(-1)};
+  $("doClose").onclick=function(){$("dlgSend").close()};
+  $("doSend").onclick=function(){push(true);$("dlgSend").close()};
+  $("doCopy").onclick=function(){
+    var b=$("doCopy"), t=csv();
+    function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
+      setTimeout(function(){b.textContent="کۆپی بکە"},2000)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(ok,function(){fallback(t,ok)});
+    }else fallback(t,ok);
+  };
+  function fallback(t,ok){
+    var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);
+    a.select();try{document.execCommand("copy");ok()}catch(e){}
+    document.body.removeChild(a);
+  }
+  $("lnKu").addEventListener("input",function(){commitLine();saveSoon()});
+  $("flowYes").onclick=function(){
+    var c=CONVS[scr().ci];
+    st.flow[c.id]={v:"yes",note:""}; save(); push(); render();
+  };
+  $("flowNo").onclick=function(){
+    var c=CONVS[scr().ci], prev=st.flow[c.id];
+    st.flow[c.id]={v:"no",note:(prev&&prev.note)||""}; save(); push(); render();
+    setTimeout(function(){$("flowNote").focus()},50);
+  };
+  $("flowNote").addEventListener("input",function(){
+    var c=CONVS[scr().ci];
+    st.flow[c.id]={v:"no",note:$("flowNote").value}; saveSoon();
+  });
+  $("btnOk").onclick=function(){
+    var s=scr(); if(s.t!=="ln") return;
+    var c=CONVS[s.ci], t=c.turns[s.ti];
+    if(!$("lnKu").value.trim()) $("lnKu").value=t.ku;
+    st.ans[lineId(c,t)]=$("lnKu").value.trim();
+    go(1);
+  };
+  window.addEventListener("pagehide",function(){commitLine();save();beacon()});
+  document.addEventListener("visibilitychange",function(){
+    if(document.visibilityState==="hidden"){commitLine();save();beacon()}
+  });
+}
+
+/* ---- boot ---- */
 function boot(data){
-  CATS=data.categories||{}; WHO=data.who||[]; Q=data.questions||[];
-  BATCH=data.batch||"batch-1"; LABEL=data.label||"";
-  KEY="kawa_voice_v2:"+BATCH;
+  DATA=data;
+  CONVS=data.conversations||[];
+  BATCH=data.batch||"batch-4"; LABEL=data.label||"";
+  KEY="kawa_voice_v3:"+BATCH;
   try{localStorage.setItem(QCACHE,JSON.stringify(data))}catch(e){}
-  load(); migrate(); bind(); render();
-  if(LABEL) document.querySelector(".brand small").textContent=LABEL;
+  load(); buildScreens(); bind(); render();
+  if(LABEL) $("label").textContent=LABEL;
   $("syncLine").textContent=stamp();
   push(true);
 }
 function fail(){
-  $("qAr").textContent="نەتوانرا پرسیارەکان باربکرێن.";
-  $("qKu").textContent="تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە.";
-  $("qKu").hidden=false;
+  $("scIntro").hidden=false;
+  $("introText").textContent="نەتوانرا گفتوگۆکان باربکرێن. تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە.";
+  $("btnStart").hidden=true;
 }
-
 fetch("questions.json?v="+Date.now()).then(function(r){
   if(!r.ok) throw 0; return r.json();
 }).then(boot).catch(function(){
@@ -504,7 +554,6 @@ fetch("questions.json?v="+Date.now()).then(function(r){
   }catch(e){}
   fail();
 });
-
 </script>
 </body>
 </html>
