@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="googlebot" content="noindex,nofollow">
 <meta name="theme-color" content="#A8701F">
-<title>دەنگی کاوە</title>
+<title>وشەکانی فلاشکارت</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
   --line:#D4DCD9; --line-strong:#B9C5C1;
   --accent:#A8701F; --accent-ink:#7A4F12; --accent-soft:#F6E9D5;
   --done:#2E6B51; --done-soft:#E0EFE7; --on-accent:#FFFFFF;
-  --kawa:#EFE6F5; --kawa-line:#C9B5DA;
+  --std:#EFE6F5; --std-line:#C9B5DA; --std-ink:#5A4370;
   --shadow:0 1px 2px rgba(22,32,30,.06),0 8px 24px rgba(22,32,30,.07);
 }
 @media (prefers-color-scheme:dark){
@@ -28,7 +28,7 @@
     --line:#26332F; --line-strong:#35443F;
     --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
     --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
-    --kawa:#241C2E; --kawa-line:#493A5C;
+    --std:#241C2E; --std-line:#493A5C; --std-ink:#C6B2DA;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
   }
 }
@@ -38,7 +38,7 @@
   --line:#26332F; --line-strong:#35443F;
   --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
   --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
-  --kawa:#241C2E; --kawa-line:#493A5C;
+  --std:#241C2E; --std-line:#493A5C; --std-ink:#C6B2DA;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
@@ -75,160 +75,156 @@ body{
 .chip.cat{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
 .chip.ok{background:var(--done-soft);color:var(--done);border-color:transparent}
 
-/* ---------- overview ---------- */
-.ovtitle{font-size:22px;font-weight:700;line-height:1.45;margin:2px 0 4px}
-.ovtitle-en{font-size:12.5px;color:var(--faint);direction:ltr;text-align:right;
-  font-family:system-ui,sans-serif;margin-bottom:12px}
-.setting{background:var(--raise);border:1px solid var(--line);border-radius:12px;
-  padding:12px 14px;font-size:14.5px;color:var(--muted);line-height:1.75}
-.setting .en{display:block;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);
-  direction:ltr;text-align:left;font-family:system-ui,sans-serif;font-size:12.5px;
-  color:var(--faint)}
-.conv{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.crow{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);
-  background:var(--surface)}
-.crow:last-child{border-bottom:0}
-.crow.k{background:var(--kawa);box-shadow:inset 3px 0 0 var(--kawa-line)}
-.cn{flex:none;width:22px;font-size:11px;color:var(--faint);
-  font-variant-numeric:tabular-nums;padding-top:3px}
-.cbody{flex:1;min-width:0}
-.cwho{font-size:11px;color:var(--faint);letter-spacing:.02em;margin-bottom:2px}
-.crow.k .cwho{color:var(--accent-ink);font-weight:700}
-.cku{font-size:16px;line-height:1.75;word-wrap:break-word}
-.cen{font-size:12px;color:var(--faint);direction:ltr;text-align:left;
-  font-family:system-ui,sans-serif;margin-top:3px;line-height:1.5}
+.h1{font-size:22px;font-weight:700;line-height:1.45;margin:2px 0 10px}
+.p{color:var(--muted);white-space:pre-line}
 
-/* ---------- one line ---------- */
-.linewho{font-size:12.5px;color:var(--faint);margin-bottom:4px}
-.linewho b{color:var(--accent-ink)}
+/* ---------- section list ---------- */
+.secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px;
+  margin-top:12px}
+.sec{text-align:start;font:inherit;cursor:pointer;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--ink);
+  box-shadow:var(--shadow)}
+.sec:hover{border-color:var(--line-strong)}
+.sec.full{background:var(--done-soft);border-color:transparent}
+.sec.here{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.sec b{display:block;font-size:14px;margin-bottom:5px}
+.sec .sn{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sec .sbar{display:block;height:3px;border-radius:99px;background:var(--line);
+  margin-top:7px;overflow:hidden}
+.sec .sbar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.sec.full .sbar i{background:var(--done)}
+
+/* ---------- one item ---------- */
 .ref{background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin-bottom:10px}
 .ref .lbl{font-size:11px;color:var(--accent-ink);font-weight:700;margin-bottom:5px;
   letter-spacing:.02em}
 .ref .en{direction:ltr;text-align:left;font-family:system-ui,sans-serif;
   font-size:16.5px;line-height:1.55;color:var(--ink)}
 .ar{background:var(--raise);border:1px solid var(--line);border-radius:10px;
-  padding:9px 12px;font-size:14.5px;color:var(--muted);margin-bottom:12px;
+  padding:9px 12px;font-size:14.5px;color:var(--muted);margin-bottom:10px;
   font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif}
 .ar .lbl{font-size:11px;color:var(--faint);font-family:"Noto Kufi Arabic",sans-serif;
   margin-bottom:3px}
+.std{background:var(--std);border-radius:12px;padding:12px 14px;margin-top:12px;
+  box-shadow:inset 3px 0 0 var(--std-line)}
+.std .lbl{font-size:11px;color:var(--std-ink);font-weight:700;margin-bottom:5px}
+.std .t{font-size:17px;line-height:1.7;word-wrap:break-word}
 .lbl2{font-size:12px;color:var(--muted);margin-bottom:6px}
-textarea{width:100%;min-height:104px;resize:vertical;border-radius:12px;
+textarea{width:100%;min-height:92px;resize:vertical;border-radius:12px;
   border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);
   padding:12px 14px;font:inherit;font-size:17px;line-height:1.8}
 textarea:focus{outline:none;border-color:var(--accent);
   box-shadow:0 0 0 3px var(--accent-soft)}
-.hint{font-size:12px;color:var(--faint);margin-top:7px}
-.prev{margin-top:12px;font-size:13px;color:var(--muted);
-  border-inline-start:3px solid var(--line-strong);padding-inline-start:10px}
-.prev b{color:var(--ink);font-weight:500}
+.hint{font-size:12px;color:var(--faint);margin-top:7px;line-height:1.6}
 
 /* ---------- buttons ---------- */
-.btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-button{font:inherit;cursor:pointer;border-radius:12px;min-height:48px;padding:10px 16px;
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button{font:inherit;cursor:pointer;border-radius:12px;padding:11px 16px;
   border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
-button.primary{background:var(--accent);color:var(--on-accent);border-color:transparent;
-  font-weight:700;flex:1}
-button.ghost{background:transparent}
-button.good{background:var(--done-soft);color:var(--done);border-color:transparent;
-  font-weight:700;flex:1}
-button:disabled{opacity:.45;cursor:default}
+button:disabled{opacity:.4;cursor:default}
+button.primary{background:var(--accent);border-color:transparent;color:var(--on-accent);
+  font-weight:700}
+button.good{background:var(--done-soft);border-color:transparent;color:var(--done);
+  font-weight:700}
+button.ghost{background:transparent;border-color:var(--line)}
+button.nav{min-width:52px;font-size:18px;line-height:1}
 
-/* ---------- bottom bar ---------- */
-.foot{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--ground);
+.foot{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--surface);
   border-top:1px solid var(--line);
   padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
 .footin{max-width:660px;margin:0 auto;display:flex;gap:8px;align-items:center}
-.footin button{flex:1}
-.footin .nav{flex:0 0 52px;min-width:52px}
+.footin .primary{flex:1}
 
-/* ---------- dialogs ---------- */
-dialog{border:0;border-radius:18px;padding:0;background:var(--surface);color:var(--ink);
-  max-width:520px;width:calc(100% - 32px);box-shadow:var(--shadow)}
-dialog::backdrop{background:rgba(10,16,15,.55)}
-.dlg{padding:18px}
-.dlg h3{margin:0 0 8px;font-size:18px}
-.dlg p{margin:0 0 12px;color:var(--muted);font-size:14px}
-.big{font-size:17px;font-weight:700;margin:14px 0 6px}
+dialog{border:0;border-radius:16px;padding:0;background:transparent;max-width:92vw}
+dialog::backdrop{background:rgba(10,16,15,.5)}
+.dlg{background:var(--surface);color:var(--ink);border-radius:16px;padding:18px;
+  box-shadow:var(--shadow);max-width:420px}
+.dlg h3{margin:0 0 8px;font-size:17px}
+.dlg p{margin:0 0 6px;color:var(--muted);font-size:14px}
+.tip{background:var(--raise);border:1px dashed var(--line-strong);border-radius:10px;
+  padding:9px 12px;font-size:13px;color:var(--muted);margin-top:10px}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <div class="top">
+<div class="top">
+  <div class="wrap" style="padding-block:0">
     <div class="toprow">
-      <div class="brand">دەنگی کاوە<small id="label"></small></div>
+      <div class="brand">وشەکانی فلاشکارت<small id="label">بۆ هەولێری</small></div>
       <div class="count" id="count"></div>
     </div>
-    <div class="bar"><i id="barfill" style="width:0"></i></div>
+    <div class="bar"><i id="barfill" style="width:0%"></i></div>
     <div class="sync" id="syncLine"></div>
   </div>
+</div>
 
-  <!-- welcome -->
+<div class="wrap">
+
+  <!-- intro -->
   <div id="scIntro" hidden>
     <div class="card">
-      <div class="ovtitle">بەخێربێی</div>
-      <p id="introText" style="color:var(--muted);line-height:1.85"></p>
-      <div class="setting" style="margin-top:12px">
-        سەرەتا هەموو گفتوگۆکە پێکەوە دەبینی. پاشان ڕستە بە ڕستە دێی.
-        <br>لای هەر ڕستەیەک <b>دەقی ئینگلیزی</b> هەیە — ئەوە مانا ڕاستەقینەکەیە.
-        کوردییەکە بەپێی ئینگلیزییەکە ڕاست بکەوە.
-        <br>ئەگەر کوردییەکە ڕاست بوو، تەنها <b>ڕاستە</b> لێ بدە.
-      </div>
-      <div class="btns"><button class="primary" id="btnStart">دەست پێ بکە</button></div>
+      <div class="h1">سڵاو 🌿</div>
+      <p class="p" id="introText"></p>
+      <div class="btns"><button class="primary" id="btnStart">دەست پێبکە</button></div>
     </div>
   </div>
 
-  <!-- conversation overview -->
-  <div id="scOv" hidden>
+  <!-- section hub -->
+  <div id="scHub" hidden>
     <div class="card">
-      <div class="chips" id="ovChips"></div>
-      <div class="ovtitle" id="ovTitle"></div>
-      <div class="ovtitle-en" id="ovTitleEn"></div>
-      <div class="setting" id="ovSetting"></div>
-      <div class="conv" id="ovConv"></div>
-      <div class="big">ئەو گفتوگۆیە وەکو قسەکردنی ڕاستەقینە دەچێ؟</div>
-      <p style="margin:0 0 10px;color:var(--muted);font-size:13.5px">
-        مەبەست ڕیزبەندییەکەیە — هەر ڕستەیەک لە شوێنی خۆیەتی، یان شتێک سەیرە؟
-      </p>
-      <div class="btns">
-        <button id="flowYes" style="flex:1">بەرێ، دەچێ</button>
-        <button id="flowNo" style="flex:1">نا، شتێکی سەیرە</button>
-      </div>
-      <div id="flowNoteWrap" hidden>
-        <div class="lbl2" style="margin-top:12px">چی سەیرە؟ (ئارەزوومەندانە)</div>
-        <textarea id="flowNote" style="min-height:76px" placeholder="…"></textarea>
-      </div>
+      <div class="h1">بەشەکان</div>
+      <p class="p" id="hubNote"></p>
+      <div class="btns"><button class="primary" id="btnResume"></button></div>
     </div>
+    <div class="secs" id="secList"></div>
   </div>
 
-  <!-- one line -->
-  <div id="scLine" hidden>
+  <!-- one word -->
+  <div id="scItem" hidden>
     <div class="card">
-      <div class="chips" id="lnChips"></div>
-      <div class="linewho" id="lnWho"></div>
-      <div class="ref">
+      <div class="chips" id="itChips"></div>
+      <div class="ref" id="itEnWrap" hidden>
         <div class="lbl">مانا بە ئینگلیزی</div>
-        <div class="en" id="lnEn"></div>
+        <div class="en" id="itEn"></div>
       </div>
-      <div class="ar"><div class="lbl">بە عەرەبیی عێراقی</div><span id="lnAr"></span></div>
-      <div class="prev" id="lnPrev" hidden></div>
-      <div class="lbl2" style="margin-top:12px">کوردییەکە — ئەگەر هەڵەیە ڕاستی بکەوە</div>
-      <textarea id="lnKu" spellcheck="false"></textarea>
-      <div class="hint" id="lnHint"></div>
+      <div class="ar" id="itArWrap" hidden>
+        <div class="lbl">بە عەرەبی</div><span id="itAr"></span>
+      </div>
+      <div class="lbl2">بە هەولێری — ئەگەر لە هەولێر وا ناڵێن، بیگۆڕە</div>
+      <textarea id="itKu" spellcheck="false"></textarea>
+      <div class="hint" id="itHint"></div>
+      <div class="tip" id="itTipWrap" hidden><span id="itTip"></span></div>
+      <div class="std" id="itStdWrap" hidden>
+        <div class="lbl">بە کوردیی ستاندارد</div>
+        <div class="t" id="itStd"></div>
+      </div>
       <div class="btns">
         <button class="good" id="btnOk">ڕاستە ✓</button>
+        <button class="ghost" id="btnHub">لیستی بەشەکان</button>
       </div>
     </div>
   </div>
 
-  <!-- finished -->
+  <!-- section finished -->
+  <div id="scSec" hidden>
+    <div class="card">
+      <div class="h1" id="secTitle"></div>
+      <p class="p" id="secNote"></p>
+      <div class="btns">
+        <button class="primary" id="btnNextSec">بەشی دواتر</button>
+        <button class="ghost" id="btnSecHub">لیستی بەشەکان</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- all finished -->
   <div id="scDone" hidden>
     <div class="card">
-      <div class="ovtitle">تەواو بوو 🌿</div>
-      <p style="color:var(--muted)">زۆر سوپاس. هەموو شتێک پارێزراوە و نێردراوە.</p>
+      <div class="h1">تەواو بوو 🌿</div>
+      <p class="p">زۆر سوپاس. هەموو شتێک پارێزراوە و نێردراوە.</p>
       <div class="btns">
         <button class="primary" id="btnSend2">دووبارە بینێرە</button>
-        <button class="ghost" id="btnBack2">بگەڕێوە</button>
+        <button class="ghost" id="btnDoneHub">لیستی بەشەکان</button>
       </div>
     </div>
   </div>
@@ -247,6 +243,7 @@ dialog::backdrop{background:rgba(10,16,15,.55)}
   <p id="sendWarn"></p>
   <div class="btns">
     <button class="primary" id="doSend">بینێرە</button>
+    <button class="ghost" id="doAll">هەمووی بنێرەوە</button>
     <button class="ghost" id="doCopy">کۆپی بکە</button>
     <button class="ghost" id="doClose">داخستن</button>
   </div>
@@ -254,26 +251,35 @@ dialog::backdrop{background:rgba(10,16,15,.55)}
 
 <script>
 /* ────────────────────────────────────────────────────────────────────────────
-   batch-4. The unit is a CONVERSATION: she sees the whole scene first, says
-   whether it flows, then walks it line by line with the ENGLISH shown as the
-   reference. The Kurdish box is pre-filled with my draft — she only types when
-   something is wrong, and "ڕاستە" confirms my draft unchanged.
+   flashcards. The unit is ONE flashcard word of the Standard Kurdish deck, to
+   be turned into Hawleri. The box arrives pre-filled with the Standard word;
+   "ڕاستە" says Hawleri uses it unchanged, anything typed replaces it.
 
-   The sheet's 11 columns do not change. For batch-4:
-     q_id              c042-t3   (conversation + turn)  |  c042-flow
-     category          the domain                       |  "flow"
-     question_arabic   the Iraqi Arabic line            |  the English setting
-     question_kurdish  my Hawleri draft                 |  the Kurdish title
-     her_hawleri_answer  the final Kurdish (hers, or mine confirmed)
-     draft_text        my Hawleri draft, always
-   The English is NOT round-tripped — it lives in the local CSV and rejoins on
-   q_id, so every column still means what its name says.
+   Cards whose Standard word she already converted in the hawleri-tests round
+   (same word, same meaning) carry her answer in `h` and are NOT shown — they
+   are done. `t` is a hint: the same word appeared in the tests with another
+   meaning, so her test answer is shown but not applied.
+
+   Sections are the deck's categories. The sheet's Apps Script (shared with the
+   Kawa batches) REPLACES every row of one device+batch on each post, so each
+   category is its own batch ("flashcards:07") and a post always carries ALL
+   answered words of that category. Only categories touched since the last
+   acknowledged post are re-sent (st.dirty).
+
+   The sheet's 11 columns, for these batches:
+     q_id              f + the card's uuid[:8]
+     category          the category (English)
+     question_arabic   the card's Arabic
+     question_kurdish  the Standard Kurdish word, as stored
+     her_hawleri_answer  her Hawleri
+     draft_text        what the box was pre-filled with
+   The English is NOT round-tripped — it rejoins from items.json on q_id.
    ──────────────────────────────────────────────────────────────────────────── */
 var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
-var QCACHE="kawa_voice_questions_b4", AR="٠١٢٣٤٥٦٧٨٩";
-var lastPush=0, pushTimer=null, saveTimer=null;
-var DATA=null, CONVS=[], SCREENS=[], BATCH="", LABEL="", KEY="";
-var st={i:0,ans:{},flow:{},seen:0,sent:0,synced:0,doneShown:0,dev:""};
+var QCACHE="kawa_voice_flashcards", AR="٠١٢٣٤٥٦٧٨٩";
+var lastPush=0, pushTimer=null, saveTimer=null, pushing=false;
+var DATA=null, SECS=[], ITEMS=[], BYSEC=[], DONE=[], BATCH="", KEY="";
+var st={v:"intro",cur:0,ans:{},dirty:{},sent:0,synced:0,dev:""};
 
 function fa(n){return String(n).replace(/\d/g,function(x){return AR[+x]})}
 function $(id){return document.getElementById(id)}
@@ -286,151 +292,163 @@ function load(){
   try{
     var raw=localStorage.getItem(KEY);
     if(raw){var p=JSON.parse(raw);
-      st.i=p.i||0; st.ans=p.ans||{}; st.flow=p.flow||{};
-      st.sent=p.sent||0; st.synced=p.synced||0; st.doneShown=p.doneShown||0;
-      st.dev=p.dev||"";}
+      st.v=p.v||"intro"; st.cur=p.cur||0; st.ans=p.ans||{}; st.dirty=p.dirty||{};
+      st.sent=p.sent||0; st.synced=p.synced||0; st.dev=p.dev||"";}
   }catch(e){}
   if(!st.dev) st.dev="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  if(!(st.cur>=0)||st.cur>=ITEMS.length) st.cur=0;
 }
 
-/* ---- screens ---- */
-function buildScreens(){
-  SCREENS=[{t:"intro"}];
-  for(var i=0;i<CONVS.length;i++){
-    var c=CONVS[i];
-    SCREENS.push({t:"ov",ci:i});
-    for(var j=0;j<c.turns.length;j++) SCREENS.push({t:"ln",ci:i,ti:j});
-  }
-  SCREENS.push({t:"done"});
+/* ---- helpers ---- */
+function sec(i){return ITEMS[i].c}
+function secStart(s){return BYSEC[s].a}
+function secEnd(s){return BYSEC[s].b}
+function nextSec(s){for(var k=s+1;k<SECS.length;k++) if(secEnd(k)>secStart(k)) return k; return -1}
+function answered(id){return !!(st.ans[id]&&st.ans[id].trim())}
+function filled(){var n=0;for(var i=0;i<ITEMS.length;i++) if(answered(ITEMS[i].id)) n++;return n}
+function secFilled(s){
+  var n=0,e=secEnd(s);
+  for(var i=secStart(s);i<e;i++) if(answered(ITEMS[i].id)) n++;
+  return n;
 }
-function scr(){return SCREENS[Math.max(0,Math.min(st.i,SCREENS.length-1))]}
-function lineId(c,t){return c.id+"-t"+t.n}
-function lineScreens(){var n=0;for(var k=0;k<SCREENS.length;k++)if(SCREENS[k].t==="ln")n++;return n}
-function filled(){var n=0;for(var k in st.ans){if((st.ans[k]||"").trim())n++}return n}
+function dirtyCount(){var n=0;for(var k in st.dirty)n++;return n}
+function firstOpen(){
+  for(var i=0;i<ITEMS.length;i++) if(!answered(ITEMS[i].id)) return i;
+  return -1;
+}
+function batchOf(s){return BATCH+":"+(s<10?"0":"")+s}
 
 /* ---- rendering ---- */
-function whoLabel(w){
-  var M={KAWA:"کاوە",CUSTOMER:"موشتەری",FRIEND:"برادەر",NEIGHBOUR:"دراوسێ",
-    LEARNER:"فێرخواز",APPRENTICE:"شاگرد",BROTHER:"برا",SISTER:"خوشک",
-    MOTHER:"داک",FATHER:"باب",BOSS:"خاوەن دووکان",DRIVER:"شۆفێر",
-    SELLER:"فرۆشیار",SHOPKEEPER:"دووکاندار",STRANGER:"کەسێکی نامۆ",
-    SUPPLIER:"دابینکەر",TEA_BOY:"چایچی",WAITER:"گارسۆن",STALLHOLDER:"فرۆشیار",
-    NEPHEW:"برازا",PHARMACIST:"سەیدەلی",GENERATOR_MAN:"پیاوی مۆلیدە"};
-  return M[w]||w;
-}
-function renderOv(s){
-  var c=CONVS[s.ci];
-  $("ovChips").innerHTML=
-    '<span class="chip cat">گفتوگۆی '+fa(s.ci+1)+' لە '+fa(CONVS.length)+'</span>'+
-    '<span class="chip">'+fa(c.turns.length)+' ڕستە</span>'+
-    (st.flow[c.id]?'<span class="chip ok">وەڵامدرا ✓</span>':'');
-  $("ovTitle").textContent=c.title_ku;
-  $("ovTitleEn").textContent=c.title_en;
-  $("ovSetting").innerHTML=esc(c.setting_ku)+
-    '<span class="en">'+esc(c.setting_en)+'</span>';
-  var h=[];
-  for(var j=0;j<c.turns.length;j++){
-    var t=c.turns[j], cur=st.ans[lineId(c,t)];
-    h.push('<div class="crow'+(t.kawa?" k":"")+'">'+
-      '<div class="cn">'+fa(t.n)+'</div><div class="cbody">'+
-      '<div class="cwho">'+esc(whoLabel(t.who))+'</div>'+
-      '<div class="cku">'+esc((cur&&cur.trim())||t.ku)+'</div>'+
-      '<div class="cen">'+esc(t.en)+'</div></div></div>');
+function renderHub(){
+  var f=filled(), left=ITEMS.length-f, o=firstOpen();
+  $("hubNote").textContent = f
+    ? "لە "+fa(ITEMS.length)+" وشە، "+fa(f)+"ت تەواو کردووە. "+fa(left)+" ماوە."
+    : "هەموو "+fa(ITEMS.length)+" وشەکە بەپێی بابەت لە "+fa(SECS.length)+" بەشدا دانراون. "+
+      "دەتوانی لە هەر بەشێکەوە دەست پێبکەی.";
+  $("btnResume").textContent = o<0 ? "هەمووی تەواو بووە ✓"
+    : (f ? "بەردەوام بە" : "دەست پێبکە");
+  $("btnResume").disabled = o<0;
+  var h=[], here=ITEMS.length?sec(st.cur):-1;
+  for(var s=0;s<SECS.length;s++){
+    var t=secEnd(s)-secStart(s); if(!t) continue;
+    var n=secFilled(s), pc=Math.round(100*n/t);
+    h.push('<button class="sec'+(n===t?" full":"")+(s===here?" here":"")+
+      '" data-s="'+s+'">'+
+      '<b>'+esc(SECS[s].ku)+(n===t?' ✓':'')+'</b>'+
+      '<span class="sn">'+fa(n)+' لە '+fa(t)+'</span>'+
+      '<span class="sbar"><i style="width:'+pc+'%"></i></span></button>');
   }
-  $("ovConv").innerHTML=h.join("");
-  var f=st.flow[c.id];
-  $("flowYes").className=(f&&f.v==="yes")?"good":"";
-  $("flowNo").className=(f&&f.v==="no")?"good":"";
-  $("flowNoteWrap").hidden=!(f&&f.v==="no");
-  $("flowNote").value=(f&&f.note)||"";
-  $("btnNext").textContent="دەست بە ڕستەکان بکە";
+  $("secList").innerHTML=h.join("");
+  var bs=$("secList").getElementsByTagName("button");
+  for(var k=0;k<bs.length;k++) bs[k].onclick=function(){
+    var s=+this.getAttribute("data-s"), e=secEnd(s), go=secStart(s);
+    for(var i=secStart(s);i<e;i++){ if(!answered(ITEMS[i].id)){go=i;break} }
+    st.cur=go; st.v="item"; save(); render(); window.scrollTo(0,0);
+  };
 }
-function renderLine(s){
-  var c=CONVS[s.ci], t=c.turns[s.ti], id=lineId(c,t);
-  var answered=(st.ans[id]||"").trim();
-  $("lnChips").innerHTML=
-    '<span class="chip cat">'+esc(c.title_ku)+'</span>'+
-    '<span class="chip">ڕستەی '+fa(t.n)+' لە '+fa(c.turns.length)+'</span>'+
-    (answered?'<span class="chip ok">تەواو ✓</span>':'');
-  $("lnWho").innerHTML="قسەکەر: <b>"+esc(whoLabel(t.who))+"</b>"+
-    (t.kawa?" — ئەمە قسەی کاوەیە":"");
-  $("lnEn").textContent=t.en;
-  $("lnAr").textContent=t.ar;
-  if(s.ti>0){
-    var p=c.turns[s.ti-1], pv=st.ans[lineId(c,p)];
-    $("lnPrev").hidden=false;
-    $("lnPrev").innerHTML="ڕستەی پێشوو ("+esc(whoLabel(p.who))+"): <b>"+
-      esc((pv&&pv.trim())||p.ku)+"</b>";
-  }else{ $("lnPrev").hidden=true; }
-  $("lnKu").value=answered||t.ku;
-  $("lnHint").textContent=answered
-    ? "پێشتر وەڵامت داوەتەوە. دەتوانی بیگۆڕی."
-    : "ئەمە ئەوەیە ئەمن نووسیومە. ئەگەر ڕاستە، «ڕاستە» لێ بدە.";
-  $("btnNext").textContent="دواتر";
+function renderItem(){
+  var it=ITEMS[st.cur], s=sec(st.cur), a=(st.ans[it.id]||"").trim();
+  $("itChips").innerHTML=
+    '<span class="chip cat">'+esc(SECS[s].ku)+'</span>'+
+    '<span class="chip">وشەی '+fa(st.cur-secStart(s)+1)+' لە '+fa(secEnd(s)-secStart(s))+'</span>'+
+    (a?'<span class="chip ok">تەواو ✓</span>':'');
+  $("itEnWrap").hidden=!it.en; if(it.en) $("itEn").textContent=it.en;
+  $("itArWrap").hidden=!it.ar; if(it.ar) $("itAr").textContent=it.ar;
+  $("itStd").textContent=it.s;
+  $("itKu").value=a||it.p;
+  $("itTipWrap").hidden=!it.t;
+  if(it.t) $("itTip").textContent="لە تاقیکردنەوەکاندا ئەم وشەیە"+
+    (it.t[1]?" بە مانای «"+it.t[1]+"»":"")+" هاتبوو و تۆ نووسیبووت: "+it.t[0];
+  showOrig();
+  $("itHint").textContent = a
+    ? "پێشتر وەڵامت داوەتەوە. دەتوانیت بیگۆڕیت."
+    : "ئەمە وشەی کوردیی ستانداردە. ئەگەر لە هەولێریش هەروا دەیڵێن، «ڕاستە ✓» لێ بدە. ئەگەر نا، بیگۆڕە.";
+  $("btnNext").textContent = (st.cur+1>=secEnd(s)) ? "کۆتایی بەش" : "دواتر";
+}
+function showOrig(){
+  $("itStdWrap").hidden=$("itKu").value.trim()===ITEMS[st.cur].p;
+}
+function renderSec(){
+  var s=sec(st.cur), n=secFilled(s), t=secEnd(s)-secStart(s);
+  $("secTitle").textContent="«"+SECS[s].ku+"» تەواو بوو";
+  $("secNote").textContent = n<t
+    ? "لەم بەشەدا "+fa(n)+" لە "+fa(t)+" وشە تەواو بووە. دەتوانی بگەڕێیەوە و ئەوانی تریش تەواو بکەی."
+    : "هەموو "+fa(t)+" وشەکەی ئەم بەشە تەواو بوون. زۆر سوپاس 🌿";
+  $("btnNextSec").hidden = nextSec(s)<0;
 }
 function render(){
-  var s=scr();
-  $("scIntro").hidden=s.t!=="intro";
-  $("scOv").hidden=s.t!=="ov";
-  $("scLine").hidden=s.t!=="ln";
-  $("scDone").hidden=s.t!=="done";
-  $("btnPrev").disabled=st.i<=0;
-  $("btnNext").hidden=(s.t==="intro"||s.t==="done");
-  if(s.t==="ov") renderOv(s);
-  if(s.t==="ln") renderLine(s);
-  if(s.t==="intro") $("introText").textContent=(DATA&&DATA.intro)||"";
-  var total=lineScreens(), f=filled();
-  $("count").innerHTML="<b>"+fa(f)+"</b> / "+fa(total);
-  $("barfill").style.width=(total?Math.round(100*f/total):0)+"%";
+  $("scIntro").hidden=st.v!=="intro";
+  $("scHub").hidden=st.v!=="hub";
+  $("scItem").hidden=st.v!=="item";
+  $("scSec").hidden=st.v!=="sec";
+  $("scDone").hidden=st.v!=="done";
+  var isItem=st.v==="item";
+  $("btnNext").hidden=!isItem;
+  $("btnPrev").hidden=!isItem;
+  $("btnPrev").disabled=st.cur<=0;
+  if(st.v==="hub") renderHub();
+  if(isItem) renderItem();
+  if(st.v==="sec") renderSec();
+  if(st.v==="intro") $("introText").textContent=
+    "ئەمانە وشەکانی فلاشکارتی کوردیی ستانداردن، بەپێی بابەت لە "+fa(SECS.length)+" بەشدا.\n\n"+
+    "هەر وشەیەک بیکە بە هەولێری، وەک لە هەولێر دەیڵێن. ئەگەر وشەکە لە هەولێریش هەروایە، تەنها «ڕاستە ✓» لێ بدە.\n\n"+
+    fa(DONE.length)+" وشەی تر پێشتر لە تاقیکردنەوەکاندا ڕاستت کردوونەتەوە، بۆیە لێرە نین. "+
+    fa(ITEMS.length)+" وشە ماوە.\n\nهەرچی دەنووسی لە مۆبایلەکەت دەپارێزرێت و خۆی دەنێردرێت.";
+  var f=filled();
+  $("count").innerHTML="<b>"+fa(f)+"</b> / "+fa(ITEMS.length);
+  $("barfill").style.width=(ITEMS.length?Math.round(100*f/ITEMS.length):0)+"%";
   save();
 }
 
 /* ---- movement ---- */
-function commitLine(){
-  var s=scr(); if(s.t!=="ln") return;
-  var c=CONVS[s.ci], t=c.turns[s.ti];
-  var v=$("lnKu").value.trim();
-  if(v) st.ans[lineId(c,t)]=v;
+function setAns(it,v){
+  if(v!==st.ans[it.id]){ st.ans[it.id]=v; st.dirty[it.c]=1 }
 }
-function go(d){
-  commitLine();
-  st.i=Math.max(0,Math.min(st.i+d,SCREENS.length-1));
-  save(); push(); render(); window.scrollTo(0,0);
-  if(scr().t==="done"&&!st.doneShown){st.doneShown=1;save();push(true)}
+function commit(){
+  if(st.v!=="item") return;
+  var it=ITEMS[st.cur], v=$("itKu").value.trim();
+  if(!v) return;
+  // The box arrives pre-filled with the Standard word, so paging past a word
+  // must NOT count as "Hawleri says it the same way" -- that would ship
+  // Standard text to the sheet as her answer. Only an edit, or "ڕاستە ✓".
+  if(v===it.p&&!answered(it.id)) return;
+  setAns(it,v);
 }
+function goItem(d){
+  commit();
+  var s=sec(st.cur), n=st.cur+d;
+  if(n<0) n=0;
+  if(n>=secEnd(s)){
+    st.v = (nextSec(s)<0) ? "done" : "sec";
+    save(); push(true); render(); window.scrollTo(0,0); return;
+  }
+  st.cur=n; save(); push(); render(); window.scrollTo(0,0);
+}
+function toHub(){commit();st.v="hub";save();push();render();window.scrollTo(0,0)}
 
 /* ---- payload ---- */
-function rows(){
-  var out=[];
-  for(var i=0;i<CONVS.length;i++){
-    var c=CONVS[i];
-    var f=st.flow[c.id];
-    if(f&&f.v){
-      out.push({id:c.id+"-flow",n:out.length+1,cat:"flow",
-        ar:c.setting_en,ku:c.title_ku,
-        answer:(f.v==="yes"?"بەرێ":"نا")+(f.note?" — "+f.note:""),
-        drafted:"no",draft:""});
-    }
-    for(var j=0;j<c.turns.length;j++){
-      var t=c.turns[j], a=(st.ans[lineId(c,t)]||"").trim();
-      if(!a) continue;
-      out.push({id:lineId(c,t),n:out.length+1,cat:c.domain,
-        ar:t.ar,ku:t.ku,answer:a,drafted:"yes",draft:t.ku});
-    }
+function rowsOf(s){
+  var out=[], e=secEnd(s);
+  for(var i=secStart(s);i<e;i++){
+    var it=ITEMS[i], a=(st.ans[it.id]||"").trim();
+    if(!a) continue;
+    out.push({id:it.id,n:i+1,cat:SECS[s].name,ar:it.ar,ku:it.s,answer:a,
+              drafted:"yes",draft:it.p});
   }
   return out;
 }
-function payload(){
-  var r=rows(); if(!r.length) return null;
-  return JSON.stringify({device:st.dev,batch:BATCH,at:new Date().toISOString(),rows:r});
+function payload(s,r){
+  return JSON.stringify({device:st.dev,batch:batchOf(s),at:new Date().toISOString(),rows:r});
 }
 function csv(){
-  var r=[["batch","q_id","q_no","category","question_arabic","question_kurdish",
-          "her_hawleri_answer","draft_was_shown","draft_text"]];
-  var R=rows();
-  for(var k=0;k<R.length;k++){
-    r.push([BATCH,R[k].id,R[k].n,R[k].cat,R[k].ar,R[k].ku,R[k].answer,
-            R[k].drafted,R[k].draft]);
+  var r=[["batch","q_id","q_no","category","english","arabic","standard_kurdish",
+          "her_hawleri","prefilled"]];
+  for(var s=0;s<SECS.length;s++){
+    var e=secEnd(s);
+    for(var i=secStart(s);i<e;i++){
+      var it=ITEMS[i], a=(st.ans[it.id]||"").trim(); if(!a) continue;
+      r.push([batchOf(s),it.id,i+1,SECS[s].name,it.en,it.ar,it.s,a,it.p]);
+    }
   }
   return r.map(function(x){return x.map(function(c){
     c=String(c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c
@@ -440,54 +458,88 @@ function stamp(){
   if(!st.synced) return "";
   var d=new Date(st.synced);
   function two(x){return (x<10?"0":"")+x}
-  return "دوایین ناردن "+two(d.getHours())+":"+two(d.getMinutes());
+  return "دوایین ناردن "+two(d.getHours())+":"+two(d.getMinutes())+
+         (dirtyCount()?" — هەندێکی چاوەڕێی ناردنە":"");
 }
-function push(force){
-  if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0) return;
+/* One category per POST, one after another: the script holds a lock, and a
+   category is only marked clean once its post has gone out. */
+function push(force,all){
+  if(!SHEET_URL) return;
+  if(pushing) return;
   if(!force&&Date.now()-lastPush<4000){
     clearTimeout(pushTimer); pushTimer=setTimeout(function(){push(true)},4000); return;
   }
-  var body=payload(); if(!body) return;
-  lastPush=Date.now();
+  var q=[];
+  for(var s=0;s<SECS.length;s++){
+    if(!(all||st.dirty[s])) continue;
+    var r=rowsOf(s);
+    if(r.length) q.push([s,r]); else delete st.dirty[s];
+  }
+  if(!q.length) return;
+  lastPush=Date.now(); pushing=true;
   var line=$("syncLine"); line.className="sync"; line.textContent="…ناردن";
-  fetch(SHEET_URL,{method:"POST",mode:"no-cors",
-    headers:{"Content-Type":"text/plain;charset=utf-8"},body:body
-  }).then(function(){
-    st.synced=Date.now(); save();
-    line.className="sync on"; line.textContent="نێردرا ✓";
-    setTimeout(function(){line.className="sync";line.textContent=stamp()},2500);
-  }).catch(function(){
-    line.className="sync"; line.textContent="ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە";
-  });
+  (function next(k){
+    if(k>=q.length){
+      pushing=false; st.synced=Date.now(); save();
+      line.className="sync on"; line.textContent="نێردرا ✓";
+      setTimeout(function(){line.className="sync";line.textContent=stamp()},2500);
+      return;
+    }
+    var s=q[k][0], body=payload(s,q[k][1]);
+    fetch(SHEET_URL,{method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},body:body
+    }).then(function(){
+      // still dirty if she changed this category while the post was out
+      if(JSON.stringify(rowsOf(s))===JSON.stringify(q[k][1])) delete st.dirty[s];
+      save(); next(k+1);
+    }).catch(function(){
+      pushing=false;
+      line.className="sync"; line.textContent="ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە";
+    });
+  })(0);
 }
 function beacon(){
-  if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0) return;
-  var body=payload(); if(!body) return;
+  if(!SHEET_URL||!navigator.sendBeacon) return;
   try{
-    if(navigator.sendBeacon){
-      navigator.sendBeacon(SHEET_URL,new Blob([body],{type:"text/plain;charset=utf-8"}));
-      st.synced=Date.now(); save();
+    for(var s in st.dirty){
+      s=+s; var r=rowsOf(s); if(!r.length) continue;
+      var body=new Blob([payload(s,r)],{type:"text/plain;charset=utf-8"});
+      if(navigator.sendBeacon(SHEET_URL,body)){ delete st.dirty[s]; st.synced=Date.now() }
     }
+    save();
   }catch(e){}
 }
 function openSend(){
-  var total=lineScreens(), f=filled();
-  $("sendWarn").textContent = f<total
-    ? "لە "+fa(total)+" ڕستە، "+fa(f)+"ی تەواو بووە. دەتوانی ئێستا بینێری و دواتر درێژەی پێبدەی."
-    : "هەموو "+fa(total)+" ڕستەکە تەواو بوون.";
+  var f=filled(), p=dirtyCount();
+  $("sendWarn").textContent = p
+    ? "لە "+fa(ITEMS.length)+" وشە، "+fa(f)+"ت تەواو کردووە. هەندێکیان هێشتا نەنێردراون."
+    : (f ? "هەموو ئەوەی تەواوت کردووە ("+fa(f)+") نێردراوە ✓"
+         : "هێشتا هیچ وەڵامێک نییە.");
   $("dlgSend").showModal();
 }
 
 /* ---- events ---- */
 function bind(){
-  $("btnStart").onclick=function(){go(1)};
-  $("btnNext").onclick=function(){go(1)};
-  $("btnPrev").onclick=function(){go(-1)};
+  $("btnStart").onclick=function(){st.v="hub";save();render();window.scrollTo(0,0)};
+  $("btnResume").onclick=function(){
+    var o=firstOpen(); if(o>=0) st.cur=o;
+    st.v="item"; save(); render(); window.scrollTo(0,0);
+  };
+  $("btnNext").onclick=function(){goItem(1)};
+  $("btnPrev").onclick=function(){goItem(-1)};
+  $("btnHub").onclick=toHub;
+  $("btnSecHub").onclick=toHub;
+  $("btnDoneHub").onclick=toHub;
+  $("btnNextSec").onclick=function(){
+    var s=nextSec(sec(st.cur));
+    if(s<0){st.v="done"} else {st.cur=secStart(s); st.v="item"}
+    save(); render(); window.scrollTo(0,0);
+  };
   $("btnSend").onclick=openSend;
   $("btnSend2").onclick=openSend;
-  $("btnBack2").onclick=function(){go(-1)};
   $("doClose").onclick=function(){$("dlgSend").close()};
   $("doSend").onclick=function(){push(true);$("dlgSend").close()};
+  $("doAll").onclick=function(){push(true,true);$("dlgSend").close()};
   $("doCopy").onclick=function(){
     var b=$("doCopy"), t=csv();
     function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
@@ -501,51 +553,46 @@ function bind(){
     a.select();try{document.execCommand("copy");ok()}catch(e){}
     document.body.removeChild(a);
   }
-  $("lnKu").addEventListener("input",function(){commitLine();saveSoon()});
-  $("flowYes").onclick=function(){
-    var c=CONVS[scr().ci];
-    st.flow[c.id]={v:"yes",note:""}; save(); push(); render();
-  };
-  $("flowNo").onclick=function(){
-    var c=CONVS[scr().ci], prev=st.flow[c.id];
-    st.flow[c.id]={v:"no",note:(prev&&prev.note)||""}; save(); push(); render();
-    setTimeout(function(){$("flowNote").focus()},50);
-  };
-  $("flowNote").addEventListener("input",function(){
-    var c=CONVS[scr().ci];
-    st.flow[c.id]={v:"no",note:$("flowNote").value}; saveSoon();
-  });
+  $("itKu").addEventListener("input",function(){commit();showOrig();saveSoon()});
   $("btnOk").onclick=function(){
-    var s=scr(); if(s.t!=="ln") return;
-    var c=CONVS[s.ci], t=c.turns[s.ti];
-    if(!$("lnKu").value.trim()) $("lnKu").value=t.ku;
-    st.ans[lineId(c,t)]=$("lnKu").value.trim();
-    go(1);
+    if(st.v!=="item") return;
+    var it=ITEMS[st.cur];
+    if(!$("itKu").value.trim()) $("itKu").value=it.p;
+    setAns(it,$("itKu").value.trim());
+    goItem(1);
   };
-  window.addEventListener("pagehide",function(){commitLine();save();beacon()});
+  window.addEventListener("pagehide",function(){commit();save();beacon()});
   document.addEventListener("visibilitychange",function(){
-    if(document.visibilityState==="hidden"){commitLine();save();beacon()}
+    if(document.visibilityState==="hidden"){commit();save();beacon()}
   });
 }
 
 /* ---- boot ---- */
 function boot(data){
   DATA=data;
-  CONVS=data.conversations||[];
-  BATCH=data.batch||"batch-4"; LABEL=data.label||"";
-  KEY="kawa_voice_v3:"+BATCH;
+  SECS=data.sections||[];
+  var all=data.items||[];
+  ITEMS=[]; DONE=[];
+  for(var i=0;i<all.length;i++) (all[i].h?DONE:ITEMS).push(all[i]);
+  BYSEC=[];
+  for(var s=0;s<SECS.length;s++) BYSEC.push({a:0,b:0});
+  for(var j=ITEMS.length-1;j>=0;j--) BYSEC[ITEMS[j].c].a=j;
+  for(var j2=0;j2<ITEMS.length;j2++) BYSEC[ITEMS[j2].c].b=j2+1;
+  BATCH=data.batch||"flashcards";
+  KEY="kawa_voice_fc_v1:"+BATCH;
   try{localStorage.setItem(QCACHE,JSON.stringify(data))}catch(e){}
-  load(); buildScreens(); bind(); render();
-  if(LABEL) $("label").textContent=LABEL;
+  load(); bind(); render();
+  if(data.label) $("label").textContent=data.label;
   $("syncLine").textContent=stamp();
   push(true);
 }
 function fail(){
   $("scIntro").hidden=false;
-  $("introText").textContent="نەتوانرا گفتوگۆکان باربکرێن. تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە.";
+  $("introText").textContent="نەتوانرا وشەکان باربکرێن. تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە.";
   $("btnStart").hidden=true;
+  $("btnNext").hidden=true; $("btnPrev").hidden=true;
 }
-fetch("questions.json?v="+Date.now()).then(function(r){
+fetch("items.json?v="+Date.now()).then(function(r){
   if(!r.ok) throw 0; return r.json();
 }).then(boot).catch(function(){
   try{
