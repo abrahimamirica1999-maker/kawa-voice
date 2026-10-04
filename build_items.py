@@ -3,8 +3,8 @@
 
 Reads the LIVE standard_kurdish flashcards (read-only) and the native speaker's
 answers from the hawleri-tests round. A card whose Standard word she already
-converted there, WITH THE SAME MEANING, takes her Hawleri and is marked done
-(`h`); she does not see it again. Every other card is pre-filled with the
+converted there, WITH THE SAME MEANING, is pre-filled with her Hawleri and
+flagged `h`; she only confirms it. Every other card is pre-filled with the
 Standard word for her to convert (only word-initial ر is respelt ڕ). Where the same Kurdish word was in
 the tests with a different meaning, her test answer is shown as a hint (`t`)
 but NOT applied — that is a guess, and guesses are hers to make.
@@ -116,7 +116,7 @@ for c in sorted(cards, key=lambda c: (ci.get(c["category_id"], 999), (c["english
           "s": c["target_text"], "p": p}
     if p in HER and en.lower() not in SENSE_DIFFERS:
         it["h"] = HER[p]
-        stats["done: her word from the tests" + (" (changed)" if HER[p] != p else " (same as Standard)")] += 1
+        stats["to confirm: her word from the tests" + (" (changed)" if HER[p] != p else " (same as Standard)")] += 1
     elif p in HER:
         it["t"] = [HER[p], TEST_EN[p]]
         stats["to review, with a hint from the tests"] += 1
@@ -124,7 +124,7 @@ for c in sorted(cards, key=lambda c: (ci.get(c["category_id"], 999), (c["english
         k = BY_INITIAL[initial(p)]
         if same_meaning(en, TEST_EN[k]):
             it["h"] = HER[k]
-            stats["done: her word from the tests (ر/ڕ spelling)"] += 1
+            stats["to confirm: her word from the tests (ر/ڕ spelling)"] += 1
         else:
             it["t"] = [HER[k], TEST_EN[k]]
             stats["to review, with a hint from the tests"] += 1
@@ -132,12 +132,14 @@ for c in sorted(cards, key=lambda c: (ci.get(c["category_id"], 999), (c["english
         hits = [k for k in BY_FOLDED.get(folded(p), []) if same_meaning(en, TEST_EN[k])]
         if len(hits) == 1:
             it["h"] = HER[hits[0]]
-            stats["done: her word from the tests (ر/ڕ ل/ڵ spelling)"] += 1
+            stats["to confirm: her word from the tests (ر/ڕ ل/ڵ spelling)"] += 1
         else:
             stats["to review"] += 1
     # What she starts from: the Standard word with word-initial ر written ڕ,
     # the one spelling fix that can't change a word (ڕ is the rule there).
-    if "h" not in it and initial(p) != p:
+    if "h" in it:
+        it["p"] = it["h"]
+    elif initial(p) != p:
         it["p"] = initial(p)
         stats["  of which pre-filled with the ر -> ڕ spelling fix"] += 1
     items.append(it)

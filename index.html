@@ -256,8 +256,9 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
    "ڕاستە" says Hawleri uses it unchanged, anything typed replaces it.
 
    Cards whose Standard word she already converted in the hawleri-tests round
-   (same word, same meaning) carry her answer in `h` and are NOT shown — they
-   are done. `t` is a hint: the same word appeared in the tests with another
+   (same word, same meaning) are flagged `h` and arrive pre-filled with HER
+   word, so she only confirms them; like every card, they count only once she
+   taps "ڕاستە" or edits. `t` is a hint: the same word appeared in the tests with another
    meaning, so her test answer is shown but not applied.
 
    Sections are the deck's categories. The sheet's Apps Script (shared with the
@@ -272,13 +273,14 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
      question_arabic   the card's Arabic
      question_kurdish  the Standard Kurdish word, as stored
      her_hawleri_answer  her Hawleri
+     draft_was_shown   "tests" (pre-filled with her test answer) | "standard"
      draft_text        what the box was pre-filled with
    The English is NOT round-tripped — it rejoins from items.json on q_id.
    ──────────────────────────────────────────────────────────────────────────── */
 var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
 var QCACHE="kawa_voice_flashcards", AR="٠١٢٣٤٥٦٧٨٩";
 var lastPush=0, pushTimer=null, saveTimer=null, pushing=false;
-var DATA=null, SECS=[], ITEMS=[], BYSEC=[], DONE=[], BATCH="", KEY="";
+var DATA=null, SECS=[], ITEMS=[], BYSEC=[], NH=0, BATCH="", KEY="";
 var st={v:"intro",cur:0,ans:{},dirty:{},sent:0,synced:0,dev:""};
 
 function fa(n){return String(n).replace(/\d/g,function(x){return AR[+x]})}
@@ -351,6 +353,7 @@ function renderItem(){
   $("itChips").innerHTML=
     '<span class="chip cat">'+esc(SECS[s].ku)+'</span>'+
     '<span class="chip">وشەی '+fa(st.cur-secStart(s)+1)+' لە '+fa(secEnd(s)-secStart(s))+'</span>'+
+    (it.h?'<span class="chip">لە تاقیکردنەوەکانەوە</span>':'')+
     (a?'<span class="chip ok">تەواو ✓</span>':'');
   $("itEnWrap").hidden=!it.en; if(it.en) $("itEn").textContent=it.en;
   $("itArWrap").hidden=!it.ar; if(it.ar) $("itAr").textContent=it.ar;
@@ -362,11 +365,14 @@ function renderItem(){
   showOrig();
   $("itHint").textContent = a
     ? "پێشتر وەڵامت داوەتەوە. دەتوانیت بیگۆڕیت."
+    : it.h
+    ? "ئەمە ئەو هەولێرییەیە کە خۆت لە تاقیکردنەوەکاندا نووسیوتە. ئەگەر بۆ ئەم مانایە ڕاستە، «ڕاستە ✓» لێ بدە. ئەگەر نا، بیگۆڕە."
     : "ئەمە وشەی کوردیی ستانداردە. ئەگەر لە هەولێریش هەروا دەیڵێن، «ڕاستە ✓» لێ بدە. ئەگەر نا، بیگۆڕە.";
   $("btnNext").textContent = (st.cur+1>=secEnd(s)) ? "کۆتایی بەش" : "دواتر";
 }
 function showOrig(){
-  $("itStdWrap").hidden=$("itKu").value.trim()===ITEMS[st.cur].p;
+  var it=ITEMS[st.cur];
+  $("itStdWrap").hidden=!it.h&&$("itKu").value.trim()===it.p;
 }
 function renderSec(){
   var s=sec(st.cur), n=secFilled(s), t=secEnd(s)-secStart(s);
@@ -392,8 +398,8 @@ function render(){
   if(st.v==="intro") $("introText").textContent=
     "ئەمانە وشەکانی فلاشکارتی کوردیی ستانداردن، بەپێی بابەت لە "+fa(SECS.length)+" بەشدا.\n\n"+
     "هەر وشەیەک بیکە بە هەولێری، وەک لە هەولێر دەیڵێن. ئەگەر وشەکە لە هەولێریش هەروایە، تەنها «ڕاستە ✓» لێ بدە.\n\n"+
-    fa(DONE.length)+" وشەی تر پێشتر لە تاقیکردنەوەکاندا ڕاستت کردوونەتەوە، بۆیە لێرە نین. "+
-    fa(ITEMS.length)+" وشە ماوە.\n\nهەرچی دەنووسی لە مۆبایلەکەت دەپارێزرێت و خۆی دەنێردرێت.";
+    fa(NH)+" وشەیان پێشتر لە تاقیکردنەوەکاندا ڕاستت کردوونەتەوە؛ ئەوانە بە هەولێرییەکەی خۆت نووسراون "+
+    "و نیشانەی «لە تاقیکردنەوەکانەوە»یان لەسەرە. تەنها دڵنیابەرەوە کە بۆ ئەو مانایە ڕاستن.\n\nهەرچی دەنووسی لە مۆبایلەکەت دەپارێزرێت و خۆی دەنێردرێت.";
   var f=filled();
   $("count").innerHTML="<b>"+fa(f)+"</b> / "+fa(ITEMS.length);
   $("barfill").style.width=(ITEMS.length?Math.round(100*f/ITEMS.length):0)+"%";
@@ -433,7 +439,7 @@ function rowsOf(s){
     var it=ITEMS[i], a=(st.ans[it.id]||"").trim();
     if(!a) continue;
     out.push({id:it.id,n:i+1,cat:SECS[s].name,ar:it.ar,ku:it.s,answer:a,
-              drafted:"yes",draft:it.p});
+              drafted:it.h?"tests":"standard",draft:it.p});
   }
   return out;
 }
@@ -572,8 +578,8 @@ function boot(data){
   DATA=data;
   SECS=data.sections||[];
   var all=data.items||[];
-  ITEMS=[]; DONE=[];
-  for(var i=0;i<all.length;i++) (all[i].h?DONE:ITEMS).push(all[i]);
+  ITEMS=all; NH=0;
+  for(var i=0;i<all.length;i++) if(all[i].h) NH++;
   BYSEC=[];
   for(var s=0;s<SECS.length;s++) BYSEC.push({a:0,b:0});
   for(var j=ITEMS.length-1;j>=0;j--) BYSEC[ITEMS[j].c].a=j;
