@@ -1,161 +1,192 @@
 # -*- coding: utf-8 -*-
-"""Build items.json: the Standard Kurdish flashcard deck, for conversion to Hawleri.
+"""Build items.json: the "fix all typos" review (every row of the typo workbook's Corrections sheet).
 
-Reads the LIVE standard_kurdish flashcards (read-only) and the native speaker's
-answers from the hawleri-tests round. A card whose Standard word she already
-converted there, WITH THE SAME MEANING, is pre-filled with her Hawleri and
-flagged `h`; she only confirms it. Every other card is pre-filled with the
-Standard word for her to convert (only word-initial ر is respelt ڕ). Where the same Kurdish word was in
-the tests with a different meaning, her test answer is shown as a hint (`t`)
-but NOT applied — that is a guess, and guesses are hers to make.
+Two groups, chosen on the first screen:
+  ar  - Arabic (Fusha meaning in the Kurdish courses, Iraqi Arabic in the Arabic course) + English
+  ku  - Kurdish (Standard Sorani, Hawleri)
+Each item says what the text must be written in (`L`), shows the English meaning (`en`) found in the course where the
+text is used, the text now (`t`), the suggested fix (`f`, may be empty) and why (`w`, English, as in the workbook).
 
-  python build_items.py          # from the app repo's others/kawa-voice
+  python build_items.py        # from the app repo's others/kawa-voice
 
-Ids are `f` + the card's uuid[:8], so a rebuild keeps her saved progress.
+Inputs (app repo, others/): typo-review-all-courses-2026-10-21.xlsx (the rows) and typo-hunt-2026-10-20/
+strings.json + courses.json (the 2026-10-20 snapshot the workbook was made from; where each text is used).
+Ids are `x` + sha1(lang|text)[:8], so a rebuild keeps the reviewer's saved progress. `r` = the workbook row number
+(the # column), so answers join back to the workbook too. The Wrong letters sheet is NOT here (owner, 2026-10-24:
+fix those automatically).
 """
-import collections, io, json, os, re, sys, urllib.request
+import collections, hashlib, json, os, re, sys
 
 import openpyxl
 
 sys.stdout.reconfigure(encoding="utf-8")
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(os.path.dirname(HERE))
-SHEET = os.path.join(REPO, "others", "Hawleri-Sorani", "hawleri-tests all corrected.xlsx")
+OTHERS = os.path.dirname(HERE)
+BOOK = os.path.join(OTHERS, "typo-review-all-courses-2026-10-21.xlsx")
+HUNT = os.path.join(OTHERS, "typo-hunt-2026-10-20")
 OUT = os.path.join(HERE, "items.json")
 
-# Same Kurdish word, but the tests used it for another meaning: not applied.
-SENSE_DIFFERS = {"interview", "earth", "sharp", "wife", "needle", "person",
-                 "than", "pay", "difficult", "heavy", "above"}
+# workbook "Language" -> (strings.json lang, group, section key)
+LANG = {"Arabic (Fusha meaning)": ("ar-fusha", "ar", "fusha"), "Arabic (Iraqi)": ("ar-iraqi", "ar", "iraqi"),
+        "English": ("en", "ar", "en"), "Kurdish (Sorani)": ("ku-std", "ku", "std"),
+        "Kurdish (Hawleri)": ("ku-hawleri", "ku", "hawleri")}
+# sections in the order the reviewer meets them; titles in the group's own language
+SECTIONS = [("ar", "fusha", "العربية الفصحى", "Fusha (Standard Arabic)"),
+            ("ar", "iraqi", "اللهجة العراقية", "Iraqi Arabic"),
+            ("ar", "en", "الإنكليزية", "English"),
+            ("ku", "std", "کوردیی ستاندارد (سۆرانی)", "Standard Kurdish (Sorani)"),
+            ("ku", "hawleri", "هەولێری", "Hawleri")]
+CHUNK = 40
 
-env = {}
-for line in io.open(os.path.join(REPO, ".env.local"), encoding="utf-8"):
-    line = line.strip()
-    if line and not line.startswith("#") and "=" in line:
-        k, _, v = line.partition("=")
-        env[k.strip()] = v.strip().strip('"').strip("'")
-URL = env["SUPABASE_URL"].rstrip("/")
-KEY = env["SUPABASE_SERVICE_ROLE_KEY"]
-H = {"apikey": KEY, "Authorization": "Bearer " + KEY, "User-Agent": "curl/8"}
+C = json.load(open(os.path.join(HUNT, "courses.json"), encoding="utf-8"))
+S = json.load(open(os.path.join(HUNT, "strings.json"), encoding="utf-8"))
+TESTS = {t["id"]: t for c in ("standard_kurdish", "hawleri_kurdish", "iraqi_arabic") for t in C[c]["tests"]}
+CARDS = {f["id"]: f for c in ("standard_kurdish", "hawleri_kurdish", "iraqi_arabic") for f in C[c]["flashcards"]}
+WHERE = collections.defaultdict(list)
+for s in S:
+    WHERE[(s["lang"], s["text"])] += [dict(w, course=s["course"]) for w in s["where"]]
 
-
-def fetch(table, flt):
-    out, off = [], 0
-    while True:  # PostgREST caps at 1000; total order ending in id
-        r = urllib.request.Request(
-            URL + "/rest/v1/%s?select=*&%s&order=id&limit=1000&offset=%d" % (table, flt, off), headers=H)
-        c = json.loads(urllib.request.urlopen(r, timeout=180).read())
-        out += c
-        if len(c) < 1000:
-            return out
-        off += 1000
+EN_KEYS = ("en", "caption_en", "target_en")
+OTHER_KEYS = ("ar", "ku", "caption_ar", "caption_ku", "target_ar", "target_ku")
 
 
-def letters(s):
-    """Arabic kaf/yeh (the dictionary's) -> Kurdish ک/ی. Spelling only, no word change."""
-    s = (s or "").replace("ك", "ک").replace("ي", "ی").replace("ى", "ی")
-    s = re.sub("[​‍‎‏ـ]", "", s)
-    return " ".join(s.split())
+def holds(v, text):
+    return v == text or (isinstance(v, list) and text in v)
 
 
-# ------------------------------------------------------------ her answers
-wb = openpyxl.load_workbook(SHEET, read_only=True)
-rows = [r for r in list(wb["answers"].iter_rows(values_only=True))[1:] if r[0] == "tests-all"]
-rows.sort(key=lambda r: r[13])  # latest submission wins for a repeated id
-HER, TEST_EN = {}, {}
-for r in rows:
-    std, her = letters(r[7]), " ".join((r[9] or "").split())
-    if std and her:
-        HER[std] = her
-        TEST_EN[std] = (r[5] or "").strip()
-
-# ------------------------------------------------------------ deck
-cards = fetch("flashcards", "course_id=eq.standard_kurdish")
-cats = sorted(fetch("flashcard_categories", "course_id=eq.standard_kurdish"),
-              key=lambda c: (c["sort_order"], c["name"]))
-ci = {c["id"]: i for i, c in enumerate(cats)}
-
-# The deck (from a printed dictionary) often writes ر for ڕ and ل for ڵ, so a
-# word she did convert can miss an exact match: رەش / ڕەش. Two looser keys:
-#   initial  - word-initial ر is always ڕ in Sorani, so this is a spelling fix;
-#   folded   - ڕ->ر and ڵ->ل everywhere, which CAN join different words
-#              (کەڕ deaf / کەر donkey), so it is only trusted with the meaning.
-# Either way her word is applied only when the English meaning agrees.
-def initial(s):
-    return re.sub(r"(^|\s)ر", lambda m: m.group(1) + "ڕ", s)
+def find_dict(v, text):
+    """The innermost dict of a test's answers that has `text` as one of its values (an option, a pair, labels)."""
+    if isinstance(v, dict):
+        for x in v.values():
+            d = find_dict(x, text)
+            if d is not None:
+                return d
+        if any(holds(x, text) for x in v.values()):
+            return v
+    elif isinstance(v, list):
+        for x in v:
+            d = find_dict(x, text)
+            if d is not None:
+                return d
+    return None
 
 
-def folded(s):
-    return s.replace("ڕ", "ر").replace("ڵ", "ل")
+def first(v):
+    return (v[0] if isinstance(v, list) and v else v) if v else ""
 
 
-SAME_SENSE = {"aeroplane": "plane"}
+def quoted(prompt):
+    m = re.search(r'"([^"]+)"', prompt or "")
+    return m.group(1) if m else ""
 
 
-def senses(s):
-    s = (s or "").lower()
-    return {re.sub(r"^(to|the|a|an) ", "", x.strip()) for x in re.split(r"[/,]", s) if x.strip()}
+def norm(x):
+    return " ".join(re.sub(r"[.?!,;:؟،«»\"]", " ", x or "").split())
 
 
-def same_meaning(card_en, test_en):
-    e = senses(card_en)
-    e |= {SAME_SENSE[x] for x in e if x in SAME_SENSE}
-    return bool(e & senses(test_en))
+# a whole sentence (Arabic or Kurdish, any course) -> its English, from the tests that carry both
+SENT_EN = {}
+for t in TESTS.values():
+    va = t.get("valid_answers") or {}
+    en = first(va.get("target_en")) or first(va.get("valid_en")) or quoted(t.get("prompt"))
+    if not en:
+        continue
+    for k in ("target_ar", "target_ku", "valid_ar", "valid_ku", "answers"):
+        for x in (va.get(k) if isinstance(va.get(k), list) else [va.get(k)]):
+            if isinstance(x, str) and x:
+                SENT_EN.setdefault(norm(x), en)
+TITLES = {}
+for c in ("standard_kurdish", "hawleri_kurdish", "iraqi_arabic"):
+    for x in C[c]["sections"] + C[c]["units"] + C[c]["steps"]:
+        for f in ("title_ar", "title_ku"):
+            if x.get(f):
+                TITLES[x[f]] = x.get("title") or ""
+        if x.get("title"):
+            TITLES.setdefault("en:" + x["title"], x.get("title_ku") or x.get("title_ar") or "")
 
 
-BY_INITIAL = {initial(k): k for k in HER}
-BY_FOLDED = collections.defaultdict(list)
-for k in HER:
-    BY_FOLDED[folded(k)].append(k)
+def sentences(lang, text):
+    """For a word of an arrange exercise: the sentence it is part of."""
+    got = collections.Counter()
+    for w in WHERE[(lang, text)]:
+        t = TESTS.get(w.get("test"))
+        if t and t["exercise_type"] == "arrange" and w.get("field") == "order":
+            got[" ".join((t.get("valid_answers") or {}).get("order") or [])] += 1
+    return [x for x, _ in got.most_common(1)]
 
+
+def meanings(lang, text):
+    """English meaning(s) of a text (for an English text: the Arabic/Kurdish shown with it), most used first."""
+    got = collections.Counter()
+    for w in WHERE[(lang, text)]:
+        if "flashcard" in w:
+            f = CARDS.get(w["flashcard"]) or {}
+            if lang == "en":
+                got[f.get("target_text") or ""] += 1
+            else:
+                got[f.get("english_text") or ""] += 1
+            continue
+        t = TESTS.get(w.get("test"))
+        if not t:
+            continue
+        va = t.get("valid_answers") or {}
+        if w.get("field", "").startswith("prompt"):          # the instruction itself, e.g. fill_blank 'for "..."'
+            got[(quoted(t.get("prompt")) or t.get("prompt") or "") if lang != "en"
+                else (quoted(t.get("prompt_ku") or t.get("prompt_ar")) or t.get("prompt_ku") or t.get("prompt_ar") or "")] += 1
+            continue
+        if t["exercise_type"] == "arrange" and w.get("field") == "order":
+            got[SENT_EN.get(norm(" ".join(va.get("order") or [])), "")] += 1
+            continue
+        d = find_dict(va, text)
+        if lang == "en":
+            hit = d and next((d[k] for k in OTHER_KEYS if d.get(k) and d.get(k) != text), "")
+            got[hit or first(va.get("target_ar")) or first(va.get("target_ku")) or ""] += 1
+        else:
+            hit = d and next((first(d[k]) for k in EN_KEYS if d.get(k)), "")
+            if not hit and d and isinstance(d.get("labels"), dict):
+                hit = d["labels"].get("en", "")
+            # a whole answer of the test (translate / fill_blank / arrange): the test's own English
+            hit = hit or first(va.get("target_en")) or first(va.get("valid_en")) or quoted(t.get("prompt"))
+            got[hit or ""] += 1
+    if not got and "title" in " ".join(w.get("kind", "") for w in WHERE[(lang, text)]):
+        got[TITLES.get(text) or TITLES.get("en:" + text) or ""] += 1
+    got.pop("", None)
+    return [m for m, _ in got.most_common(2)]
+
+
+wb = openpyxl.load_workbook(BOOK, read_only=True)
+rows = list(wb["Corrections"].iter_rows(min_row=2, values_only=True))
 items, stats = [], collections.Counter()
-for c in sorted(cards, key=lambda c: (ci.get(c["category_id"], 999), (c["english_text"] or "").lower())):
-    p = letters(c["target_text"])
-    en = (c["english_text"] or "").strip()
-    it = {"id": "f" + c["id"].replace("-", "")[:8], "c": ci.get(c["category_id"], -1),
-          "en": en, "ar": (c["arabic_text"] or "").strip(),
-          "s": c["target_text"], "p": p}
-    if p in HER and en.lower() not in SENSE_DIFFERS:
-        it["h"] = HER[p]
-        stats["to confirm: her word from the tests" + (" (changed)" if HER[p] != p else " (same as Standard)")] += 1
-    elif p in HER:
-        it["t"] = [HER[p], TEST_EN[p]]
-        stats["to review, with a hint from the tests"] += 1
-    elif initial(p) in BY_INITIAL:
-        k = BY_INITIAL[initial(p)]
-        if same_meaning(en, TEST_EN[k]):
-            it["h"] = HER[k]
-            stats["to confirm: her word from the tests (ر/ڕ spelling)"] += 1
-        else:
-            it["t"] = [HER[k], TEST_EN[k]]
-            stats["to review, with a hint from the tests"] += 1
-    else:
-        hits = [k for k in BY_FOLDED.get(folded(p), []) if same_meaning(en, TEST_EN[k])]
-        if len(hits) == 1:
-            it["h"] = HER[hits[0]]
-            stats["to confirm: her word from the tests (ر/ڕ ل/ڵ spelling)"] += 1
-        else:
-            stats["to review"] += 1
-    # What she starts from: the Standard word with word-initial ر written ڕ,
-    # the one spelling fix that can't change a word (ڕ is the rule there).
-    if "h" in it:
-        it["p"] = it["h"]
-    elif initial(p) != p:
-        it["p"] = initial(p)
-        stats["  of which pre-filled with the ر -> ڕ spelling fix"] += 1
-    items.append(it)
+for r in rows:
+    if r[0] is None:
+        continue
+    no, courses, language, found, sure, text, fix, why, used, where = r[:10]
+    lang, group, key = LANG[language]
+    m = meanings(lang, text)
+    stats[(group, key, "with meaning" if m else "NO meaning")] += 1
+    items.append({"id": "x" + hashlib.sha1((lang + "|" + text).encode("utf-8")).hexdigest()[:8], "r": no,
+                  "g": group, "k": key, "co": courses, "t": text, "f": fix or "", "w": why or "",
+                  "by": found, "s": sure or "", "n": used, "wh": where or "", "en": m, "in": sentences(lang, text)})
 
-ids = [i["id"] for i in items]
-assert len(ids) == len(set(ids)), "id collision"
-secs = [{"name": c["name"], "ku": initial(letters(c["name_ku"])), "ar": c["name_ar"]} for c in cats]
+# sections: per language, chunks of CHUNK, most-used texts first
+sections, ordered = [], []
+for g, k, ti, en in SECTIONS:
+    its = sorted([i for i in items if i["k"] == k], key=lambda i: (-(i["n"] or 0), i["r"]))
+    parts = max(1, -(-len(its) // CHUNK))
+    for p in range(parts):
+        chunk = its[p * CHUNK:(p + 1) * CHUNK]
+        if not chunk:
+            continue
+        si = len(sections)
+        sections.append({"g": g, "k": k, "title": ti + (" %d" % (p + 1) if parts > 1 else ""),
+                         "name": en + (" %d" % (p + 1) if parts > 1 else "")})
+        for it in chunk:
+            it["c"] = si
+            ordered.append(it)
 
-data = {
-    "batch": "flashcards",
-    "label": "وشەکانی فلاشکارت — بۆ هەولێری",
-    "sections": secs,
-    "items": items,
-}
-json.dump(data, io.open(OUT, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
-print("cards %d in %d categories" % (len(items), len(secs)))
+assert len({i["id"] for i in ordered}) == len(ordered) == len(items), "duplicate ids"
+json.dump({"batch": "typos", "sections": sections, "items": ordered},
+          open(OUT, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
 for k, v in sorted(stats.items()):
-    print("  %-45s %d" % (k, v))
-print("->", OUT)
+    print(k, v)
+print(len(ordered), "items,", len(sections), "sections ->", OUT)

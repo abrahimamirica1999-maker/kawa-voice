@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="googlebot" content="noindex,nofollow">
 <meta name="theme-color" content="#A8701F">
-<title>وشەکانی فلاشکارت</title>
+<title>Fix all typos</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,8 @@
   --line:#D4DCD9; --line-strong:#B9C5C1;
   --accent:#A8701F; --accent-ink:#7A4F12; --accent-soft:#F6E9D5;
   --done:#2E6B51; --done-soft:#E0EFE7; --on-accent:#FFFFFF;
-  --std:#EFE6F5; --std-line:#C9B5DA; --std-ink:#5A4370;
+  --fix:#FFF4C2; --fix-line:#E2C65A; --fix-ink:#6B5300;
+  --lang:#E4EEFB; --lang-ink:#1F4C86;
   --shadow:0 1px 2px rgba(22,32,30,.06),0 8px 24px rgba(22,32,30,.07);
 }
 @media (prefers-color-scheme:dark){
@@ -28,7 +29,8 @@
     --line:#26332F; --line-strong:#35443F;
     --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
     --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
-    --std:#241C2E; --std-line:#493A5C; --std-ink:#C6B2DA;
+    --fix:#2C2610; --fix-line:#6B5A1E; --fix-ink:#E8D27A;
+    --lang:#17243A; --lang-ink:#9DC1F0;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
   }
 }
@@ -38,7 +40,8 @@
   --line:#26332F; --line-strong:#35443F;
   --accent:#D19B4E; --accent-ink:#E9BE7C; --accent-soft:#2B2216;
   --done:#6FBF95; --done-soft:#172A21; --on-accent:#1B1206;
-  --std:#241C2E; --std-line:#493A5C; --std-ink:#C6B2DA;
+  --fix:#2C2610; --fix-line:#6B5A1E; --fix-ink:#E8D27A;
+  --lang:#17243A; --lang-ink:#9DC1F0;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
@@ -74,9 +77,17 @@ body{
   color:var(--muted);border:1px solid var(--line);white-space:nowrap}
 .chip.cat{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
 .chip.ok{background:var(--done-soft);color:var(--done);border-color:transparent}
-
 .h1{font-size:22px;font-weight:700;line-height:1.45;margin:2px 0 10px}
 .p{color:var(--muted);white-space:pre-line}
+
+/* ---------- group picker ---------- */
+.groups{display:grid;gap:10px;margin-top:12px}
+.grp{text-align:start;font:inherit;cursor:pointer;background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;padding:16px;color:var(--ink);
+  box-shadow:var(--shadow)}
+.grp:hover{border-color:var(--accent)}
+.grp b{display:block;font-size:18px;margin-bottom:4px}
+.grp span{display:block;font-size:13px;color:var(--muted)}
 
 /* ---------- section list ---------- */
 .secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px;
@@ -95,38 +106,46 @@ body{
 .sec.full .sbar i{background:var(--done)}
 
 /* ---------- one item ---------- */
-.ref{background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.ref .lbl{font-size:11px;color:var(--accent-ink);font-weight:700;margin-bottom:5px;
-  letter-spacing:.02em}
-.ref .en{direction:ltr;text-align:left;font-family:system-ui,sans-serif;
-  font-size:16.5px;line-height:1.55;color:var(--ink)}
-.ar{background:var(--raise);border:1px solid var(--line);border-radius:10px;
-  padding:9px 12px;font-size:14.5px;color:var(--muted);margin-bottom:10px;
-  font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif}
-.ar .lbl{font-size:11px;color:var(--faint);font-family:"Noto Kufi Arabic",sans-serif;
-  margin-bottom:3px}
-.std{background:var(--std);border-radius:12px;padding:12px 14px;margin-top:12px;
-  box-shadow:inset 3px 0 0 var(--std-line)}
-.std .lbl{font-size:11px;color:var(--std-ink);font-weight:700;margin-bottom:5px}
-.std .t{font-size:17px;line-height:1.7;word-wrap:break-word}
-.lbl2{font-size:12px;color:var(--muted);margin-bottom:6px}
-textarea{width:100%;min-height:92px;resize:vertical;border-radius:12px;
-  border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);
-  padding:12px 14px;font:inherit;font-size:17px;line-height:1.8}
-textarea:focus{outline:none;border-color:var(--accent);
-  box-shadow:0 0 0 3px var(--accent-soft)}
+.lang{background:var(--lang);color:var(--lang-ink);border-radius:12px;padding:9px 14px;
+  font-weight:700;font-size:15px;margin-bottom:10px}
+.lbl{font-size:11px;font-weight:700;margin-bottom:4px;letter-spacing:.02em}
+.ref{background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.ref .lbl{color:var(--accent-ink)}
+.ref .en{direction:ltr;text-align:left;font-family:system-ui,sans-serif;font-size:16px;line-height:1.55}
+.ref .en + .en{margin-top:4px;font-size:14px;color:var(--muted)}
+.ref .en.rtl{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Noto Kufi Arabic",serif}
+.ctx{background:var(--raise);border:1px solid var(--line);border-radius:10px;
+  padding:8px 12px;font-size:15px;color:var(--muted);margin-bottom:10px}
+.ctx .lbl{color:var(--faint)}
+.now{border:1.5px solid var(--line-strong);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.now .lbl{color:var(--muted)}
+.now .t,.fix .t{font-size:20px;line-height:1.7;word-wrap:break-word;white-space:pre-wrap}
+.fix{background:var(--fix);border-radius:12px;padding:12px 14px;margin-bottom:10px;
+  box-shadow:inset 3px 0 0 var(--fix-line)}
+.fix .lbl{color:var(--fix-ink)}
+.why{direction:ltr;text-align:left;font-family:system-ui,sans-serif;font-size:13px;
+  color:var(--muted);background:var(--raise);border-radius:10px;padding:8px 12px;margin-bottom:12px}
+.why b{font-weight:600;color:var(--faint)}
+.ltr{direction:ltr;text-align:left;font-family:system-ui,sans-serif}
+.lbl2{font-size:12px;color:var(--muted);margin:6px 0}
+textarea,input.note{width:100%;border-radius:12px;border:1.5px solid var(--line-strong);
+  background:var(--surface);color:var(--ink);padding:12px 14px;font:inherit}
+textarea{min-height:84px;resize:vertical;font-size:18px;line-height:1.8}
+input.note{font-size:14px;padding:9px 12px}
+textarea:focus,input.note:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .hint{font-size:12px;color:var(--faint);margin-top:7px;line-height:1.6}
+.picked{font-size:13px;color:var(--done);font-weight:700;margin-top:8px}
 
 /* ---------- buttons ---------- */
 .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 button{font:inherit;cursor:pointer;border-radius:12px;padding:11px 16px;
   border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
 button:disabled{opacity:.4;cursor:default}
-button.primary{background:var(--accent);border-color:transparent;color:var(--on-accent);
-  font-weight:700}
-button.good{background:var(--done-soft);border-color:transparent;color:var(--done);
-  font-weight:700}
+button.primary{background:var(--accent);border-color:transparent;color:var(--on-accent);font-weight:700}
+button.good{background:var(--done-soft);border-color:transparent;color:var(--done);font-weight:700}
+button.usefix{background:var(--fix);border-color:var(--fix-line);color:var(--fix-ink);font-weight:700}
 button.ghost{background:transparent;border-color:var(--line)}
+button.small{padding:6px 12px;font-size:13px}
 button.nav{min-width:52px;font-size:18px;line-height:1}
 
 .foot{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--surface);
@@ -141,8 +160,6 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
   box-shadow:var(--shadow);max-width:420px}
 .dlg h3{margin:0 0 8px;font-size:17px}
 .dlg p{margin:0 0 6px;color:var(--muted);font-size:14px}
-.tip{background:var(--raise);border:1px dashed var(--line-strong);border-radius:10px;
-  padding:9px 12px;font-size:13px;color:var(--muted);margin-top:10px}
 </style>
 </head>
 <body>
@@ -150,7 +167,7 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
 <div class="top">
   <div class="wrap" style="padding-block:0">
     <div class="toprow">
-      <div class="brand">وشەکانی فلاشکارت<small id="label">بۆ هەولێری</small></div>
+      <div class="brand" id="brand">ڕاستکردنەوەی هەڵەکان<small id="label">Fix all typos</small></div>
       <div class="count" id="count"></div>
     </div>
     <div class="bar"><i id="barfill" style="width:0%"></i></div>
@@ -160,48 +177,73 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
 
 <div class="wrap">
 
-  <!-- intro -->
+  <!-- group picker -->
+  <div id="scPick" hidden>
+    <div class="card">
+      <div class="h1">سڵاو 🌿 · مرحباً</div>
+      <p class="p">بەشێک هەڵبژێرە · اختر مجموعة</p>
+    </div>
+    <div class="groups">
+      <button class="grp" data-g="ar" dir="rtl"><b>العربية + English</b>
+        <span id="pickAr"></span></button>
+      <button class="grp" data-g="ku" dir="rtl"><b>کوردی</b>
+        <span id="pickKu"></span></button>
+    </div>
+  </div>
+
+  <!-- intro of a group -->
   <div id="scIntro" hidden>
     <div class="card">
-      <div class="h1">سڵاو 🌿</div>
+      <div class="h1" id="introTitle"></div>
       <p class="p" id="introText"></p>
-      <div class="btns"><button class="primary" id="btnStart">دەست پێبکە</button></div>
+      <div class="btns"><button class="primary" id="btnStart"></button></div>
     </div>
   </div>
 
   <!-- section hub -->
   <div id="scHub" hidden>
     <div class="card">
-      <div class="h1">بەشەکان</div>
+      <div class="h1" id="hubTitle"></div>
       <p class="p" id="hubNote"></p>
-      <div class="btns"><button class="primary" id="btnResume"></button></div>
+      <div class="btns">
+        <button class="primary" id="btnResume"></button>
+        <button class="ghost small" id="btnGroup"></button>
+      </div>
     </div>
     <div class="secs" id="secList"></div>
   </div>
 
-  <!-- one word -->
+  <!-- one text -->
   <div id="scItem" hidden>
     <div class="card">
       <div class="chips" id="itChips"></div>
+      <div class="lang" id="itLang"></div>
       <div class="ref" id="itEnWrap" hidden>
-        <div class="lbl">مانا بە ئینگلیزی</div>
-        <div class="en" id="itEn"></div>
+        <div class="lbl" id="itEnLbl"></div>
+        <div id="itEn"></div>
       </div>
-      <div class="ar" id="itArWrap" hidden>
-        <div class="lbl">بە عەرەبی</div><span id="itAr"></span>
+      <div class="ctx" id="itInWrap" hidden>
+        <div class="lbl" id="itInLbl"></div><span id="itIn"></span>
       </div>
-      <div class="lbl2">بە هەولێری — ئەگەر لە هەولێر وا ناڵێن، بیگۆڕە</div>
-      <textarea id="itKu" spellcheck="false"></textarea>
-      <div class="hint" id="itHint"></div>
-      <div class="tip" id="itTipWrap" hidden><span id="itTip"></span></div>
-      <div class="std" id="itStdWrap" hidden>
-        <div class="lbl">بە کوردیی ستاندارد</div>
-        <div class="t" id="itStd"></div>
+      <div class="now">
+        <div class="lbl" id="itNowLbl"></div>
+        <div class="t" id="itNow"></div>
       </div>
+      <div class="fix" id="itFixWrap" hidden>
+        <div class="lbl" id="itFixLbl"></div>
+        <div class="t" id="itFix"></div>
+      </div>
+      <div class="why" id="itWhyWrap" hidden><b>Why (AI / checks):</b> <span id="itWhy"></span></div>
       <div class="btns">
-        <button class="good" id="btnOk">ڕاستە ✓</button>
-        <button class="ghost" id="btnHub">لیستی بەشەکان</button>
+        <button class="usefix" id="btnFix"></button>
+        <button class="good" id="btnKeep"></button>
       </div>
+      <div class="lbl2" id="itOwnLbl"></div>
+      <textarea id="itOwn" spellcheck="false"></textarea>
+      <input class="note" id="itNote" type="text" autocomplete="off">
+      <div class="picked" id="itPicked" hidden></div>
+      <div class="hint" id="itHint"></div>
+      <div class="btns"><button class="ghost small" id="btnHub"></button></div>
     </div>
   </div>
 
@@ -211,20 +253,20 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
       <div class="h1" id="secTitle"></div>
       <p class="p" id="secNote"></p>
       <div class="btns">
-        <button class="primary" id="btnNextSec">بەشی دواتر</button>
-        <button class="ghost" id="btnSecHub">لیستی بەشەکان</button>
+        <button class="primary" id="btnNextSec"></button>
+        <button class="ghost" id="btnSecHub"></button>
       </div>
     </div>
   </div>
 
-  <!-- all finished -->
+  <!-- group finished -->
   <div id="scDone" hidden>
     <div class="card">
-      <div class="h1">تەواو بوو 🌿</div>
-      <p class="p">زۆر سوپاس. هەموو شتێک پارێزراوە و نێردراوە.</p>
+      <div class="h1" id="doneTitle"></div>
+      <p class="p" id="doneNote"></p>
       <div class="btns">
-        <button class="primary" id="btnSend2">دووبارە بینێرە</button>
-        <button class="ghost" id="btnDoneHub">لیستی بەشەکان</button>
+        <button class="primary" id="btnSend2"></button>
+        <button class="ghost" id="btnDoneHub"></button>
       </div>
     </div>
   </div>
@@ -232,341 +274,406 @@ dialog::backdrop{background:rgba(10,16,15,.5)}
 
 <div class="foot">
   <div class="footin">
-    <button class="nav ghost" id="btnPrev" aria-label="پێشوو">→</button>
-    <button class="primary" id="btnNext">دواتر</button>
-    <button class="nav ghost" id="btnSend" aria-label="ناردن">↑</button>
+    <button class="nav ghost" id="btnPrev" aria-label="previous">→</button>
+    <button class="primary" id="btnNext"></button>
+    <button class="nav ghost" id="btnSend" aria-label="send">↑</button>
   </div>
 </div>
 
 <dialog id="dlgSend"><div class="dlg">
-  <h3>ناردن</h3>
+  <h3 id="sendTitle"></h3>
   <p id="sendWarn"></p>
   <div class="btns">
-    <button class="primary" id="doSend">بینێرە</button>
-    <button class="ghost" id="doAll">هەمووی بنێرەوە</button>
-    <button class="ghost" id="doCopy">کۆپی بکە</button>
-    <button class="ghost" id="doClose">داخستن</button>
+    <button class="primary" id="doSend"></button>
+    <button class="ghost" id="doAll"></button>
+    <button class="ghost" id="doCopy"></button>
+    <button class="ghost" id="doClose"></button>
   </div>
 </div></dialog>
 
 <script>
 /* ────────────────────────────────────────────────────────────────────────────
-   flashcards. The unit is ONE flashcard word of the Standard Kurdish deck, to
-   be turned into Hawleri. The box arrives pre-filled with the Standard word;
-   "ڕاستە" says Hawleri uses it unchanged, anything typed replaces it.
+   Fix all typos (2026-10-24). One screen per text of the typo workbook
+   (typo-review-all-courses-2026-10-21.xlsx, sheet Corrections). Two groups,
+   picked on the first screen, each with its own UI language:
+     ar  Arabic (Fusha / Iraqi) + English      ku  Kurdish (Standard / Hawleri)
+   Each screen says what the text must be written in, the English meaning from
+   the course, the text now, the suggested fix (if any) and why.
 
-   Cards whose Standard word she already converted in the hawleri-tests round
-   (same word, same meaning) are flagged `h` and arrive pre-filled with HER
-   word, so she only confirms them; like every card, they count only once she
-   taps "ڕاستە" or edits. `t` is a hint: the same word appeared in the tests with another
-   meaning, so her test answer is shown but not applied.
+   An answer is one of: "keep" (the text is right), "fix" (take the suggestion),
+   "own" (the reviewer wrote the right text), or "note" (only a note).
+   The box arrives pre-filled with the text now, so PAGING PAST RECORDS NOTHING:
+   only a button, an edit or a note writes to st.ans. Do not "simplify" commit().
 
-   Sections are the deck's categories. The sheet's Apps Script (shared with the
-   Kawa batches) REPLACES every row of one device+batch on each post, so each
-   category is its own batch ("flashcards:07") and a post always carries ALL
-   answered words of that category. Only categories touched since the last
-   acknowledged post are re-sent (st.dirty).
-
-   The sheet's 11 columns, for these batches:
-     q_id              f + the card's uuid[:8]
-     category          the category (English)
-     question_arabic   the card's Arabic
-     question_kurdish  the Standard Kurdish word, as stored
-     her_hawleri_answer  her Hawleri
-     draft_was_shown   "tests" (pre-filled with her test answer) | "standard"
-     draft_text        what the box was pre-filled with
-   The English is NOT round-tripped — it rejoins from items.json on q_id.
+   Sync: only rows changed since the last acknowledged push (st.pend). The
+   Apps Script (apps-script.gs) upserts on item_id into the "fix all typos"
+   sheet, so a row sent twice is not a duplicate; "send all" re-sends everything.
    ──────────────────────────────────────────────────────────────────────────── */
-var SHEET_URL="https://script.google.com/macros/s/AKfycbyfV4KhWyYIbwOBCtd9G-Ovn9RzuP5G_7_N8tABEPN7UcykN9EgGNI54FRZW-ryJvRGhA/exec";
-var QCACHE="kawa_voice_flashcards", AR="٠١٢٣٤٥٦٧٨٩";
-var lastPush=0, pushTimer=null, saveTimer=null, pushing=false;
-var DATA=null, SECS=[], ITEMS=[], BYSEC=[], NH=0, BATCH="", KEY="";
-var st={v:"intro",cur:0,ans:{},dirty:{},sent:0,synced:0,dev:""};
+var SHEET_URL="https://script.google.com/macros/s/AKfycbywfzloKYT7ycCHlBzxRMhOw06Ow50SaH11myN-OckpIrN83mkTvmhQ9JQPJPkKjLuASw/exec";
+var QCACHE="fix_typos_items", KEY="fix_typos_v1", AR="٠١٢٣٤٥٦٧٨٩";
+var lastPush=0, pushTimer=null, saveTimer=null;
+var DATA=null, ALL=[], SECS=[], ITEMS=[], GSECS=[], BATCH="typos";
+var st={g:"",v:"pick",cur:{ar:0,ku:0},ans:{},pend:{},synced:0,dev:""};
+
+var WRITE_IN={fusha:"Fusha (Standard Arabic)",iraqi:"Iraqi Arabic",en:"English",
+              std:"Standard Kurdish (Sorani)",hawleri:"Hawleri"};
+var T={
+ ku:{brand:"ڕاستکردنەوەی هەڵەکان",
+  pick:function(n){return fa(n)+" دەقی کوردی: کوردیی ستاندارد و هەولێری"},
+  introTitle:"هەڵەکانی کوردی",
+  intro:function(n,s){return "ئەمانە "+fa(n)+" دەقی کوردین لە کۆرسەکاندا کە وا دیارە هەڵەیان تێدایە، لە "+fa(s)+" بەشدا.\n\n"+
+    "لە هەر دەقێکدا دەبینی: دەبێت بە چی بنووسرێت (کوردیی ستاندارد یان هەولێری)، مانا ئینگلیزییەکەی، دەقەکە ئێستا چۆنە، و پێشنیارێک بۆ ڕاستکردنەوە.\n\n"+
+    "• ئەگەر پێشنیارەکە ڕاستە: «پێشنیارەکە ڕاستە ✓»\n• ئەگەر دەقەکە خۆی ڕاستە و هەڵە نییە: «دەقەکە ڕاستە، وەک خۆی بمێنێتەوە»\n• ئەگەر هیچیان ڕاست نین: دەقە ڕاستەکە لە خانەکەدا بنووسە.\n\nهەرچی دەکەی لە مۆبایلەکەت دەپارێزرێت و خۆی دەنێردرێت."},
+  start:"دەست پێبکە", hub:"بەشەکان",
+  hubNote:function(f,n,s){return f?"لە "+fa(n)+" دەق، "+fa(f)+"ت تەواو کردووە. "+fa(n-f)+" ماوە.":fa(n)+" دەق لە "+fa(s)+" بەشدا. دەتوانی لە هەر بەشێکەوە دەست پێبکەی."},
+  resume:"بەردەوام بە", allDone:"هەمووی تەواو بووە ✓", group:"گۆڕینی بەش (عەرەبی / کوردی)",
+  of:" لە ", item:"دەقی ",
+  lang:{std:"دەبێت بە کوردیی ستاندارد (سۆرانی) بنووسرێت",hawleri:"دەبێت بە هەولێری بنووسرێت"},
+  enLbl:"مانا بە ئینگلیزی", enLblEn:"", inLbl:"لەم ڕستەیەدایە", nowLbl:"دەقەکە ئێستا",
+  fixLbl:"پێشنیار بۆ ڕاستکردنەوە", useFix:"پێشنیارەکە ڕاستە ✓", keep:"دەقەکە ڕاستە، وەک خۆی بمێنێتەوە",
+  own:"یان دەقە ڕاستەکە لێرە بنووسە:", note:"تێبینی (ئەگەر هەتە)",
+  hint:"تەنها ڕۆیشتن بۆ دەقی دواتر هیچ تۆمار ناکات؛ دوگمەیەک لێ بدە یان دەقەکە بگۆڕە.",
+  picked:{keep:"✓ وەک خۆی دەمێنێتەوە",fix:"✓ پێشنیارەکە وەرگیرا",own:"✓ دەقی خۆت تۆمار کرا",note:"✓ تێبینییەکەت تۆمار کرا"},
+  src:{"Audio Review respelling":"لە پێداچوونەوەی دەنگەوە","AI proofread":"AI","Known problem":"کێشەی ناسراو","Male/female leftover":"نێر/مێ"},
+  srcAuto:"پشکنینی خۆکار",
+  course:{"Standard Kurdish":"کۆرسی کوردیی ستاندارد","Hawleri":"کۆرسی هەولێری","Iraqi Arabic":"کۆرسی عەرەبیی عێراقی"},
+  uses:function(n){return "بەکارهاتووە "+fa(n)+" جار"},
+  done:"تەواو ✓", next:"دواتر", secEnd:"کۆتایی بەش", toHub:"لیستی بەشەکان",
+  secTitle:function(t){return "«"+t+"» تەواو بوو"},
+  secNote:function(n,t){return n<t?"لەم بەشەدا "+fa(n)+" لە "+fa(t)+" دەق تەواو بووە. دەتوانی بگەڕێیەوە و ئەوانی تریش تەواو بکەی.":"هەموو "+fa(t)+" دەقەکەی ئەم بەشە تەواو بوون. زۆر سوپاس 🌿"},
+  nextSec:"بەشی دواتر", doneTitle:"تەواو بوو 🌿", doneNote:"زۆر سوپاس. هەموو شتێک پارێزراوە و نێردراوە.",
+  sendAgain:"دووبارە بینێرە", send:"ناردن", doSend:"بینێرە", doAll:"هەمووی بنێرەوە", copy:"کۆپی بکە", copied:"کۆپی کرا ✓", close:"داخستن",
+  sendWarn:function(f,n,p){return p?"لە "+fa(n)+" دەق، "+fa(f)+"ت تەواو کردووە. "+fa(p)+" هێشتا نەنێردراوە.":(f?"هەموو ئەوەی تەواوت کردووە ("+fa(f)+") نێردراوە ✓":"هێشتا هیچ وەڵامێک نییە.")},
+  sending:"…ناردن", sent:"نێردرا ✓", offline:"ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە",
+  last:"دوایین ناردن ", waiting:function(p){return " — "+fa(p)+" چاوەڕێی ناردنە"},
+  fail:"نەتوانرا دەقەکان باربکرێن. تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە."},
+ ar:{brand:"تصحيح الأخطاء",
+  pick:function(n){return fa(n)+" نصاً: الفصحى، اللهجة العراقية، والإنكليزية"},
+  introTitle:"الأخطاء العربية والإنكليزية",
+  intro:function(n,s){return "هذه "+fa(n)+" نصاً من الدورات يبدو أن فيها خطأ، مقسّمة على "+fa(s)+" أقسام.\n\n"+
+    "في كل نص ترى: بأي لغة يجب أن يُكتب (الفصحى أو اللهجة العراقية أو الإنكليزية)، معناه بالإنكليزية، النص كما هو الآن، واقتراحاً للتصحيح.\n\n"+
+    "• إذا كان الاقتراح صحيحاً: «الاقتراح صحيح ✓»\n• إذا كان النص نفسه صحيحاً وليس فيه خطأ: «النص صحيح، يبقى كما هو»\n• إذا لم يكن أيٌّ منهما صحيحاً: اكتب النص الصحيح في الخانة.\n\nكل ما تفعله يُحفظ في هاتفك ويُرسل تلقائياً."},
+  start:"ابدأ", hub:"الأقسام",
+  hubNote:function(f,n,s){return f?"من "+fa(n)+" نصاً أكملتَ "+fa(f)+". بقي "+fa(n-f)+".":fa(n)+" نصاً في "+fa(s)+" أقسام. يمكنك البدء من أي قسم."},
+  resume:"تابع", allDone:"اكتمل كل شيء ✓", group:"تغيير المجموعة (عربي / كردي)",
+  of:" من ", item:"النص ",
+  lang:{fusha:"يجب أن يُكتب بالعربية الفصحى",iraqi:"يجب أن يُكتب باللهجة العراقية",en:"يجب أن يُكتب بالإنكليزية"},
+  enLbl:"المعنى بالإنكليزية", enLblEn:"يقابله في الدرس", inLbl:"ضمن هذه الجملة", nowLbl:"النص الآن",
+  fixLbl:"اقتراح للتصحيح", useFix:"الاقتراح صحيح ✓", keep:"النص صحيح، يبقى كما هو",
+  own:"أو اكتب النص الصحيح هنا:", note:"ملاحظة (إن وُجدت)",
+  hint:"الانتقال إلى النص التالي وحده لا يسجّل شيئاً؛ اضغط زراً أو عدّل النص.",
+  picked:{keep:"✓ يبقى كما هو",fix:"✓ تم قبول الاقتراح",own:"✓ تم تسجيل نصّك",note:"✓ تم تسجيل ملاحظتك"},
+  src:{"Audio Review respelling":"من مراجعة الصوت","AI proofread":"AI","Known problem":"مشكلة معروفة","Male/female leftover":"مذكر/مؤنث"},
+  srcAuto:"فحص آلي",
+  course:{"Standard Kurdish":"دورة الكردية القياسية","Hawleri":"دورة الهولێرية","Iraqi Arabic":"دورة العراقية"},
+  uses:function(n){return "مستخدم "+fa(n)+" مرة"},
+  done:"تم ✓", next:"التالي", secEnd:"نهاية القسم", toHub:"قائمة الأقسام",
+  secTitle:function(t){return "انتهى قسم «"+t+"»"},
+  secNote:function(n,t){return n<t?"في هذا القسم أكملتَ "+fa(n)+" من "+fa(t)+". يمكنك الرجوع وإكمال الباقي.":"اكتملت كل نصوص هذا القسم ("+fa(t)+"). شكراً جزيلاً 🌿"},
+  nextSec:"القسم التالي", doneTitle:"اكتمل 🌿", doneNote:"شكراً جزيلاً. كل شيء محفوظ ومُرسل.",
+  sendAgain:"أرسل مرة أخرى", send:"الإرسال", doSend:"أرسل", doAll:"أرسل الكل من جديد", copy:"نسخ", copied:"تم النسخ ✓", close:"إغلاق",
+  sendWarn:function(f,n,p){return p?"من "+fa(n)+" نصاً أكملتَ "+fa(f)+". "+fa(p)+" لم يُرسل بعد.":(f?"كل ما أكملته ("+fa(f)+") قد أُرسل ✓":"لا توجد إجابات بعد.")},
+  sending:"…جارٍ الإرسال", sent:"أُرسل ✓", offline:"لا يوجد إنترنت — محفوظ في هاتفك",
+  last:"آخر إرسال ", waiting:function(p){return " — "+fa(p)+" بانتظار الإرسال"},
+  fail:"تعذّر تحميل النصوص. تأكد من الإنترنت ثم أعد تحميل الصفحة."}
+};
 
 function fa(n){return String(n).replace(/\d/g,function(x){return AR[+x]})}
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?"":s)
   .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function L(){return T[st.g||"ku"]}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
 function saveSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(save,300)}
-
 function load(){
   try{
     var raw=localStorage.getItem(KEY);
     if(raw){var p=JSON.parse(raw);
-      st.v=p.v||"intro"; st.cur=p.cur||0; st.ans=p.ans||{}; st.dirty=p.dirty||{};
-      st.sent=p.sent||0; st.synced=p.synced||0; st.dev=p.dev||"";}
+      st.g=p.g||""; st.v=p.v||"pick"; st.cur=p.cur||{ar:0,ku:0}; st.ans=p.ans||{};
+      st.pend=p.pend||{}; st.synced=p.synced||0; st.dev=p.dev||"";}
   }catch(e){}
   if(!st.dev) st.dev="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-  if(!(st.cur>=0)||st.cur>=ITEMS.length) st.cur=0;
+  if(!st.g) st.v="pick";
 }
+
+/* ---- group ---- */
+function setGroup(g){
+  st.g=g; ITEMS=[]; GSECS=[];
+  for(var i=0;i<ALL.length;i++) if(ALL[i].g===g) ITEMS.push(ALL[i]);
+  for(var s=0;s<SECS.length;s++) if(SECS[s].g===g){
+    var a=-1,b=-1;
+    for(var j=0;j<ITEMS.length;j++) if(ITEMS[j].c===s){ if(a<0)a=j; b=j+1 }
+    if(a>=0) GSECS.push({s:s,a:a,b:b,title:SECS[s].title,name:SECS[s].name});
+  }
+  if(!(st.cur[g]>=0)||st.cur[g]>=ITEMS.length) st.cur[g]=0;
+  document.documentElement.lang = g==="ar"?"ar":"ckb";
+  $("brand").firstChild.nodeValue=L().brand;
+}
+function cur(){return st.cur[st.g]}
+function setCur(i){st.cur[st.g]=i}
 
 /* ---- helpers ---- */
-function sec(i){return ITEMS[i].c}
-function secStart(s){return BYSEC[s].a}
-function secEnd(s){return BYSEC[s].b}
-function nextSec(s){for(var k=s+1;k<SECS.length;k++) if(secEnd(k)>secStart(k)) return k; return -1}
-function answered(id){return !!(st.ans[id]&&st.ans[id].trim())}
+function gs(i){for(var k=0;k<GSECS.length;k++) if(i<GSECS[k].b) return k; return GSECS.length-1}
+function answered(id){var a=st.ans[id];return !!(a&&(a.d||"").length)}
 function filled(){var n=0;for(var i=0;i<ITEMS.length;i++) if(answered(ITEMS[i].id)) n++;return n}
-function secFilled(s){
-  var n=0,e=secEnd(s);
-  for(var i=secStart(s);i<e;i++) if(answered(ITEMS[i].id)) n++;
-  return n;
-}
-function dirtyCount(){var n=0;for(var k in st.dirty)n++;return n}
-function firstOpen(){
-  for(var i=0;i<ITEMS.length;i++) if(!answered(ITEMS[i].id)) return i;
-  return -1;
-}
-function batchOf(s){return BATCH+":"+(s<10?"0":"")+s}
+function secFilled(k){var n=0;for(var i=GSECS[k].a;i<GSECS[k].b;i++) if(answered(ITEMS[i].id)) n++;return n}
+function pendCount(){var n=0;for(var i=0;i<ITEMS.length;i++) if(st.pend[ITEMS[i].id]) n++;return n}
+function firstOpen(){for(var i=0;i<ITEMS.length;i++) if(!answered(ITEMS[i].id)) return i;return -1}
 
 /* ---- rendering ---- */
+function renderPick(){
+  var n={ar:0,ku:0}; for(var i=0;i<ALL.length;i++) n[ALL[i].g]++;
+  $("pickAr").textContent=T.ar.pick(n.ar);
+  $("pickKu").textContent=T.ku.pick(n.ku);
+}
 function renderHub(){
-  var f=filled(), left=ITEMS.length-f, o=firstOpen();
-  $("hubNote").textContent = f
-    ? "لە "+fa(ITEMS.length)+" وشە، "+fa(f)+"ت تەواو کردووە. "+fa(left)+" ماوە."
-    : "هەموو "+fa(ITEMS.length)+" وشەکە بەپێی بابەت لە "+fa(SECS.length)+" بەشدا دانراون. "+
-      "دەتوانی لە هەر بەشێکەوە دەست پێبکەی.";
-  $("btnResume").textContent = o<0 ? "هەمووی تەواو بووە ✓"
-    : (f ? "بەردەوام بە" : "دەست پێبکە");
-  $("btnResume").disabled = o<0;
-  var h=[], here=ITEMS.length?sec(st.cur):-1;
-  for(var s=0;s<SECS.length;s++){
-    var t=secEnd(s)-secStart(s); if(!t) continue;
-    var n=secFilled(s), pc=Math.round(100*n/t);
-    h.push('<button class="sec'+(n===t?" full":"")+(s===here?" here":"")+
-      '" data-s="'+s+'">'+
-      '<b>'+esc(SECS[s].ku)+(n===t?' ✓':'')+'</b>'+
-      '<span class="sn">'+fa(n)+' لە '+fa(t)+'</span>'+
+  var t=L(), f=filled(), o=firstOpen();
+  $("hubTitle").textContent=t.hub;
+  $("hubNote").textContent=t.hubNote(f,ITEMS.length,GSECS.length);
+  $("btnResume").textContent= o<0 ? t.allDone : (f?t.resume:t.start);
+  $("btnResume").disabled= o<0;
+  $("btnGroup").textContent=t.group;
+  var h=[], here=gs(cur());
+  for(var k=0;k<GSECS.length;k++){
+    var tot=GSECS[k].b-GSECS[k].a, n=secFilled(k), pc=Math.round(100*n/tot);
+    h.push('<button class="sec'+(n===tot?" full":"")+(k===here?" here":"")+'" data-k="'+k+'">'+
+      '<b>'+esc(GSECS[k].title)+(n===tot?' ✓':'')+'</b>'+
+      '<span class="sn">'+fa(n)+t.of+fa(tot)+'</span>'+
       '<span class="sbar"><i style="width:'+pc+'%"></i></span></button>');
   }
   $("secList").innerHTML=h.join("");
   var bs=$("secList").getElementsByTagName("button");
-  for(var k=0;k<bs.length;k++) bs[k].onclick=function(){
-    var s=+this.getAttribute("data-s"), e=secEnd(s), go=secStart(s);
-    for(var i=secStart(s);i<e;i++){ if(!answered(ITEMS[i].id)){go=i;break} }
-    st.cur=go; st.v="item"; save(); render(); window.scrollTo(0,0);
+  for(var q=0;q<bs.length;q++) bs[q].onclick=function(){
+    var k=+this.getAttribute("data-k"), go=GSECS[k].a;
+    for(var i=GSECS[k].a;i<GSECS[k].b;i++){ if(!answered(ITEMS[i].id)){go=i;break} }
+    setCur(go); st.v="item"; save(); render(); window.scrollTo(0,0);
   };
 }
-function renderItem(){
-  var it=ITEMS[st.cur], s=sec(st.cur), a=(st.ans[it.id]||"").trim();
-  $("itChips").innerHTML=
-    '<span class="chip cat">'+esc(SECS[s].ku)+'</span>'+
-    '<span class="chip">وشەی '+fa(st.cur-secStart(s)+1)+' لە '+fa(secEnd(s)-secStart(s))+'</span>'+
-    (it.h?'<span class="chip">لە تاقیکردنەوەکانەوە</span>':'')+
-    (a?'<span class="chip ok">تەواو ✓</span>':'');
-  $("itEnWrap").hidden=!it.en; if(it.en) $("itEn").textContent=it.en;
-  $("itArWrap").hidden=!it.ar; if(it.ar) $("itAr").textContent=it.ar;
-  $("itStd").textContent=it.s;
-  $("itKu").value=a||it.p;
-  $("itTipWrap").hidden=!it.t;
-  if(it.t) $("itTip").textContent="لە تاقیکردنەوەکاندا ئەم وشەیە"+
-    (it.t[1]?" بە مانای «"+it.t[1]+"»":"")+" هاتبوو و تۆ نووسیبووت: "+it.t[0];
-  showOrig();
-  $("itHint").textContent = a
-    ? "پێشتر وەڵامت داوەتەوە. دەتوانیت بیگۆڕیت."
-    : it.h
-    ? "ئەمە ئەو هەولێرییەیە کە خۆت لە تاقیکردنەوەکاندا نووسیوتە. ئەگەر بۆ ئەم مانایە ڕاستە، «ڕاستە ✓» لێ بدە. ئەگەر نا، بیگۆڕە."
-    : "ئەمە وشەی کوردیی ستانداردە. ئەگەر لە هەولێریش هەروا دەیڵێن، «ڕاستە ✓» لێ بدە. ئەگەر نا، بیگۆڕە.";
-  $("btnNext").textContent = (st.cur+1>=secEnd(s)) ? "کۆتایی بەش" : "دواتر";
+function srcChip(by){
+  var t=L(), out=[], parts=String(by||"").split(" + ");
+  for(var i=0;i<parts.length;i++){
+    var x=t.src[parts[i]]||t.srcAuto; if(out.indexOf(x)<0) out.push(x);
+  }
+  return out.join(" + ");
 }
-function showOrig(){
-  var it=ITEMS[st.cur];
-  $("itStdWrap").hidden=!it.h&&$("itKu").value.trim()===it.p;
+function courseChip(co){
+  var t=L(), parts=String(co||"").split(" + "), out=[];
+  for(var i=0;i<parts.length;i++) out.push(t.course[parts[i]]||parts[i]);
+  return out.join(" + ");
+}
+function renderItem(){
+  var t=L(), i=cur(), it=ITEMS[i], k=gs(i), g=GSECS[k], a=st.ans[it.id]||{}, isEn=it.k==="en";
+  $("itChips").innerHTML=
+    '<span class="chip cat">'+esc(g.title)+'</span>'+
+    '<span class="chip">'+t.item+fa(i-g.a+1)+t.of+fa(g.b-g.a)+'</span>'+
+    '<span class="chip">'+esc(courseChip(it.co))+'</span>'+
+    '<span class="chip">'+esc(srcChip(it.by))+'</span>'+
+    (it.n?'<span class="chip">'+esc(t.uses(it.n))+'</span>':'')+
+    (answered(it.id)?'<span class="chip ok">'+t.done+'</span>':'');
+  $("itLang").textContent=t.lang[it.k];
+  var en=it.en||[];
+  $("itEnWrap").hidden=!en.length;
+  $("itEnLbl").textContent=isEn?t.enLblEn:t.enLbl;
+  $("itEn").innerHTML=en.map(function(x){return '<div class="en'+(isEn?' rtl':'')+'">'+esc(x)+'</div>'}).join("");
+  var ctx=(it["in"]||[])[0];
+  $("itInWrap").hidden=!ctx; $("itInLbl").textContent=t.inLbl; $("itIn").textContent=ctx||"";
+  $("itNowLbl").textContent=t.nowLbl;
+  $("itNow").textContent=it.t; $("itNow").className="t"+(isEn?" ltr":"");
+  $("itFixWrap").hidden=!it.f; $("itFixLbl").textContent=t.fixLbl;
+  $("itFix").textContent=it.f; $("itFix").className="t"+(isEn?" ltr":"");
+  $("itWhyWrap").hidden=!it.w; $("itWhy").textContent=it.w;
+  $("btnFix").hidden=!it.f; $("btnFix").textContent=t.useFix;
+  $("btnKeep").textContent=t.keep;
+  $("itOwnLbl").textContent=t.own;
+  $("itOwn").value= (a.d==="own"||a.d==="fix") ? a.a : it.t;
+  $("itOwn").className=isEn?"ltr":""; $("itOwn").dir=isEn?"ltr":"rtl";
+  $("itNote").placeholder=t.note; $("itNote").value=a.note||"";
+  $("itPicked").hidden=!answered(it.id); $("itPicked").textContent=answered(it.id)?t.picked[a.d]:"";
+  $("itHint").textContent=t.hint;
+  $("btnHub").textContent=t.toHub;
+  $("btnNext").textContent=(i+1>=g.b)?t.secEnd:t.next;
 }
 function renderSec(){
-  var s=sec(st.cur), n=secFilled(s), t=secEnd(s)-secStart(s);
-  $("secTitle").textContent="«"+SECS[s].ku+"» تەواو بوو";
-  $("secNote").textContent = n<t
-    ? "لەم بەشەدا "+fa(n)+" لە "+fa(t)+" وشە تەواو بووە. دەتوانی بگەڕێیەوە و ئەوانی تریش تەواو بکەی."
-    : "هەموو "+fa(t)+" وشەکەی ئەم بەشە تەواو بوون. زۆر سوپاس 🌿";
-  $("btnNextSec").hidden = nextSec(s)<0;
+  var t=L(), k=gs(cur()), n=secFilled(k), tot=GSECS[k].b-GSECS[k].a;
+  $("secTitle").textContent=t.secTitle(GSECS[k].title);
+  $("secNote").textContent=t.secNote(n,tot);
+  $("btnNextSec").textContent=t.nextSec; $("btnNextSec").hidden=k+1>=GSECS.length;
+  $("btnSecHub").textContent=t.toHub;
 }
 function render(){
-  $("scIntro").hidden=st.v!=="intro";
-  $("scHub").hidden=st.v!=="hub";
-  $("scItem").hidden=st.v!=="item";
-  $("scSec").hidden=st.v!=="sec";
-  $("scDone").hidden=st.v!=="done";
-  var isItem=st.v==="item";
-  $("btnNext").hidden=!isItem;
-  $("btnPrev").hidden=!isItem;
-  $("btnPrev").disabled=st.cur<=0;
-  if(st.v==="hub") renderHub();
-  if(isItem) renderItem();
-  if(st.v==="sec") renderSec();
-  if(st.v==="intro") $("introText").textContent=
-    "ئەمانە وشەکانی فلاشکارتی کوردیی ستانداردن، بەپێی بابەت لە "+fa(SECS.length)+" بەشدا.\n\n"+
-    "هەر وشەیەک بیکە بە هەولێری، وەک لە هەولێر دەیڵێن. ئەگەر وشەکە لە هەولێریش هەروایە، تەنها «ڕاستە ✓» لێ بدە.\n\n"+
-    fa(NH)+" وشەیان پێشتر لە تاقیکردنەوەکاندا ڕاستت کردوونەتەوە؛ ئەوانە بە هەولێرییەکەی خۆت نووسراون "+
-    "و نیشانەی «لە تاقیکردنەوەکانەوە»یان لەسەرە. تەنها دڵنیابەرەوە کە بۆ ئەو مانایە ڕاستن.\n\nهەرچی دەنووسی لە مۆبایلەکەت دەپارێزرێت و خۆی دەنێردرێت.";
+  var v=st.v;
+  $("scPick").hidden=v!=="pick";
+  $("scIntro").hidden=v!=="intro";
+  $("scHub").hidden=v!=="hub";
+  $("scItem").hidden=v!=="item";
+  $("scSec").hidden=v!=="sec";
+  $("scDone").hidden=v!=="done";
+  $("btnNext").hidden=v!=="item"; $("btnPrev").hidden=v!=="item";
+  $("btnSend").hidden=v==="pick";
+  if(v==="pick"){ renderPick(); $("count").innerHTML=""; $("barfill").style.width="0%"; save(); return }
+  var t=L();
+  $("btnPrev").disabled=cur()<=0;
+  if(v==="intro"){ $("introTitle").textContent=t.introTitle; $("introText").textContent=t.intro(ITEMS.length,GSECS.length);
+    $("btnStart").textContent=t.start }
+  if(v==="hub") renderHub();
+  if(v==="item") renderItem();
+  if(v==="sec") renderSec();
+  if(v==="done"){ $("doneTitle").textContent=t.doneTitle; $("doneNote").textContent=t.doneNote;
+    $("btnSend2").textContent=t.sendAgain; $("btnDoneHub").textContent=t.toHub }
   var f=filled();
   $("count").innerHTML="<b>"+fa(f)+"</b> / "+fa(ITEMS.length);
   $("barfill").style.width=(ITEMS.length?Math.round(100*f/ITEMS.length):0)+"%";
   save();
 }
 
-/* ---- movement ---- */
-function setAns(it,v){
-  if(v!==st.ans[it.id]){ st.ans[it.id]=v; st.dirty[it.c]=1 }
+/* ---- answers ---- */
+function setAns(it,d,a){
+  var note=$("itNote").value.trim(), o=st.ans[it.id]||{};
+  if(o.d===d&&o.a===a&&(o.note||"")===note) return;
+  st.ans[it.id]={d:d,a:a,note:note}; st.pend[it.id]=1;
 }
+// Typing in the box: own text, unless it is back to the text now (or equals the suggestion).
+// Paging past an untouched box must record NOTHING (see the header).
 function commit(){
   if(st.v!=="item") return;
-  var it=ITEMS[st.cur], v=$("itKu").value.trim();
-  if(!v) return;
-  // The box arrives pre-filled with the Standard word, so paging past a word
-  // must NOT count as "Hawleri says it the same way" -- that would ship
-  // Standard text to the sheet as her answer. Only an edit, or "ڕاستە ✓".
-  if(v===it.p&&!answered(it.id)) return;
-  setAns(it,v);
+  var it=ITEMS[cur()], v=$("itOwn").value.trim(), note=$("itNote").value.trim(), o=st.ans[it.id];
+  if(v&&v!==it.t) setAns(it, v===it.f?"fix":"own", v);
+  else if(o&&(o.d==="own"||o.d==="fix")&&v===it.t){        // typed back to the text now: no own text any more
+    if(note) setAns(it,"note",""); else { delete st.ans[it.id]; st.pend[it.id]=1 }
+  }
+  else if(o&&o.d) setAns(it,o.d,o.a);           // keeps the earlier choice, updates the note
+  else if(note) setAns(it,"note","");
 }
 function goItem(d){
   commit();
-  var s=sec(st.cur), n=st.cur+d;
+  var i=cur(), k=gs(i), n=i+d;
   if(n<0) n=0;
-  if(n>=secEnd(s)){
-    st.v = (nextSec(s)<0) ? "done" : "sec";
+  if(n>=GSECS[k].b){
+    st.v=(k+1>=GSECS.length)?"done":"sec";
     save(); push(true); render(); window.scrollTo(0,0); return;
   }
-  st.cur=n; save(); push(); render(); window.scrollTo(0,0);
+  setCur(n); save(); push(); render(); window.scrollTo(0,0);
 }
 function toHub(){commit();st.v="hub";save();push();render();window.scrollTo(0,0)}
 
 /* ---- payload ---- */
-function rowsOf(s){
-  var out=[], e=secEnd(s);
-  for(var i=secStart(s);i<e;i++){
-    var it=ITEMS[i], a=(st.ans[it.id]||"").trim();
-    if(!a) continue;
-    out.push({id:it.id,n:i+1,cat:SECS[s].name,ar:it.ar,ku:it.s,answer:a,
-              drafted:it.h?"tests":"standard",draft:it.p});
+var DEC={keep:"keep as it is",fix:"take the suggestion",own:"reviewer wrote it",note:"note only",none:"(answer taken back)"};
+function rowOf(it){
+  var a=st.ans[it.id]||{d:"none"}, fixed=a.d==="keep"?it.t:(a.d==="note"||a.d==="none")?"":a.a;
+  return {id:it.id,group:it.g==="ar"?"Arabic + English":"Kurdish",row:it.r,section:SECS[it.c].name,
+          course:it.co,write_in:WRITE_IN[it.k],english:(it.en||[]).join(" | "),text_now:it.t,
+          suggested_fix:it.f,decision:DEC[a.d],correct_text:fixed,
+          changed:(a.d==="note"||a.d==="none")?"":(fixed===it.t?"no":"yes"),note:a.note||""};
+}
+function rows(all){
+  var out=[];
+  for(var i=0;i<ALL.length;i++){
+    var it=ALL[i];
+    if(all?!answered(it.id):!st.pend[it.id]) continue;   // a taken-back answer is sent once, as "(answer taken back)"
+    out.push(rowOf(it));
   }
   return out;
 }
-function payload(s,r){
-  return JSON.stringify({device:st.dev,batch:batchOf(s),at:new Date().toISOString(),rows:r});
-}
+function payload(r){return JSON.stringify({device:st.dev,batch:BATCH,at:new Date().toISOString(),rows:r})}
+var COLS=["group","row","section","course","write_in","english","text_now","suggested_fix","decision","correct_text","changed","note","id"];
 function csv(){
-  var r=[["batch","q_id","q_no","category","english","arabic","standard_kurdish",
-          "her_hawleri","prefilled"]];
-  for(var s=0;s<SECS.length;s++){
-    var e=secEnd(s);
-    for(var i=secStart(s);i<e;i++){
-      var it=ITEMS[i], a=(st.ans[it.id]||"").trim(); if(!a) continue;
-      r.push([batchOf(s),it.id,i+1,SECS[s].name,it.en,it.ar,it.s,a,it.p]);
-    }
-  }
+  var r=[COLS], R=rows(true);
+  for(var k=0;k<R.length;k++) r.push(COLS.map(function(c){return R[k][c]}));
   return r.map(function(x){return x.map(function(c){
-    c=String(c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c
+    c=String(c==null?"":c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c
   }).join(",")}).join("\r\n");
 }
 function stamp(){
-  if(!st.synced) return "";
-  var d=new Date(st.synced);
+  if(!st.synced||!st.g) return "";
+  var d=new Date(st.synced), p=pendCount();
   function two(x){return (x<10?"0":"")+x}
-  return "دوایین ناردن "+two(d.getHours())+":"+two(d.getMinutes())+
-         (dirtyCount()?" — هەندێکی چاوەڕێی ناردنە":"");
+  return L().last+two(d.getHours())+":"+two(d.getMinutes())+(p?L().waiting(p):"");
 }
-/* One category per POST, one after another: the script holds a lock, and a
-   category is only marked clean once its post has gone out. */
 function push(force,all){
-  if(!SHEET_URL) return;
-  if(pushing) return;
+  if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0) return;
   if(!force&&Date.now()-lastPush<4000){
     clearTimeout(pushTimer); pushTimer=setTimeout(function(){push(true)},4000); return;
   }
-  var q=[];
-  for(var s=0;s<SECS.length;s++){
-    if(!(all||st.dirty[s])) continue;
-    var r=rowsOf(s);
-    if(r.length) q.push([s,r]); else delete st.dirty[s];
-  }
-  if(!q.length) return;
-  lastPush=Date.now(); pushing=true;
-  var line=$("syncLine"); line.className="sync"; line.textContent="…ناردن";
-  (function next(k){
-    if(k>=q.length){
-      pushing=false; st.synced=Date.now(); save();
-      line.className="sync on"; line.textContent="نێردرا ✓";
-      setTimeout(function(){line.className="sync";line.textContent=stamp()},2500);
-      return;
+  var sending=rows(!!all); if(!sending.length) return;
+  var sent={}; for(var k=0;k<sending.length;k++) sent[sending[k].id]=JSON.stringify(sending[k]);
+  lastPush=Date.now();
+  var line=$("syncLine"); line.className="sync"; line.textContent=L().sending;
+  fetch(SHEET_URL,{method:"POST",mode:"no-cors",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},body:payload(sending)
+  }).then(function(){
+    // still pending if it changed while the post was out
+    for(var id in sent){ var it=null;
+      for(var i=0;i<ALL.length;i++) if(ALL[i].id===id){it=ALL[i];break}
+      if(it&&JSON.stringify(rowOf(it))===sent[id]) delete st.pend[id];
     }
-    var s=q[k][0], body=payload(s,q[k][1]);
-    fetch(SHEET_URL,{method:"POST",mode:"no-cors",
-      headers:{"Content-Type":"text/plain;charset=utf-8"},body:body
-    }).then(function(){
-      // still dirty if she changed this category while the post was out
-      if(JSON.stringify(rowsOf(s))===JSON.stringify(q[k][1])) delete st.dirty[s];
-      save(); next(k+1);
-    }).catch(function(){
-      pushing=false;
-      line.className="sync"; line.textContent="ئینتەرنێت نییە — لە مۆبایلەکەت پارێزراوە";
-    });
-  })(0);
+    st.synced=Date.now(); save();
+    line.className="sync on"; line.textContent=L().sent;
+    setTimeout(function(){line.className="sync";line.textContent=stamp()},2500);
+  }).catch(function(){
+    line.className="sync"; line.textContent=L().offline;
+  });
 }
 function beacon(){
-  if(!SHEET_URL||!navigator.sendBeacon) return;
+  if(!SHEET_URL||SHEET_URL.indexOf("PASTE_")===0||!navigator.sendBeacon) return;
+  var sending=rows(false); if(!sending.length) return;
   try{
-    for(var s in st.dirty){
-      s=+s; var r=rowsOf(s); if(!r.length) continue;
-      var body=new Blob([payload(s,r)],{type:"text/plain;charset=utf-8"});
-      if(navigator.sendBeacon(SHEET_URL,body)){ delete st.dirty[s]; st.synced=Date.now() }
+    var body=new Blob([payload(sending)],{type:"text/plain;charset=utf-8"});
+    if(navigator.sendBeacon(SHEET_URL,body)){
+      for(var k=0;k<sending.length;k++) delete st.pend[sending[k].id];
+      st.synced=Date.now(); save();
     }
-    save();
   }catch(e){}
 }
 function openSend(){
-  var f=filled(), p=dirtyCount();
-  $("sendWarn").textContent = p
-    ? "لە "+fa(ITEMS.length)+" وشە، "+fa(f)+"ت تەواو کردووە. هەندێکیان هێشتا نەنێردراون."
-    : (f ? "هەموو ئەوەی تەواوت کردووە ("+fa(f)+") نێردراوە ✓"
-         : "هێشتا هیچ وەڵامێک نییە.");
+  var t=L();
+  $("sendTitle").textContent=t.send; $("doSend").textContent=t.doSend; $("doAll").textContent=t.doAll;
+  $("doCopy").textContent=t.copy; $("doClose").textContent=t.close;
+  $("sendWarn").textContent=t.sendWarn(filled(),ITEMS.length,pendCount());
   $("dlgSend").showModal();
 }
 
 /* ---- events ---- */
 function bind(){
+  var gb=document.querySelectorAll(".grp");
+  for(var q=0;q<gb.length;q++) gb[q].onclick=function(){
+    var g=this.getAttribute("data-g"), seen=false;
+    for(var id in st.ans){ for(var i=0;i<ALL.length;i++) if(ALL[i].id===id&&ALL[i].g===g){seen=true;break} if(seen)break }
+    setGroup(g); st.v=seen?"hub":"intro"; save(); render(); window.scrollTo(0,0);
+  };
   $("btnStart").onclick=function(){st.v="hub";save();render();window.scrollTo(0,0)};
   $("btnResume").onclick=function(){
-    var o=firstOpen(); if(o>=0) st.cur=o;
+    var o=firstOpen(); if(o>=0) setCur(o);
     st.v="item"; save(); render(); window.scrollTo(0,0);
   };
+  $("btnGroup").onclick=function(){st.v="pick";save();render();window.scrollTo(0,0)};
   $("btnNext").onclick=function(){goItem(1)};
   $("btnPrev").onclick=function(){goItem(-1)};
-  $("btnHub").onclick=toHub;
-  $("btnSecHub").onclick=toHub;
-  $("btnDoneHub").onclick=toHub;
+  $("btnHub").onclick=toHub; $("btnSecHub").onclick=toHub; $("btnDoneHub").onclick=toHub;
   $("btnNextSec").onclick=function(){
-    var s=nextSec(sec(st.cur));
-    if(s<0){st.v="done"} else {st.cur=secStart(s); st.v="item"}
+    var k=gs(cur())+1;
+    if(k>=GSECS.length){st.v="done"} else {setCur(GSECS[k].a); st.v="item"}
     save(); render(); window.scrollTo(0,0);
   };
-  $("btnSend").onclick=openSend;
-  $("btnSend2").onclick=openSend;
+  $("btnFix").onclick=function(){var it=ITEMS[cur()]; $("itOwn").value=it.f; setAns(it,"fix",it.f); goItem(1)};
+  $("btnKeep").onclick=function(){var it=ITEMS[cur()]; $("itOwn").value=it.t; setAns(it,"keep",it.t); goItem(1)};
+  $("btnSend").onclick=openSend; $("btnSend2").onclick=openSend;
   $("doClose").onclick=function(){$("dlgSend").close()};
   $("doSend").onclick=function(){push(true);$("dlgSend").close()};
   $("doAll").onclick=function(){push(true,true);$("dlgSend").close()};
   $("doCopy").onclick=function(){
-    var b=$("doCopy"), t=csv();
-    function ok(){b.textContent="کۆپی کرا ✓";st.sent=Date.now();save();
-      setTimeout(function(){b.textContent="کۆپی بکە"},2000)}
+    var b=$("doCopy"), txt=csv();
+    function ok(){b.textContent=L().copied;setTimeout(function(){b.textContent=L().copy},2000)}
     if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(t).then(ok,function(){fallback(t,ok)});
-    }else fallback(t,ok);
+      navigator.clipboard.writeText(txt).then(ok,function(){fallback(txt,ok)});
+    }else fallback(txt,ok);
   };
-  function fallback(t,ok){
-    var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);
+  function fallback(txt,ok){
+    var a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);
     a.select();try{document.execCommand("copy");ok()}catch(e){}
     document.body.removeChild(a);
   }
-  $("itKu").addEventListener("input",function(){commit();showOrig();saveSoon()});
-  $("btnOk").onclick=function(){
-    if(st.v!=="item") return;
-    var it=ITEMS[st.cur];
-    if(!$("itKu").value.trim()) $("itKu").value=it.p;
-    setAns(it,$("itKu").value.trim());
-    goItem(1);
-  };
+  $("itOwn").addEventListener("input",function(){commit();saveSoon()});
+  $("itNote").addEventListener("input",function(){commit();saveSoon()});
   window.addEventListener("pagehide",function(){commit();save();beacon()});
   document.addEventListener("visibilitychange",function(){
     if(document.visibilityState==="hidden"){commit();save();beacon()}
@@ -575,36 +682,22 @@ function bind(){
 
 /* ---- boot ---- */
 function boot(data){
-  DATA=data;
-  SECS=data.sections||[];
-  var all=data.items||[];
-  ITEMS=all; NH=0;
-  for(var i=0;i<all.length;i++) if(all[i].h) NH++;
-  BYSEC=[];
-  for(var s=0;s<SECS.length;s++) BYSEC.push({a:0,b:0});
-  for(var j=ITEMS.length-1;j>=0;j--) BYSEC[ITEMS[j].c].a=j;
-  for(var j2=0;j2<ITEMS.length;j2++) BYSEC[ITEMS[j2].c].b=j2+1;
-  BATCH=data.batch||"flashcards";
-  KEY="kawa_voice_fc_v1:"+BATCH;
+  DATA=data; SECS=data.sections||[]; ALL=data.items||[]; BATCH=data.batch||"typos";
   try{localStorage.setItem(QCACHE,JSON.stringify(data))}catch(e){}
-  load(); bind(); render();
-  if(data.label) $("label").textContent=data.label;
+  load(); if(st.g) setGroup(st.g);
+  bind(); render();
   $("syncLine").textContent=stamp();
   push(true);
 }
 function fail(){
-  $("scIntro").hidden=false;
-  $("introText").textContent="نەتوانرا وشەکان باربکرێن. تکایە ئینتەرنێت بپشکنە و لاپەڕەکە تازە بکەرەوە.";
-  $("btnStart").hidden=true;
+  $("scPick").hidden=false;
+  $("pickAr").textContent=T.ar.fail; $("pickKu").textContent=T.ku.fail;
   $("btnNext").hidden=true; $("btnPrev").hidden=true;
 }
 fetch("items.json?v="+Date.now()).then(function(r){
   if(!r.ok) throw 0; return r.json();
 }).then(boot).catch(function(){
-  try{
-    var c=localStorage.getItem(QCACHE);
-    if(c){boot(JSON.parse(c));return}
-  }catch(e){}
+  try{ var c=localStorage.getItem(QCACHE); if(c){boot(JSON.parse(c));return} }catch(e){}
   fail();
 });
 </script>
